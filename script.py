@@ -83,7 +83,6 @@ try:
                 del inputs
                 del labels
                 del outputs
-                gc.collect()
                 torch.cuda.empty_cache()
             except:
                 pass

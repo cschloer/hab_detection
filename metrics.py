@@ -3,6 +3,7 @@ import math
 import torch
 from helpers import log
 from constants import device
+from model import mse_loss_with_nans
 
 
 def get_model_performance(model, loader):
@@ -77,7 +78,6 @@ def get_model_performance(model, loader):
         del preds_flattened
         del pixel_preds
         del pixel_preds_nonzero
-        gc.collect()
 
     mses = ((all_labels - all_preds) ** 2).mean(axis=0)
     log(f"Mean squared error: {mses} : {np.sqrt(mses)}")
