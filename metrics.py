@@ -2,6 +2,7 @@ import numpy as np
 import math
 import torch
 from helpers import log
+from constants import device
 
 
 def get_model_performance(model, loader):

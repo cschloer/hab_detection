@@ -72,7 +72,7 @@ try:
             os.makedirs(MODEL_SAVE_FOLDER, exist_ok=True)
             torch.save(model.state_dict(), f"{MODEL_SAVE_FOLDER}/epoch_recent.pt")
 
-            if epoch % 5 == 4:
+            if epoch % 5 == 4 or epoch == 0:
                 torch.save(
                     model.state_dict(), f"{MODEL_SAVE_FOLDER}/epoch_{epoch + 1}.pt"
                 )
