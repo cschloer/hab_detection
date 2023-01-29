@@ -49,10 +49,7 @@ try:
 
         log(f"Starting Epoch {epoch + 1}!")
         running_loss = 0.0
-        if epoch == 0:
-            torch.save(model.state_dict(), f"{MODEL_SAVE_FOLDER}/epoch_recent.pt")
         try:
-            continue
             for batch_idx, (inputs, labels, _) in enumerate(train_loader):
                 model.train()
                 inputs = inputs.to(device, dtype=torch.float)
