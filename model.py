@@ -2,6 +2,7 @@ from constants import device, LEARNING_RATE
 
 from torchvision import models
 import torch
+import numpy as np
 
 
 def load_model(model_path):

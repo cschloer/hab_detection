@@ -1,3 +1,8 @@
+import numpy as np
+import torch
+from helpers import log
+
+
 def get_model_performance(model, loader):
     # model_cpu = model.cpu()
     model.eval()
@@ -73,9 +78,9 @@ def get_model_performance(model, loader):
         gc.collect()
 
     mses = ((all_labels - all_preds) ** 2).mean(axis=0)
-    print(f"Mean squared error: {mses} : {np.sqrt(mses)}")
-    print(f"Averaged MSE: {math.sqrt(sum / (batch_idx + 1))}")
-    print(f"Averaged MSE2: {math.sqrt(sum2 / (batch_idx + 1))}")
-    print(f"Averaged MSE without no HAB: {math.sqrt(sum3 / (batch_idx + 1))}")
-    print(f"Averaged distance from correct: {(sum4 / (batch_idx + 1))}")
-    print(f"Averaged distance from correct without no HAB: {(sum5 / (batch_idx + 1))}")
+    log(f"Mean squared error: {mses} : {np.sqrt(mses)}")
+    log(f"Averaged MSE: {math.sqrt(sum / (batch_idx + 1))}")
+    log(f"Averaged MSE2: {math.sqrt(sum2 / (batch_idx + 1))}")
+    log(f"Averaged MSE without no HAB: {math.sqrt(sum3 / (batch_idx + 1))}")
+    log(f"Averaged distance from correct: {(sum4 / (batch_idx + 1))}")
+    log(f"Averaged distance from correct without no HAB: {(sum5 / (batch_idx + 1))}")
