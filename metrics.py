@@ -29,7 +29,7 @@ def get_model_performance(model, loader):
         # print(f"{batch_idx + 1} / {len(loader)}")
         # if counter > 10:
         #  break
-        inputs = inputs.to(device, dtype=torch.float64)
+        inputs = inputs.to(device, dtype=torch.float)
         labels = labels.to(device)
         preds = model(inputs)["out"]  # make prediction
         if batch_idx == 0:
