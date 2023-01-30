@@ -97,14 +97,9 @@ class ImageData(Dataset):
 
         # We divide to make the numbers manageable for calculating mean and std and thus normalizing
         # 10,000 is the accepted number to get a brightness level
-        print("BEFORE DIVISON", image[0, 0, 0])
         image = image.astype(np.float32) / 10000
         # augmentations
-        print("IMAGE SHAPE BEFORE", image.shape)
-        print("BEFORE TRANSFORM", image[0, 0, 0])
         image = transform(image)
-        print("AFTER TRANSFORM", image[0, 0, 0])
-        print("IMAGE SHAPE AFTER", image.shape)
 
         return image, label, idx
 
