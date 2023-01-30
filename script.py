@@ -55,7 +55,7 @@ try:
         try:
             for batch_idx, (inputs, labels, _) in enumerate(train_loader):
                 model.train()
-                inputs = inputs.to(device, dtype=torch.float64)
+                inputs = inputs.to(device, dtype=torch.float)
                 labels = labels.to(device)
 
                 optimizer.zero_grad()
