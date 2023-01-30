@@ -18,7 +18,7 @@ train_dataset = get_image_dataset(ZIP_PATH_TRAIN)
 train_loader = DataLoader(
     train_dataset,
     batch_size=TRAINING_BATCH_SIZE,
-    shuffle=True,
+    shuffle=False,
     num_workers=0,
     drop_last=True,
 )
