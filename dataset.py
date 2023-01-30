@@ -1,5 +1,6 @@
 from constants import dataset_mean, dataset_std
 
+import torchvision.transforms as transforms
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 import zipfile
@@ -36,19 +37,9 @@ def get_data(zip_path):
     return imgs, labels, zip_path
 
 
-def get_augs(mean, std):
-    return A.Compose(
-        [
-            A.Normalize(
-                mean=mean,
-                std=std,
-            ),
-            ToTensorV2(),
-        ]
-    )
-
-
-augs = get_augs(dataset_mean, dataset_std)
+transform = transforms.Compose(
+    [transforms.ToTensor(), transforms.Normalize(dataset_mean, dataset_std)]
+)
 
 
 class ImageData(Dataset):
@@ -57,12 +48,10 @@ class ImageData(Dataset):
         imgs,
         labels,
         zip_path,
-        transform=augs,
     ):
         super().__init__()
         self.imgs = imgs
         self.labels = labels
-        self.transform = transform
         self.zip_path = zip_path
         self.zip = None
         self.open_zip()
@@ -110,13 +99,16 @@ class ImageData(Dataset):
         # 10,000 is the accepted number to get a brightness level
         image = image.astype(np.float32) / 10000
         # augmentations
-        if self.transform:
-            image = self.transform(image=image)["image"]
+        print("IMAGE SHAPE BEFORE", image.shape)
+        print("BEFORE TRANSFORM", image[0, 0, 0])
+        image = transform(image)
+        print("AFTER TRANSFORM", image[0, 0, 0])
+        print("IMAGE SHAPE AFTER", image.shape)
 
         return image, label, idx
 
 
-def get_image_dataset(zip_path, transform=augs):
+def get_image_dataset(zip_path):
     imgs, labels, zip_path = get_data(zip_path)
-    image_dataset = ImageData(imgs, labels, zip_path, transform=transform)
+    image_dataset = ImageData(imgs, labels, zip_path)
     return image_dataset
