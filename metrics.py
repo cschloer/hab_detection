@@ -14,7 +14,6 @@ def get_model_performance(model, loader):
     all_labels = torch.tensor([])
     counter = 0
     sum = 0
-    sum_gradient = 0
     sum_from_loss_func = 0
     sum_without_hab = 0
     sum_average_distance = 0
@@ -67,8 +66,6 @@ def get_model_performance(model, loader):
         ).mean()
 
         sum += loss.item()
-        loss.backward()
-        sum_gradient += loss.item()
         sum_from_loss_func += loss_from_loss_func.item()
         sum_without_hab += loss_without_hab.item()
         sum_average_distance += average_distance.item()
@@ -88,7 +85,6 @@ def get_model_performance(model, loader):
         del pixel_preds_nonzero
 
     mses = ((all_labels - all_preds) ** 2).mean(axis=0)
-    log(f"Averaged gradient: {math.sqrt(sum_gradient / (batch_idx + 1))}")
     log(f"Mean squared error: {mses} : {np.sqrt(mses)}")
     log(f"Averaged MSE: {math.sqrt(sum / (batch_idx + 1))}")
     log(
