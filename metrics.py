@@ -20,6 +20,7 @@ def get_model_performance(model, loader):
     sum_average_distance_without_hab = 0
     for batch_idx, (inputs, labels, _) in enumerate(loader):
         print("INPUTS", inputs)
+        print("INPUTS 0 corner", inputs[0, :, :, 0:2, 0:2])
         print("INPUTS dtype", inputs.dtype)
         print("LABELS", labels)
         counter += 1
@@ -61,6 +62,8 @@ def get_model_performance(model, loader):
         )
         if batch_idx == 0:
             print("FLATTENED SHAPE", pixel_preds.shape, pixel_labels.shape)
+        print("PREDS", pixel_preds)
+        print("LABELS", pixel_labels)
         loss = ((pixel_labels - pixel_preds) ** 2).mean(axis=0)
         loss_without_hab = ((pixel_labels_nonzero - pixel_preds_nonzero) ** 2).mean(
             axis=0
