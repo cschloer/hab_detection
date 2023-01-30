@@ -19,11 +19,14 @@ def get_model_performance(model, loader):
     sum_average_distance = 0
     sum_average_distance_without_hab = 0
     for batch_idx, (inputs, labels, _) in enumerate(loader):
+        print("INPUTS", inputs)
+        print("INPUTS dtype", inputs.dtype)
+        print("LABELS", labels)
         counter += 1
         # print(f"{batch_idx + 1} / {len(loader)}")
         # if counter > 10:
         #  break
-        inputs = inputs.to(device, dtype=torch.float64)
+        inputs = inputs.to(device, dtype=torch.float)
         labels = labels.to(device)
         preds = model(inputs)["out"]  # make prediction
         if batch_idx == 0:
