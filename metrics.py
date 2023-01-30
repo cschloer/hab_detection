@@ -20,15 +20,16 @@ def get_model_performance(model, loader):
     sum_average_distance_without_hab = 0
     for batch_idx, (inputs, labels, _) in enumerate(loader):
         print("INPUTS SHAPE", inputs.shape)
-        print("INPUTS", inputs)
         print("INPUTS 0 corner", inputs[0, :, 0:2, 0:2])
+        print("INPUTS 1 corner", inputs[1, :, 0:2, 0:2])
+        print("INPUTS 2 corner", inputs[2, :, 0:2, 0:2])
         print("INPUTS dtype", inputs.dtype)
         print("LABELS", labels)
         counter += 1
         # print(f"{batch_idx + 1} / {len(loader)}")
         # if counter > 10:
         #  break
-        inputs = inputs.to(device, dtype=torch.float)
+        inputs = inputs.to(device, dtype=torch.float64)
         labels = labels.to(device)
         preds = model(inputs)["out"]  # make prediction
         if batch_idx == 0:
