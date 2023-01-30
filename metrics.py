@@ -6,10 +6,10 @@ from constants import device
 from model import mse_loss_with_nans
 
 
-def get_model_performance(model, loader):
+def get_model_performance(model, loader, num_batches=-1):
     # model_cpu = model.cpu()
     with torch.no_grad():
-        model.train()
+        model.eval()
 
         all_preds = torch.tensor([])
         all_labels = torch.tensor([])
@@ -20,10 +20,7 @@ def get_model_performance(model, loader):
         sum_average_distance = 0
         sum_average_distance_without_hab = 0
         for batch_idx, (inputs, labels, _) in enumerate(loader):
-            counter += 1
             # print(f"{batch_idx + 1} / {len(loader)}")
-            # if counter > 10:
-            #  break
             inputs = inputs.to(device, dtype=torch.float)
             labels = labels.to(device)
             preds = model(inputs)["out"]  # make prediction
@@ -75,7 +72,11 @@ def get_model_performance(model, loader):
             sum_average_distance += average_distance.item()
             sum_average_distance_without_hab += average_distance_without_hab.item()
 
-            #break
+            counter += 1
+            if num_batches >= 0 and counter >= num_batches:
+                break
+
+            # break
             del inputs
             del labels
             del preds
@@ -89,14 +90,16 @@ def get_model_performance(model, loader):
             del pixel_preds_nonzero
 
         mses = ((all_labels - all_preds) ** 2).mean(axis=0)
-        log(f"Mean squared error: {mses} : {np.sqrt(mses)}")
+        # log(f"Mean squared error: {mses} : {np.sqrt(mses)}")
         log(f"Averaged MSE: {math.sqrt(sum / (batch_idx + 1))}")
+        """
         log(
             f"Averaged MSE from loss function: {math.sqrt(sum_from_loss_func / (batch_idx + 1))}"
         )
         log(
             f"Averaged MSE without no HAB: {math.sqrt(sum_without_hab / (batch_idx + 1))}"
         )
+        """
         log(
             f"Averaged distance from correct: {(sum_average_distance / (batch_idx + 1))}"
         )

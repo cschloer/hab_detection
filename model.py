@@ -9,8 +9,10 @@ def load_model(model_path):
     model = models.segmentation.deeplabv3_resnet50(pretrained=False)
 
     # Chance first layer to accept 12 input bands (12 bands)
+    model.bn1 = torch.nn.BatchNorm2d(64, track_running_stats=False)
     model.backbone.conv1 = torch.nn.Conv2d(12, 64, kernel_size=(7, 7), stride=(2, 2))
     # Change final layer to 1 continuous output
+    model.classifier[2] = torch.nn.BatchNorm2d(256, track_running_stats=False)
     model.classifier[4] = torch.nn.Sequential(
         torch.nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1)),
         torch.nn.Sigmoid(),
