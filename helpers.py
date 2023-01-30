@@ -1,9 +1,9 @@
 import logging
-from constants import MODEL_SAVE_FOLDER
+from constants import MODEL_SAVE_FOLDER, LOG_NAME
 
 FORMAT = "%(asctime)s: %(message)s"
 logging.basicConfig(
-    level=logging.INFO, filename=f"{MODEL_SAVE_FOLDER}/log.txt", format=FORMAT
+    level=logging.INFO, filename=f"{MODEL_SAVE_FOLDER}/{LOG_NAME}", format=FORMAT
 )
 
 

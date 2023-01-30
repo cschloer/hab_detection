@@ -2,8 +2,9 @@ import torch
 
 ZIP_PATH_TRAIN = "/shared/datasets/hab/data/dataset4_train.zip"
 ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset4_test.zip"
-MODEL_LOAD_PATH = ""
+MODEL_LOAD_PATH = "/shared/datasets/hab/models/experiment1/epoch_75.pt"
 MODEL_SAVE_FOLDER = "/shared/datasets/hab/models/experiment1"
+LOG_NAME = "log2.txt"
 
 TRAINING_BATCH_SIZE = 128
 TEST_BATCH_SIZE = 128
