@@ -9,7 +9,7 @@ from model import mse_loss_with_nans
 def get_model_performance(model, loader):
     # model_cpu = model.cpu()
     with torch.no_grad():
-        model.train()
+        model.eval()
 
         all_preds = torch.tensor([])
         all_labels = torch.tensor([])
