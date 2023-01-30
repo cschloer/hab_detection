@@ -27,3 +27,4 @@ log(f"Loading model...")
 model = load_model(MODEL_LOAD_PATH)
 
 log(f"Getting statistics...")
+get_model_performance(model, train_loader)
