@@ -77,7 +77,10 @@ try:
                 torch.save(
                     model.state_dict(), f"{MODEL_SAVE_FOLDER}/epoch_{epoch + 1}.pt"
                 )
+                log("Getting test model performance")
                 get_model_performance(model, test_loader)
+                log("Getting train model performance")
+                get_model_performance(model, train_loader)
         finally:
             try:
                 # Clear GPU cache in case it crashes so it can run again
