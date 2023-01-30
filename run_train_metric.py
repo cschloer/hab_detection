@@ -1,5 +1,3 @@
-import
-
 from helpers import log
 from model import load_model
 from dataset import get_image_dataset
