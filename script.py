@@ -60,9 +60,10 @@ try:
                 optimizer.zero_grad()
                 outputs = model(inputs)["out"]  # make prediction
                 loss = criterion(outputs, labels)  # Calculate cross entropy loss
+                running_loss += loss.item()
                 loss.backward()  # Backpropogate loss
                 optimizer.step()  # Apply gradient descent change to weight
-                running_loss += loss.item()
+                # running_loss += loss.item()
                 if batch_idx % 25 == 24:  # print every 50 mini-batches
                     log(
                         f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {math.sqrt(running_loss / 25) :.3f}"

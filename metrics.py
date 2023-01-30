@@ -14,10 +14,11 @@ def get_model_performance(model, loader):
     all_labels = torch.tensor([])
     counter = 0
     sum = 0
-    sum2 = 0
-    sum3 = 0
-    sum4 = 0
-    sum5 = 0
+    sum_gradient = 0
+    sum_from_loss_func = 0
+    sum_without_hab = 0
+    sum_average_distance = 0
+    sum_average_distance_without_hab = 0
     for batch_idx, (inputs, labels, _) in enumerate(loader):
         counter += 1
         # print(f"{batch_idx + 1} / {len(loader)}")
@@ -55,17 +56,24 @@ def get_model_performance(model, loader):
             0,
         )
         loss = ((pixel_labels - pixel_preds) ** 2).mean(axis=0)
-        loss3 = ((pixel_labels_nonzero - pixel_preds_nonzero) ** 2).mean(axis=0)
+        loss_without_hab = ((pixel_labels_nonzero - pixel_preds_nonzero) ** 2).mean(
+            axis=0
+        )
 
-        loss2 = mse_loss_with_nans(preds, labels).cpu().detach()
-        loss4 = np.abs(pixel_labels - pixel_preds).mean()
-        loss5 = np.abs(pixel_labels_nonzero - pixel_preds_nonzero).mean()
+        loss_from_loss_func = mse_loss_with_nans(preds, labels).cpu().detach()
+        average_distance = np.abs(pixel_labels - pixel_preds).mean()
+        average_distance_without_hab = np.abs(
+            pixel_labels_nonzero - pixel_preds_nonzero
+        ).mean()
 
         sum += loss.item()
-        sum2 += loss2.item()
-        sum3 += loss3.item()
-        sum4 += loss4.item()
-        sum5 += loss5.item()
+        loss.backward()
+        sum_gradient += loss.item()
+        sum_from_loss_func += loss_from_loss_func.item()
+        sum_without_hab += loss_without_hab.item()
+        sum_average_distance += average_distance.item()
+        sum_average_distance_without_hab += average_distance_without_hab.item()
+
         # break
         del inputs
         del labels
@@ -80,9 +88,14 @@ def get_model_performance(model, loader):
         del pixel_preds_nonzero
 
     mses = ((all_labels - all_preds) ** 2).mean(axis=0)
+    log(f"Averaged gradient: {math.sqrt(sum_gradient / (batch_idx + 1))}")
     log(f"Mean squared error: {mses} : {np.sqrt(mses)}")
     log(f"Averaged MSE: {math.sqrt(sum / (batch_idx + 1))}")
-    log(f"Averaged MSE2: {math.sqrt(sum2 / (batch_idx + 1))}")
-    log(f"Averaged MSE without no HAB: {math.sqrt(sum3 / (batch_idx + 1))}")
-    log(f"Averaged distance from correct: {(sum4 / (batch_idx + 1))}")
-    log(f"Averaged distance from correct without no HAB: {(sum5 / (batch_idx + 1))}")
+    log(
+        f"Averaged MSE from loss function: {math.sqrt(sum_from_loss_func / (batch_idx + 1))}"
+    )
+    log(f"Averaged MSE without no HAB: {math.sqrt(sum_without_hab / (batch_idx + 1))}")
+    log(f"Averaged distance from correct: {(sum_average_distance / (batch_idx + 1))}")
+    log(
+        f"Averaged distance from correct without no HAB: {(sum_average_distance_without_hab / (batch_idx + 1))}"
+    )
