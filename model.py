@@ -7,8 +7,6 @@ import numpy as np
 
 def load_model(model_path):
     model = models.segmentation.deeplabv3_resnet50(pretrained=False)
-    print(model)
-    print("----------------------------------------------\n\n\n\n")
 
     # Chance first layer to accept 12 input bands (12 bands)
     model.backbone.conv1 = torch.nn.Conv2d(12, 64, kernel_size=(7, 7), stride=(2, 2))
