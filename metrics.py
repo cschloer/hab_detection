@@ -19,8 +19,9 @@ def get_model_performance(model, loader):
     sum_average_distance = 0
     sum_average_distance_without_hab = 0
     for batch_idx, (inputs, labels, _) in enumerate(loader):
+        print("INPUTS SHAPE", inputs.shape)
         print("INPUTS", inputs)
-        print("INPUTS 0 corner", inputs[0, :, :, 0:2, 0:2])
+        print("INPUTS 0 corner", inputs[0, :, 0:2, 0:2])
         print("INPUTS dtype", inputs.dtype)
         print("LABELS", labels)
         counter += 1
