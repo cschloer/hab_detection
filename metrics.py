@@ -72,7 +72,6 @@ def get_model_performance(model, loader):
         sum_average_distance += average_distance.item()
         sum_average_distance_without_hab += average_distance_without_hab.item()
 
-        break
         # break
         del inputs
         del labels
