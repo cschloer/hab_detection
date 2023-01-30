@@ -26,6 +26,8 @@ def get_model_performance(model, loader):
         inputs = inputs.to(device, dtype=torch.float64)
         labels = labels.to(device)
         preds = model(inputs)["out"]  # make prediction
+        if batch_idx == 0:
+            print("First SHAPE", preds.shape, labels.shape)
         labels_masked_land = torch.where(labels == 254, np.nan, labels)
         labels_masked_all = torch.where(
             labels_masked_land == 255, np.nan, labels_masked_land
@@ -54,6 +56,8 @@ def get_model_performance(model, loader):
             ),
             0,
         )
+        if batch_idx == 0:
+            print("FLATTENED SHAPE", pixel_preds.shape, pixel_labels.shape)
         loss = ((pixel_labels - pixel_preds) ** 2).mean(axis=0)
         loss_without_hab = ((pixel_labels_nonzero - pixel_preds_nonzero) ** 2).mean(
             axis=0
@@ -71,6 +75,7 @@ def get_model_performance(model, loader):
         sum_average_distance += average_distance.item()
         sum_average_distance_without_hab += average_distance_without_hab.item()
 
+        break
         # break
         del inputs
         del labels
