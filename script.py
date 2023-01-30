@@ -47,7 +47,7 @@ try:
     optimizer = get_optimizer(model)
     criterion = get_criterion()
 
-    for epoch in range(0, 1000):  # Training loop
+    for epoch in range(82, 1000):  # Training loop
 
         log(f"Starting Epoch {epoch + 1}!")
         running_loss = 0.0
