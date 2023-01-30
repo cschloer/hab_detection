@@ -12,6 +12,7 @@ from constants import (
     TEST_BATCH_SIZE,
     MODEL_SAVE_FOLDER,
     MODEL_LOAD_PATH,
+    EPOCH_START,
 )
 from helpers import log
 from model import load_model, get_criterion, get_optimizer
@@ -47,7 +48,7 @@ try:
     optimizer = get_optimizer(model)
     criterion = get_criterion()
 
-    for epoch in range(84, 1000):  # Training loop
+    for epoch in range(EPOCH_START, 1000):  # Training loop
 
         log(f"Starting Epoch {epoch + 1}!")
         running_loss = 0.0
