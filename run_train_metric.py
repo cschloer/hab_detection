@@ -15,7 +15,7 @@ from constants import (
 
 log(f"Loading datasets...")
 
-train_dataset = get_image_dataset(ZIP_PATH_TEST)
+train_dataset = get_image_dataset(ZIP_PATH_TRAIN)
 train_loader = DataLoader(
     train_dataset,
     batch_size=TRAINING_BATCH_SIZE,
