@@ -4,7 +4,7 @@ ZIP_PATH_TRAIN = "/shared/datasets/hab/data/dataset4_train.zip"
 ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset4_test.zip"
 EPOCH_START = 0
 MODEL_LOAD_PATH = ""
-MODEL_SAVE_FOLDER = "/shared/datasets/hab/models/experiment2"
+MODEL_SAVE_FOLDER = "/shared/datasets/hab/models/experiment3"
 LOG_NAME = "log.txt"
 
 TRAINING_BATCH_SIZE = 128
