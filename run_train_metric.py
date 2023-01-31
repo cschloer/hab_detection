@@ -1,10 +1,10 @@
 from torch.utils.data import DataLoader
 
-from .helpers import log
-from .model import load_model
-from .dataset import get_image_dataset
-from .metrics import get_model_performance
-from constants import (
+from hab_detection.helpers import log
+from hab_detection.model import load_model
+from hab_detection.dataset import get_image_dataset
+from hab_detection.metrics import get_model_performance
+from hab_detection.constants import (
     device,
     ZIP_PATH_TRAIN,
     ZIP_PATH_TEST,

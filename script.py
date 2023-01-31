@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import math
 
-from .constants import (
+from hab_detection.constants import (
     device,
     ZIP_PATH_TRAIN,
     ZIP_PATH_TEST,
@@ -14,10 +14,10 @@ from .constants import (
     MODEL_LOAD_PATH,
     EPOCH_START,
 )
-from .helpers import log
-from .model import load_model, get_criterion, get_optimizer
-from .dataset import get_image_dataset
-from .metrics import get_model_performance
+from hab_detection.helpers import log
+from hab_detection.model import load_model, get_criterion, get_optimizer
+from hab_detection.dataset import get_image_dataset
+from hab_detection.metrics import get_model_performance
 
 try:
     log(
