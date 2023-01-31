@@ -21,7 +21,6 @@ def load_model(model_path):
 
     if model_path:
         model.load_state_dict(torch.load(model_path, map_location=device))
-    print(model)
     return model
 
 
