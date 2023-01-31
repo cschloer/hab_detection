@@ -1,8 +1,6 @@
 from constants import dataset_mean, dataset_std
 
 import torchvision.transforms as transforms
-import albumentations as A
-from albumentations.pytorch import ToTensorV2
 import zipfile
 import re
 from torch.utils.data import Dataset
