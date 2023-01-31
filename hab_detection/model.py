@@ -1,4 +1,4 @@
-from constants import device, LEARNING_RATE
+from .constants import device, LEARNING_RATE
 
 from torchvision import models
 import torch

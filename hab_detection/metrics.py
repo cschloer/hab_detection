@@ -1,9 +1,9 @@
 import numpy as np
 import math
 import torch
-from helpers import log
-from constants import device
-from model import mse_loss_with_nans
+from .helpers import log
+from .constants import device
+from .model import mse_loss_with_nans
 
 
 def get_model_performance(model, loader, num_batches=-1):

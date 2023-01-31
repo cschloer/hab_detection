@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import math
 
-from constants import (
+from .constants import (
     device,
     ZIP_PATH_TRAIN,
     ZIP_PATH_TEST,
@@ -14,10 +14,10 @@ from constants import (
     MODEL_LOAD_PATH,
     EPOCH_START,
 )
-from helpers import log
-from model import load_model, get_criterion, get_optimizer
-from dataset import get_image_dataset
-from metrics import get_model_performance
+from .helpers import log
+from .model import load_model, get_criterion, get_optimizer
+from .dataset import get_image_dataset
+from .metrics import get_model_performance
 
 try:
     log(

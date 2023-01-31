@@ -1,9 +1,9 @@
 from torch.utils.data import DataLoader
 
-from helpers import log
-from model import load_model
-from dataset import get_image_dataset
-from metrics import get_model_performance
+from .helpers import log
+from .model import load_model
+from .dataset import get_image_dataset
+from .metrics import get_model_performance
 from constants import (
     device,
     ZIP_PATH_TRAIN,

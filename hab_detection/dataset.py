@@ -1,4 +1,4 @@
-from constants import dataset_mean, dataset_std
+from .constants import dataset_mean, dataset_std
 
 import torchvision.transforms as transforms
 import zipfile
