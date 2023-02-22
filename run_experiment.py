@@ -1,5 +1,8 @@
 import sys
+import json
 from hab_detection.train import train
+
+experiments = json.load("experiments.json")
 
 # First argument is experiment id, second argument is the epoch start
 
@@ -25,14 +28,6 @@ model_file = None
 if len(sys.argv) == 4:
     model_file = sys.argv[3]
 
-experiments = {
-    "test": {
-        "name": "test",
-        "batch_size": 32,
-    },
-}
-print(e)
-print(epoch_start)
 
 train(
     experiments[e]["name"],

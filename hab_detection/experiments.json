@@ -1,0 +1,7 @@
+{
+    "test": {
+        "name": "test2",
+        "batch_size": 32
+    }
+}
+
