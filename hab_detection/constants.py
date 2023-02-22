@@ -2,13 +2,11 @@ import torch
 
 ZIP_PATH_TRAIN = "/shared/datasets/hab/data/dataset4_train.zip"
 ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset4_test.zip"
-EPOCH_START = 0
-MODEL_LOAD_PATH = ""
-MODEL_SAVE_FOLDER = "/shared/datasets/hab/models/experiment4"
+MODEL_SAVE_BASE_FOLDER = "/shared/datasets/hab/models"
 LOG_NAME = "log.txt"
 
-TRAINING_BATCH_SIZE = 128
-TEST_BATCH_SIZE = 128
+TRAINING_BATCH_SIZE = 32
+TEST_BATCH_SIZE = 32
 LEARNING_RATE = 1e-5
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")

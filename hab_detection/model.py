@@ -1,15 +1,20 @@
-from .constants import device, LEARNING_RATE
+from .constants import device, LEARNING_RATE, MODEL_SAVE_BASE_FOLDER
 
 from torchvision import models
 import torch
 import numpy as np
 
 
-def load_model(model_path):
+def load_model(
+    # model_file is None if we shouldn't load from a previous model.
+    # Otherwise path starting with "/" or filename in model_folder starting without /
+    model_file,
+    model_folder,
+):
     model = models.segmentation.deeplabv3_resnet50(pretrained=False)
 
     # Chance first layer to accept 12 input bands (12 bands)
-    model.bn1 = torch.nn.BatchNorm2d(64, track_running_stats=False)
+    model.backbone.bn1 = torch.nn.BatchNorm2d(64, track_running_stats=False)
     model.backbone.conv1 = torch.nn.Conv2d(12, 64, kernel_size=(7, 7), stride=(2, 2))
     # Change final layer to 1 continuous output
     model.classifier[2] = torch.nn.BatchNorm2d(256, track_running_stats=False)
@@ -19,8 +24,13 @@ def load_model(model_path):
     )
     model = model.to(device)
 
-    if model_path:
-        model.load_state_dict(torch.load(model_path, map_location=device))
+    if model_file is not None:
+        # An entire path was passed in
+        if model_file.startswith("/"):
+            model.load_state_dict(torch.load(model_file, map_location=device))
+        else:
+            model_file_path = f"{model_folder}/{model_file}"
+            model.load_state_dict(torch.load(model_file, map_location=device))
     return model
 
 
