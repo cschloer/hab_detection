@@ -12,7 +12,7 @@ from .constants import (
     TEST_BATCH_SIZE,
     MODEL_SAVE_BASE_FOLDER,
 )
-from .helpers import log
+from .helpers import log, set_config
 from .model import load_model, get_criterion, get_optimizer
 from .dataset import get_image_dataset
 from .metrics import get_model_performance
