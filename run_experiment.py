@@ -2,7 +2,8 @@ import sys
 import json
 from hab_detection.train import train
 
-experiments = json.load("experiments.json")
+with open("experiments.json", "r") as f:
+    experiments = json.load(f)
 
 # First argument is experiment id, second argument is the epoch start
 
