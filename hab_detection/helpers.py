@@ -12,7 +12,8 @@ def set_config(experiment_name):
             filename=f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}/{LOG_NAME}",
             format=FORMAT,
         )
-    except:
+    except Exception as e:
+        print("ERROR", e)
         logging.basicConfig(
             level=logging.INFO,
             handlers=[logging.StreamHandler(sys.stdout)],

@@ -19,9 +19,9 @@ from .metrics import get_model_performance
 
 
 def train(experiment_name, batch_size, epoch_start=0, model_file=None):
-    set_config(experiment_name)
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
     os.makedirs(model_save_folder, exist_ok=True)
+    set_config(experiment_name)
     try:
         log(
             f'Starting with model save folder "{model_save_folder}", training batch size "{TRAINING_BATCH_SIZE}"'
