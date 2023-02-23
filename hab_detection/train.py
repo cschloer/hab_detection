@@ -8,8 +8,6 @@ from .constants import (
     device,
     ZIP_PATH_TRAIN,
     ZIP_PATH_TEST,
-    TRAINING_BATCH_SIZE,
-    TEST_BATCH_SIZE,
     MODEL_SAVE_BASE_FOLDER,
 )
 from .helpers import log, set_config
@@ -21,6 +19,9 @@ from .metrics import get_model_performance
 def train(
     experiment_name,
     batch_size,
+    # None for regression, a list of integers ending in 254 for class
+    class_designation,
+    model_architecture,
     epoch_start=0,
     model_file=None,
 ):
@@ -29,30 +30,32 @@ def train(
     set_config(experiment_name)
     try:
         log(
-            f'Starting with model save folder "{model_save_folder}", training batch size "{TRAINING_BATCH_SIZE}"'
+            f'Starting with model save folder "{model_save_folder}", training batch size "{batch_size}"'
         )
         log(f"Loading datasets...")
 
-        train_dataset = get_image_dataset(ZIP_PATH_TRAIN)
+        train_dataset = get_image_dataset(ZIP_PATH_TRAIN, class_designation)
         train_loader = DataLoader(
             train_dataset,
-            batch_size=TRAINING_BATCH_SIZE,
+            batch_size=batch_size,
             shuffle=True,
             num_workers=0,
             drop_last=True,
         )
 
-        test_dataset = get_image_dataset(ZIP_PATH_TEST)
+        test_dataset = get_image_dataset(ZIP_PATH_TEST, class_designation)
         test_loader = DataLoader(
             test_dataset,
-            batch_size=TEST_BATCH_SIZE,
+            batch_size=batch_size,
             shuffle=False,
             num_workers=0,
             drop_last=True,
         )
         log(f"Done loading datasets. Getting the model.")
 
-        model = load_model(model_file, model_save_folder)
+        model = load_model(
+            model_architecture, model_file, model_save_folder, class_designation
+        )
         optimizer = get_optimizer(model)
         criterion = get_criterion()
 

@@ -5,8 +5,6 @@ ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset4_test.zip"
 MODEL_SAVE_BASE_FOLDER = "/shared/datasets/hab/models"
 LOG_NAME = "log.txt"
 
-TRAINING_BATCH_SIZE = 32
-TEST_BATCH_SIZE = 32
 LEARNING_RATE = 1e-5
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")

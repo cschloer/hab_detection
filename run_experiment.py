@@ -12,7 +12,7 @@ if len(sys.argv) < 2:
     exit()
 if len(sys.argv) > 4:
     print(
-        "run_experiment.py takes maximally 2 arguments, the experiment id and the start epoch."
+        "run_experiment.py takes maximally 3 arguments, the experiment id, the start epoch, and the filename/path of the model to preload ."
     )
     exit()
 
@@ -29,10 +29,18 @@ model_file = None
 if len(sys.argv) == 4:
     model_file = sys.argv[3]
 
+experiment_name = sys.argv[1]
+if experiment_name not in experiments:
+    print(f"Experiment {experiment_name} not in experiments.json")
+
+e = experiments[experiment_name]
+
 
 train(
-    experiments[e]["name"],
-    experiments[e]["batch_size"],
+    e["name"],
+    e["batch_size"],
+    e["class_designation"],
+    e["model_architecture"],
     epoch_start=epoch_start,
     model_file=model_file,
 )

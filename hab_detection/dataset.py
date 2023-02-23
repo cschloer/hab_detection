@@ -1,4 +1,5 @@
 from .constants import dataset_mean, dataset_std
+from .helpers import log
 
 import torchvision.transforms as transforms
 import zipfile
@@ -46,11 +47,14 @@ class ImageData(Dataset):
         imgs,
         labels,
         zip_path,
+        class_designation,
     ):
         super().__init__()
         self.imgs = imgs
         self.labels = labels
         self.zip_path = zip_path
+        self.class_designation = class_designation
+
         self.zip = None
         self.open_zip()
 
@@ -62,7 +66,7 @@ class ImageData(Dataset):
         try:
             image = np.load(self.zip.open(filename))
         except Exception as e:
-            print("FAILED", filename)
+            log(f"FAILED: {filename}")
             raise e
         if image is None:
             raise FileNotFoundError(filename)
@@ -88,6 +92,13 @@ class ImageData(Dataset):
         self.close_zip()
         self.zip = zipfile.ZipFile(self.zip_path, mode="r")
 
+    def transform_label(self, label):
+        if self.class_designation is None:
+            # It's a regression problem, no need to transform the label
+            return label
+        # for
+        # label = label[
+
     def __getitem__(self, idx):
         image, label = self._get_image(idx)
         image = image.transpose(1, 2, 0)
@@ -99,10 +110,12 @@ class ImageData(Dataset):
         # augmentations
         image = transform(image)
 
+        label = self.transform_label(label)
+
         return image, label, idx
 
 
-def get_image_dataset(zip_path):
+def get_image_dataset(zip_path, class_designation):
     imgs, labels, zip_path = get_data(zip_path)
-    image_dataset = ImageData(imgs, labels, zip_path)
+    image_dataset = ImageData(imgs, labels, zip_path, class_designation)
     return image_dataset
