@@ -106,7 +106,7 @@ class ImageData(Dataset):
             raise Exception("The last value of the class_designation must 254.")
         start = time.time()
         floor = 0
-        for i, ceil in enumerate(class_designation):
+        for i, ceil in enumerate(self.class_designation):
             label = np.where((label >= floor) & (label < ceil), i, label)
             floor = ceil
 
