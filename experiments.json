@@ -4,7 +4,7 @@
         "batch_size": 32,
         "class_designation": null,
         "model_architecture": "resnet50"
-    }
+    },
     "test": {
         "name": "test",
         "batch_size": 32,
