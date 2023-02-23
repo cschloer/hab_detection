@@ -86,15 +86,12 @@ def mse_loss_with_nans(pred, label):
     return loss
 
 
-def cross_entropy_with_nans(pred, label):
-    return torch.nn.CrossEntropyLoss(ignore_index=-1)(pred, label)
-
-
-def get_criterion(class_designation):
+def get_criterion(class_designation, class_weights):
     if class_designation is None:
         return mse_loss_with_nans
     else:
-        return cross_entropy_with_nans
+        lf = torch.nn.CrossEntropyLoss(ignore_index=-1, weight=class_weights)
+        return lf
 
 
 def get_optimizer(model):

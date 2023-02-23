@@ -3,12 +3,14 @@
         "name": "experiment3",
         "batch_size": 32,
         "class_designation": null,
+        "class_weights": null,
         "model_architecture": "resnet50"
     },
     "test_class": {
         "name": "test_class",
         "batch_size": 32,
         "class_designation": [50, 100, 150, 200, 254],
+        "class_weights": [1, 100, 100, 100, 1000],
         "model_architecture": "resnet50"
     }
 }

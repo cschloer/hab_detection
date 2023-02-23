@@ -22,6 +22,7 @@ def train(
     batch_size,
     # None for regression, a list of integers ending in 254 for class
     class_designation,
+    class_weights,
     model_architecture,
     epoch_start=0,
     model_file=None,
@@ -58,7 +59,7 @@ def train(
             model_architecture, model_file, model_save_folder, class_designation
         )
         optimizer = get_optimizer(model)
-        criterion = get_criterion(class_designation)
+        criterion = get_criterion(class_designation, class_weights)
 
         if class_designation is not None:
             train_accuracy = Accuracy(

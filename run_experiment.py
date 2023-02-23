@@ -40,6 +40,7 @@ train(
     e["name"],
     e["batch_size"],
     e["class_designation"],
+    e["class_weights"],
     e["model_architecture"],
     epoch_start=epoch_start,
     model_file=model_file,
