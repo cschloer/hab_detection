@@ -59,36 +59,42 @@ def load_model(
 
 
 def mask_and_flatten_output(pred, label, flatten=True):
-    # Missing data are 254 and 255
+    # Missing data are transformed to -1
+    label_masked = torch.where(label == -1, np.nan, label)
 
-    label_masked_land = torch.where(label == 254, np.nan, label)
-    label_masked_all = torch.where(label_masked_land == 255, np.nan, label_masked_land)
-
-    pred_masked_all = torch.where(torch.isnan(label_masked_all), np.nan, pred)
+    pred_masked = torch.where(torch.isnan(label_masked), np.nan, pred)
 
     if flatten:
         label_flattened = label_masked_all.flatten()
         label_final = label_flattened[~torch.isnan(label_flattened)]
 
         pred_flattened = pred_masked_all.flatten()
-        # Multiply the flattened input by 253 to put it in the same range as the target
-        pred_final = pred_flattened[~torch.isnan(pred_flattened)] * 253
+        pred_final = pred_flattened[~torch.isnan(pred_flattened)]
 
         return pred_final, label_final
-    return pred_masked_all * 253, label_masked_all
+    return pred_masked_all, label_masked_all
 
 
 def mse_loss_with_nans(pred, label):
     # Custom loss function that changes removes any pixels that are 254 or 255 from consideration
 
-    pred_final, label_final = mask_and_flatten_output(pred, label)
+    pred, label = mask_and_flatten_output(pred, label)
+    # Multiply the flattened prediction by 253 to put it in the same range as the target
+    pred = pred * 253
 
-    loss = torch.mean((pred_final - label_final) ** 2)
+    loss = torch.mean((pred - label) ** 2)
     return loss
 
 
-def get_criterion():
-    return mse_loss_with_nans
+def cross_entropy_with_nans(pred, label):
+    return torch.nn.CrossEntropyLoss(ignore_index=-1)(pred, label)
+
+
+def get_criterion(class_designation):
+    if class_designation is None:
+        return mse_loss_with_nans
+    else:
+        return cross_entropy_with_nans
 
 
 def get_optimizer(model):

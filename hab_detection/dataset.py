@@ -2,10 +2,13 @@ from .constants import dataset_mean, dataset_std
 from .helpers import log
 
 import torchvision.transforms as transforms
+import torch.nn.functional as F
+import torch
 import zipfile
 import re
 from torch.utils.data import Dataset
 import numpy as np
+import time
 
 
 def get_data(zip_path):
@@ -93,11 +96,25 @@ class ImageData(Dataset):
         self.zip = zipfile.ZipFile(self.zip_path, mode="r")
 
     def transform_label(self, label):
+        # First set no data values to -1
+        label = np.where((label >= 254), -1, label)
         if self.class_designation is None:
-            # It's a regression problem, no need to transform the label
+            # It's a regression problem, no need to transform to class problem
             return label
-        # for
-        # label = label[
+            # return torch.from_numpy(label)
+        if self.class_designation[-1] != 254:
+            raise Exception("The last value of the class_designation must 254.")
+        start = time.time()
+        floor = 0
+        for i, ceil in enumerate(class_designation):
+            label = np.where((label >= floor) & (label < ceil), i, label)
+            floor = ceil
+
+        # label = torch.from_numpy(label)
+        # F.one_hot(label, num_classes=len(class_designation))
+
+        print(f"Elapsed to transform label: {time.time() - start}")
+        return label
 
     def __getitem__(self, idx):
         image, label = self._get_image(idx)

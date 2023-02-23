@@ -1,6 +1,7 @@
 import os
 from torch.utils.data import DataLoader
 import torch
+from torchmetrics import Accuracy, ConfusionMatrix
 import numpy as np
 import math
 
@@ -59,41 +60,85 @@ def train(
         optimizer = get_optimizer(model)
         criterion = get_criterion()
 
+        if class_designation is not None:
+            train_accuracy = Accuracy(
+                task="multiclass",
+                num_classes=len(class_designation),
+                ignore_index=-1,
+            )
+            train_cm = ConfusionMatrix(
+                task="multiclass",
+                num_classes=len(class_designation),
+                ignore_index=-1,
+            )
         for epoch in range(epoch_start, 1000):  # Training loop
 
             log(f"Starting Epoch {epoch + 1}!")
-            running_loss = 0.0
+            running_accuracy = 0
+            running_loss = 0
             try:
                 for batch_idx, (inputs, labels, _) in enumerate(train_loader):
                     model.train()
                     inputs = inputs.to(device, dtype=torch.float)
                     labels = labels.to(device)
+                    log(f"INPUTS SHAPE {inputs.shape}")
+                    log(f"LABELS SHAPE {labels.shape}")
 
                     optimizer.zero_grad()
                     outputs = model(inputs)["out"]  # make prediction
+                    log(f"OUTPUTS SHAPE {outputs.shape}")
                     loss = criterion(outputs, labels)  # Calculate cross entropy loss
                     loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
                     running_loss += loss.item()
-                    if batch_idx % 25 == 24:  # print every 50 mini-batches
-                        log(
-                            f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {math.sqrt(running_loss / 25) :.3f}"
-                        )
+
+                    if class_designation is not None:
+                        batch_accuracy = train_accuracy(outputs, labels)
+                        running_accuracy += batch_accuracy
+                        train_cm.update(outputs, labels)
+
+                    NUM_BATCHES = 100
+                    if (
+                        batch_idx % NUM_BATCHES == NUM_BATCHES - 1
+                    ):  # print every 99 mini-batches
+                        avg_loss = math.sqrt(running_loss / NUM_BATCHES)
+                        if class_designation is not None:
+                            avg_accuracy = math.sqrt(running_accuracy / NUM_BATCHES)
+                            log(
+                                f"[{epoch + 1}, {batch_idx + 1:5d}] avg loss: {avg_loss :.3f}, avg accuracy: {avg_accuracy :.3f}"
+                            )
+                        else:
+                            log(
+                                f"[{epoch + 1}, {batch_idx + 1:5d}] avg loss: {avg_loss :.3f}"
+                            )
                         running_loss = 0.0
+                        running_accuracy = 0.0
 
                 torch.save(model.state_dict(), f"{model_save_folder}/epoch_recent.pt")
 
+                # Print out performance metrics
                 if epoch % 5 == 4 or epoch == 0:
                     torch.save(
                         model.state_dict(), f"{model_save_folder}/epoch_{epoch + 1}.pt"
                     )
                     log("Getting actual test model performance")
-                    get_model_performance(model, test_loader)
+                    get_model_performance(model, test_loader, class_designation)
                 else:
                     log("Getting subset test model performance")
-                    get_model_performance(model, test_loader, num_batches=10)
-                log("Getting subset train model performance")
-                get_model_performance(model, train_loader, num_batches=10)
+                    get_model_performance(
+                        model, test_loader, class_designation, num_batches=10
+                    )
+                if class_designation is not None:
+                    log(f"Epoch {epoch + 1} train accuracy: {train_accuracy.compute()}")
+                    log(
+                        f"Epoch {epoch + 1} train confusion matrix: {train_cm.compute()}"
+                    )
+                    train_accuracy.reset()
+                    train_cm.reset()
+                else:
+                    log("Getting subset train model performance")
+                    get_model_performance(model, train_loader, num_batches=10)
+
             finally:
                 try:
                     # Clear GPU cache in case it crashes so it can run again
