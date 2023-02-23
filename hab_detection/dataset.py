@@ -104,7 +104,6 @@ class ImageData(Dataset):
             # return torch.from_numpy(label)
         if self.class_designation[-1] != 254:
             raise Exception("The last value of the class_designation must 254.")
-        start = time.time()
         floor = 0
         for i, ceil in enumerate(self.class_designation):
             label = np.where((label >= floor) & (label < ceil), i, label)
@@ -113,8 +112,7 @@ class ImageData(Dataset):
         # label = torch.from_numpy(label)
         # F.one_hot(label, num_classes=len(class_designation))
 
-        print(f"Elapsed to transform label: {time.time() - start}")
-        return label
+        return label.reshape(label.shape[1], labe.shape[2])
 
     def __getitem__(self, idx):
         image, label = self._get_image(idx)
