@@ -58,7 +58,7 @@ def train(
             model_architecture, model_file, model_save_folder, class_designation
         )
         optimizer = get_optimizer(model)
-        criterion = get_criterion()
+        criterion = get_criterion(class_designation)
 
         if class_designation is not None:
             train_accuracy = Accuracy(

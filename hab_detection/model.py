@@ -15,7 +15,7 @@ def load_model(
 ):
     if model_architecture == "resnet50":
         # Load resnet50 segmentation model
-        model = models.segmentation.deeplabv3_resnet50(pretrained=False)
+        model = models.segmentation.deeplabv3_resnet50(weights=None)
 
         # Fix BatchNorm2D Bug
         model.backbone.bn1 = torch.nn.BatchNorm2d(64, track_running_stats=False)
