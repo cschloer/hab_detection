@@ -90,7 +90,10 @@ def get_criterion(class_designation, class_weights):
     if class_designation is None:
         return mse_loss_with_nans
     else:
-        lf = torch.nn.CrossEntropyLoss(ignore_index=-1, weight=class_weights)
+        lf = torch.nn.CrossEntropyLoss(
+            ignore_index=-1,
+            weight=torch.FloatTensor(class_weights),
+        )
         return lf
 
 
