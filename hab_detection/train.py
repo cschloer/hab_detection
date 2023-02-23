@@ -81,12 +81,9 @@ def train(
                     model.train()
                     inputs = inputs.to(device, dtype=torch.float)
                     labels = labels.to(device)
-                    log(f"INPUTS SHAPE {inputs.shape}")
-                    log(f"LABELS SHAPE {labels.shape}")
 
                     optimizer.zero_grad()
                     outputs = model(inputs)["out"]  # make prediction
-                    log(f"OUTPUTS SHAPE {outputs.shape}")
                     loss = criterion(outputs, labels)  # Calculate cross entropy loss
                     loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
