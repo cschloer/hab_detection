@@ -1,7 +1,9 @@
 {
-    "test": {
-        "name": "test2",
-        "batch_size": 32
+    "experiment3": {
+        "name": "experiment3",
+        "batch_size": 32,
+        "class_designation": null,
+        "model_architecture": "resnet50"
     }
 }
 
