@@ -52,7 +52,7 @@ def load_model(
                 model.load_state_dict(torch.load(model_file, map_location=device))
             else:
                 model_file_path = f"{model_folder}/{model_file}"
-                model.load_state_dict(torch.load(model_file, map_location=device))
+                model.load_state_dict(torch.load(model_file_path, map_location=device))
     else:
         raise Exception(f"Unknown model architecture {model_architecture}")
     return model
