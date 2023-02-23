@@ -112,7 +112,7 @@ class ImageData(Dataset):
         # label = torch.from_numpy(label)
         # F.one_hot(label, num_classes=len(class_designation))
 
-        return label.reshape(label.shape[1], label.shape[2])
+        return label.reshape(label.shape[1], label.shape[2]).astype(np.int_)
 
     def __getitem__(self, idx):
         image, label = self._get_image(idx)
