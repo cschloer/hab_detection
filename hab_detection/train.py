@@ -78,20 +78,15 @@ def train(
             running_loss = 0
             try:
                 for batch_idx, (inputs, labels, _) in enumerate(train_loader):
-                    log(f"Batch {batch_idx}")
                     model.train()
                     inputs = inputs.to(device, dtype=torch.float)
                     labels = labels.to(device)
 
                     optimizer.zero_grad()
                     outputs = model(inputs)["out"]  # make prediction
-                    log(f"pred done")
                     loss = criterion(outputs, labels)  # Calculate cross entropy loss
-                    log(f"loss done")
                     loss.backward()  # Backpropogate loss
-                    log(f"loss backward")
                     optimizer.step()  # Apply gradient descent change to weight
-                    log(f"gradient descent done")
                     running_loss += loss.item()
 
                     if class_designation is not None:
