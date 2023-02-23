@@ -134,7 +134,9 @@ def train(
                     train_cm.reset()
                 else:
                     log("Getting subset train model performance")
-                    get_model_performance(model, train_loader, num_batches=10)
+                    get_model_performance(
+                        model, train_loader, class_designation, num_batches=10
+                    )
 
             finally:
                 try:
