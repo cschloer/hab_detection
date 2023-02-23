@@ -65,14 +65,14 @@ def mask_and_flatten_output(pred, label, flatten=True):
     pred_masked = torch.where(torch.isnan(label_masked), np.nan, pred)
 
     if flatten:
-        label_flattened = label_masked_all.flatten()
+        label_flattened = label_masked.flatten()
         label_final = label_flattened[~torch.isnan(label_flattened)]
 
-        pred_flattened = pred_masked_all.flatten()
+        pred_flattened = pred_masked.flatten()
         pred_final = pred_flattened[~torch.isnan(pred_flattened)]
 
         return pred_final, label_final
-    return pred_masked_all, label_masked_all
+    return pred_masked, label_masked
 
 
 def mse_loss_with_nans(pred, label):
