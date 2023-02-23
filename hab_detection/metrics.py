@@ -46,12 +46,12 @@ def get_model_performance(model, loader, class_designation, num_batches=-1):
                 task="multiclass",
                 num_classes=len(class_designation),
                 ignore_index=-1,
-            )
+            ).to(device)
             accuracy = Accuracy(
                 task="multiclass",
                 num_classes=len(class_designation),
                 ignore_index=-1,
-            )
+            ).to(device)
             for batch_idx, (inputs, labels, _) in enumerate(loader):
                 inputs = inputs.to(device, dtype=torch.float)
                 labels = labels.to(device)

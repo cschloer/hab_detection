@@ -65,12 +65,12 @@ def train(
                 task="multiclass",
                 num_classes=len(class_designation),
                 ignore_index=-1,
-            )
+            ).to(device)
             train_cm = ConfusionMatrix(
                 task="multiclass",
                 num_classes=len(class_designation),
                 ignore_index=-1,
-            )
+            ).to(device)
         for epoch in range(epoch_start, 1000):  # Training loop
 
             log(f"Starting Epoch {epoch + 1}!")
