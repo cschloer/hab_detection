@@ -5,8 +5,8 @@
         "class_designation": null,
         "model_architecture": "resnet50"
     },
-    "test": {
-        "name": "test",
+    "test_class": {
+        "name": "test_class",
         "batch_size": 32,
         "class_designation": [50, 100, 150, 200, 254],
         "model_architecture": "resnet50"
