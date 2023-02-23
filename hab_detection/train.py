@@ -89,6 +89,7 @@ def train(
                     loss = criterion(outputs, labels)  # Calculate cross entropy loss
                     log(f"loss done")
                     loss.backward()  # Backpropogate loss
+                    log(f"loss backward")
                     optimizer.step()  # Apply gradient descent change to weight
                     log(f"gradient descent done")
                     running_loss += loss.item()
