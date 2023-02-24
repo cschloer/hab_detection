@@ -50,4 +50,4 @@ def visualize(
     )
 
     _, metrics = get_model_performance(model, loader, class_designation, num_batches=10)
-    log(pprint.pformat(metrics))
+    log(f"\n{pprint.pformat(metrics)})

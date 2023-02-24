@@ -112,9 +112,9 @@ def train(
                 log(f"Epoch {epoch} test loss: {test_loss}")
                 # Print out performance metrics
                 log(f"Train statistics:")
-                log(pprint.pformat(train_tracker.compute_all()))
+                log(f"\n{pprint.pformat(train_tracker.compute_all())}")
                 log(f"Test statistics:")
-                log(pprint.pformat(test_metrics))
+                log(f"\n{pprint.pformat(test_metrics)}")
 
                 if epoch % 5 == 4 or epoch == 0:
                     torch.save(
