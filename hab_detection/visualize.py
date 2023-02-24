@@ -77,6 +77,10 @@ def visualize(
     cax1 = fig.add_subplot(gs00[0])
     cax2 = fig.add_subplot(gs00[1])
 
+    class_names = [
+        f"{0 if i == 0 else a[i-1]} - {a[i] - 1}"
+        for i, a in enumerate(class_designation)
+    ]
     sns.heatmap(
         cm,
         annot=True,
@@ -86,6 +90,8 @@ def visualize(
         vmax=vmax,
         ax=ax,
         cbar_ax=cax2,
+        xticklabels=class_names,
+        yticklabels=class_names,
     )
     sns.heatmap(
         cm,
@@ -97,6 +103,8 @@ def visualize(
         ax=ax,
         cbar_ax=cax1,
         cbar_kws=dict(ticks=[]),
+        xticklabels=class_names,
+        yticklabels=class_names,
     )
 
     """
