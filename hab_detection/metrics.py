@@ -5,7 +5,7 @@ import torch
 from torchmetrics import (
     MetricTracker,
     MetricCollection,
-    MeanSquaredError
+    MeanSquaredError,
     Precision,
     Accuracy,
     ConfusionMatrix,
@@ -22,42 +22,42 @@ def get_metric_tracker(class_designation):
         return MetricTracker(
             MetricCollection(
                 [
-                    MeanSquaredError(squared=False)
-
-                ])
-                )
+                    MeanSquaredError(squared=False),
+                ]
+            ),
+        )
 
     return MetricTracker(
-            MetricCollection(
-                [
-                    Accuracy(
-                        task="multiclass",
-                        num_classes=len(class_designation),
-                        ignore_index=-1,
-                    ).to(device),
-                    ConfusionMatrix(
-                        task="multiclass",
-                        num_classes=len(class_designation),
-                        ignore_index=-1,
-                    ).to(device),
-                    Precision(
-                        task="multiclass",
-                        num_classes=len(class_designation),
-                        ignore_index=-1,
-                    ).to(device),
-                    Recall(
-                        task="multiclass",
-                        num_classes=len(class_designation),
-                        ignore_index=-1,
-                    ).to(device),
-                    Specificity(
-                        task="multiclass",
-                        num_classes=len(class_designation),
-                        ignore_index=-1,
-                    ).to(device),
-                ]
-            )
-        ).to(device)
+        MetricCollection(
+            [
+                Accuracy(
+                    task="multiclass",
+                    num_classes=len(class_designation),
+                    ignore_index=-1,
+                ).to(device),
+                ConfusionMatrix(
+                    task="multiclass",
+                    num_classes=len(class_designation),
+                    ignore_index=-1,
+                ).to(device),
+                Precision(
+                    task="multiclass",
+                    num_classes=len(class_designation),
+                    ignore_index=-1,
+                ).to(device),
+                Recall(
+                    task="multiclass",
+                    num_classes=len(class_designation),
+                    ignore_index=-1,
+                ).to(device),
+                Specificity(
+                    task="multiclass",
+                    num_classes=len(class_designation),
+                    ignore_index=-1,
+                ).to(device),
+            ]
+        )
+    ).to(device)
 
 
 def get_model_performance(
