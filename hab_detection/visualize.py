@@ -1,4 +1,5 @@
 import os
+from sklearn.metrics import ConfusionMatrixDisplay
 from torch.utils.data import DataLoader
 import torch
 import pprint
@@ -12,6 +13,9 @@ from .metrics import get_metric_tracker, get_model_performance
 from .helpers import log, set_config
 from .dataset import get_image_dataset
 from .model import load_model
+
+def save_plot(image_save_folder, filename):
+    plt.savefig(f"{image_save_folder}/{filename}.png")
 
 
 def visualize(
@@ -50,4 +54,9 @@ def visualize(
     )
 
     _, metrics = get_model_performance(model, loader, class_designation, num_batches=-1)
+    metrics = metrics.cpu()
     log(f"\n{pprint.pformat(metrics)}")
+
+    cf_disp = ConfusionMatrixDisplay(metrics["MulticlassConfusionMatrix"].numpy()))
+    cf_disp.plot()
+    save_plot(image_save_folder, "confusion_matrix")
