@@ -79,7 +79,7 @@ def visualize(
 
     class_names = [
         f"{0 if i == 0 else class_designation[i-1]} - {a - 1}"
-        for i, a in (class_designation)
+        for i, a in enumerate(class_designation)
     ]
     sns.heatmap(
         cm,
