@@ -6,7 +6,7 @@ from .constants import (
     ZIP_PATH_TEST,
     MODEL_SAVE_BASE_FOLDER,
 )
-from .metrics import get_class_metric_tracker
+from .metrics import get_metric_tracker
 
 
 def visualize(
