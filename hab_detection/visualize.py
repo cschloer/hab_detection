@@ -49,5 +49,5 @@ def visualize(
         model_architecture, model_file, model_save_folder, class_designation
     )
 
-    _, metrics = get_model_performance(model, loader, class_designation, num_batches=10)
-    log(f"\n{pprint.pformat(metrics)})
+    _, metrics = get_model_performance(model, loader, class_designation, num_batches=-1)
+    log(f"\n{pprint.pformat(metrics)}")
