@@ -78,8 +78,8 @@ def visualize(
     cax2 = fig.add_subplot(gs00[1])
 
     class_names = [
-        f"{0 if i == 0 else a[i-1]} - {a[i] - 1}"
-        for i, a in enumerate(class_designation)
+        f"{0 if i == 0 else class_designation[i-1]} - {a - 1}"
+        for i, a in (class_designation)
     ]
     sns.heatmap(
         cm,
