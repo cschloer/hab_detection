@@ -1,3 +1,4 @@
+import os
 from torch.utils.data import DataLoader
 import torch
 from .constants import (
@@ -8,6 +9,8 @@ from .constants import (
 )
 from .metrics import get_metric_tracker
 from .helpers import log, set_config
+from .dataset import get_image_dataset
+from .model import load_model
 
 
 def visualize(
