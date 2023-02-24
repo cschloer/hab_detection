@@ -2,6 +2,7 @@ import os
 from sklearn.metrics import ConfusionMatrixDisplay
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import pprint
 from .constants import (
@@ -57,7 +58,7 @@ def visualize(
 
     _, metrics = get_model_performance(model, loader, class_designation, num_batches=10)
     log(f"\n{pprint.pformat(metrics)}")
-    cm = metrics["MulticlassConfusionMatrix"].cpu().numpy()
+    cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
     print(cm, cm.shape)
 
     cf_disp = ConfusionMatrixDisplay(cm)
