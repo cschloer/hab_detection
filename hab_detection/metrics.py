@@ -66,11 +66,10 @@ def get_model_performance(
     model,
     loader,
     class_designation,
-    class_weights,
+    class_weights=None,
     num_batches=-1,
 ):
     # model_cpu = model.cpu()
-    criterion = get_criterion(class_designation, class_weights)
     tracker = get_metric_tracker(class_designation)
     with torch.no_grad():
         model.eval()
@@ -82,8 +81,11 @@ def get_model_performance(
             labels = labels.to(device)
             preds = model(inputs)["out"]  # make prediction
 
-            loss = criterion(preds, labels)  # Calculate cross entropy loss
-            total_loss += loss.item()
+            # Only calculate the loss if its regression or class weights is passed in
+            if class_designation is None or class_weights is not None:
+                criterion = get_criterion(class_designation, class_weights)
+                loss = criterion(preds, labels)  # Calculate cross entropy loss
+                total_loss += loss.item()
 
             if class_designation is None:
                 # Mask the unused values for metrics

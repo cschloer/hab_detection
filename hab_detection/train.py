@@ -106,7 +106,7 @@ def train(
                     model,
                     test_loader,
                     class_designation,
-                    class_weights,
+                    class_weights=class_weights,
                 )
                 log(f"Epoch {epoch} test loss: {test_loss}")
                 # Print out performance metrics

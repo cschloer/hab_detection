@@ -42,12 +42,5 @@ def visualize(
         model_architecture, model_file, model_save_folder, class_designation
     )
 
-    tracker = get_class_metric_tracker(class_designation)
-    model.eval()
-
-    with torch.no_grad():
-        for batch_idx, (inputs, labels, _) in enumerate(loader):
-            inputs = inputs.to(device, dtype=torch.float)
-            labels = labels.to(device)
-
-            preds = model(inputs)["out"]  # make prediction
+    _, metrics = get_model_performance(model, loader, class_designation, num_batches=10)
+    log(pprint.pformat(metrics))
