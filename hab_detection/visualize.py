@@ -93,7 +93,7 @@ def visualize(
         xticklabels=class_names,
         yticklabels=class_names,
     )
-    sns.heatmap(
+    ax = sns.heatmap(
         cm,
         annot=True,
         mask=off_diag_mask,
@@ -106,7 +106,7 @@ def visualize(
         xticklabels=class_names,
         yticklabels=class_names,
     )
-    # plt.yticks(rotation=90)
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
 
     """
     cf_disp = ConfusionMatrixDisplay(cm)
