@@ -14,7 +14,7 @@ from torchmetrics import (
 )
 from .helpers import log
 from .constants import device
-from .model import mse_loss_with_nans
+from .model import get_criterion
 
 
 def get_metric_tracker(class_designation):
