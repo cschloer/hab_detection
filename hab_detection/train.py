@@ -14,7 +14,7 @@ from .constants import (
 from .helpers import log, set_config
 from .model import load_model, get_criterion, get_optimizer
 from .dataset import get_image_dataset
-from .metrics import get_model_performance
+from .metrics import get_model_performance, get_metric_tracker
 
 
 def train(
