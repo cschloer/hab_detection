@@ -1,4 +1,3 @@
-from torchmetrics import Accuracy, ConfusionMatrix, StatScores
 from torch.utils.data import DataLoader
 import torch
 from .constants import (
@@ -7,6 +6,7 @@ from .constants import (
     ZIP_PATH_TEST,
     MODEL_SAVE_BASE_FOLDER,
 )
+from .metrics import get_class_metric_tracker
 
 
 def visualize(
@@ -42,21 +42,7 @@ def visualize(
         model_architecture, model_file, model_save_folder, class_designation
     )
 
-    accuracy = Accuracy(
-        task="multiclass",
-        num_classes=len(class_designation),
-        ignore_index=-1,
-    ).to(device)
-    cm = ConfusionMatrix(
-        task="multiclass",
-        num_classes=len(class_designation),
-        ignore_index=-1,
-    ).to(device)
-    ss = ConfusionMatrix(
-        task="multiclass",
-        num_classes=len(class_designation),
-        ignore_index=-1,
-    ).to(device)
+    tracker = get_class_metric_tracker(class_designation)
     model.eval()
 
     with torch.no_grad():

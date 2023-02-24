@@ -2,64 +2,96 @@ import numpy as np
 import math
 import torch
 
-from torchmetrics import Accuracy, ConfusionMatrix
+from torchmetrics import (
+    MetricTracker,
+    MetricCollection,
+    MeanSquaredError
+    Precision,
+    Accuracy,
+    ConfusionMatrix,
+    Recall,
+    Specificity,
+)
 from .helpers import log
 from .constants import device
 from .model import mse_loss_with_nans
 
 
+def get_metric_tracker(class_designation):
+    if class_designation is None:
+        return MetricTracker(
+            MetricCollection(
+                [
+                    MeanSquaredError(squared=False)
+
+                ])
+                )
+
+    return MetricTracker(
+            MetricCollection(
+                [
+                    Accuracy(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                    ConfusionMatrix(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                    Precision(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                    Recall(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                    Specificity(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                ]
+            )
+        ).to(device)
+
+
 def get_model_performance(
-    model, loader, class_designation, num_batches=-1, additional_str=""
+    model,
+    loader,
+    class_designation,
+    class_weights,
+    num_batches=-1,
 ):
     # model_cpu = model.cpu()
+    criterion = get_criterion(class_designation, class_weights)
+    tracker = get_metric_tracker(class_designation)
     with torch.no_grad():
         model.eval()
 
-        if class_designation is None:
-            # It's a regression
+        total_loss = 0
+        for batch_idx, (inputs, labels, _) in enumerate(loader):
+            # print(f"{batch_idx + 1} / {len(loader)}")
+            inputs = inputs.to(device, dtype=torch.float)
+            labels = labels.to(device)
+            preds = model(inputs)["out"]  # make prediction
 
-            all_preds = torch.tensor([])
-            all_labels = torch.tensor([])
-            counter = 0
-            sum = 0
-            for batch_idx, (inputs, labels, _) in enumerate(loader):
-                # print(f"{batch_idx + 1} / {len(loader)}")
-                inputs = inputs.to(device, dtype=torch.float)
-                labels = labels.to(device)
-                preds = model(inputs)["out"]  # make prediction
+            loss = criterion(preds, labels)  # Calculate cross entropy loss
+            total_loss += loss.item()
 
-                loss = mse_loss_with_nans(preds, labels).cpu().detach()
-                sum += loss.item()
+            if class_designation is None:
+                # Mask the unused values for metrics
+                preds = preds[~labels == -1]
+                labels = labels[~labels == -1]
 
-                counter += 1
-                if num_batches >= 0 and counter >= num_batches:
-                    break
+            tracker.update(preds, labels)
 
-                # break
-                del inputs
-                del labels
-                del preds
+            counter += 1
+            if num_batches >= 0 and counter >= num_batches:
+                break
 
-            log(f"{additional_str}MSE: {math.sqrt(sum / (batch_idx + 1))}")
-        else:
-            total_correct = 0
-            total = 0
-            cm = ConfusionMatrix(
-                task="multiclass",
-                num_classes=len(class_designation),
-                ignore_index=-1,
-            ).to(device)
-            accuracy = Accuracy(
-                task="multiclass",
-                num_classes=len(class_designation),
-                ignore_index=-1,
-            ).to(device)
-            for batch_idx, (inputs, labels, _) in enumerate(loader):
-                inputs = inputs.to(device, dtype=torch.float)
-                labels = labels.to(device)
-                preds = model(inputs)["out"]  # make prediction
-
-                cm.update(preds, labels)
-                accuracy.update(preds, labels)
-            log(f"{additional_str}accuracy: {accuracy.compute()}")
-            log(f"{additional_str}confusion matrix:\n{cm.compute()}")
+    return total_loss / batch_idx, tracker.compute_all()

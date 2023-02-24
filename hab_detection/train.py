@@ -61,22 +61,12 @@ def train(
         optimizer = get_optimizer(model)
         criterion = get_criterion(class_designation, class_weights)
 
-        if class_designation is not None:
-            train_accuracy = Accuracy(
-                task="multiclass",
-                num_classes=len(class_designation),
-                ignore_index=-1,
-            ).to(device)
-            train_cm = ConfusionMatrix(
-                task="multiclass",
-                num_classes=len(class_designation),
-                ignore_index=-1,
-            ).to(device)
+        train_tracker = get_metric_tracker(class_designation)
         for epoch in range(epoch_start, 1000):  # Training loop
 
             log(f"Starting Epoch {epoch + 1}!")
-            running_accuracy = 0
             running_loss = 0
+            total_loss = 0
             try:
                 for batch_idx, (inputs, labels, _) in enumerate(train_loader):
                     model.train()
@@ -84,80 +74,59 @@ def train(
                     labels = labels.to(device)
 
                     optimizer.zero_grad()
-                    outputs = model(inputs)["out"]  # make prediction
-                    loss = criterion(outputs, labels)  # Calculate cross entropy loss
+                    preds = model(inputs)["out"]  # make prediction
+                    loss = criterion(preds, labels)  # Calculate cross entropy loss
                     loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
-                    running_loss += loss.item()
 
-                    if class_designation is not None:
-                        batch_accuracy = train_accuracy(outputs, labels)
-                        running_accuracy += batch_accuracy
-                        train_cm.update(outputs, labels)
+                    running_loss += loss.item()
+                    total_loss += loss.item()
+
+                    if class_designation is None:
+                        # Mask the unused values for metrics
+                        preds = preds[~labels == -1]
+                        labels = labels[~labels == -1]
+
+                    train_tracker.update(preds, labels)
 
                     NUM_BATCHES = 100
                     if (
                         batch_idx % NUM_BATCHES == NUM_BATCHES - 1
                     ):  # print every 99 mini-batches
                         avg_loss = math.sqrt(running_loss / NUM_BATCHES)
-                        if class_designation is not None:
-                            avg_accuracy = running_accuracy / NUM_BATCHES
-                            log(
-                                f"[{epoch + 1}, {batch_idx + 1:5d}] avg loss: {avg_loss :.3f}, avg accuracy: {avg_accuracy :.3f}"
-                            )
-                        else:
-                            log(
-                                f"[{epoch + 1}, {batch_idx + 1:5d}] avg loss: {avg_loss :.3f}"
-                            )
+                        log(
+                            f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f}"
+                        )
                         running_loss = 0.0
-                        running_accuracy = 0.0
 
                 torch.save(model.state_dict(), f"{model_save_folder}/epoch_recent.pt")
 
+                log(f"Epoch {epoch} train loss: {total_loss / batch_idx}")
+                test_loss, test_metrics = get_model_performance(
+                    model,
+                    test_loader,
+                    class_designation,
+                    class_weights,
+                )
+                log(f"Epoch {epoch} test loss: {test_loss}")
                 # Print out performance metrics
+                log(f"Train statistics:")
+                log(pprint.pformat(train_tracker.compute_all()))
+                log(f"Test statistics:")
+                log(pprint.pformat(test_metrics))
+
                 if epoch % 5 == 4 or epoch == 0:
                     torch.save(
                         model.state_dict(), f"{model_save_folder}/epoch_{epoch + 1}.pt"
                     )
-                    log("Getting actual test model performance")
-                    get_model_performance(
-                        model,
-                        test_loader,
-                        class_designation,
-                        additional_str=f"Epoch {epoch+1} test ",
-                    )
-                else:
-                    log("Getting subset test model performance")
-                    get_model_performance(
-                        model,
-                        test_loader,
-                        class_designation,
-                        num_batches=10,
-                        additional_str=f"Epoch {epoch+1} test ",
-                    )
-                if class_designation is not None:
-                    log(f"Epoch {epoch + 1} train accuracy: {train_accuracy.compute()}")
-                    log(
-                        f"Epoch {epoch + 1} train confusion matrix: {train_cm.compute()}"
-                    )
-                    train_accuracy.reset()
-                    train_cm.reset()
-                else:
-                    log("Getting subset train model performance")
-                    get_model_performance(
-                        model,
-                        train_loader,
-                        class_designation,
-                        num_batches=10,
-                        additional_str=f"Epoch {epoch+1} train ",
-                    )
+                train_tracker.reset()
 
             finally:
                 try:
                     # Clear GPU cache in case it crashes so it can run again
                     del inputs
                     del labels
-                    del outputs
+                    del preds
                     torch.cuda.empty_cache()
                 except:
                     pass
