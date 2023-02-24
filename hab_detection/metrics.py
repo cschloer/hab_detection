@@ -75,6 +75,7 @@ def get_model_performance(
         model.eval()
 
         total_loss = 0
+        counter = 0
         for batch_idx, (inputs, labels, _) in enumerate(loader):
             # print(f"{batch_idx + 1} / {len(loader)}")
             inputs = inputs.to(device, dtype=torch.float)
