@@ -17,13 +17,13 @@ if len(sys.argv) > 4:
     exit()
 
 e = sys.argv[1]
-epoch_start = 0
+epoch = 0
 if len(sys.argv) >= 3:
-    epoch_start_str = sys.argv[2]
-    if not epoch_start_str.isdigit():
+    epoch_str = sys.argv[2]
+    if not epoch_str.isdigit():
         print("The second argument must be an integer")
         exit()
-    epoch_start = int(epoch_start_str)
+    epoch = int(epoch_str)
 
 model_file = None
 if len(sys.argv) == 4:
