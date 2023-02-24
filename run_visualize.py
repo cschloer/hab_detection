@@ -38,6 +38,7 @@ e = experiments[experiment_name]
 visualize(
     e["name"],
     e["class_designation"],
-    epoch,
+    e["model_architecture"],
     model_file,
+    epoch,
 )

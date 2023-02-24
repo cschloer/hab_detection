@@ -16,14 +16,16 @@ from .model import load_model
 def visualize(
     experiment_name,
     class_designation,
-    epoch,
+    model_architecture,
     model_file,
+    epoch,
     dataset_type="test",
 ):
     # Set the config to print to stdout
     set_config("test")
 
-    image_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}/visualize/{epoch}"
+    model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
+    image_save_folder = f"{model_save_folder}/visualize/{epoch}"
     os.makedirs(image_save_folder, exist_ok=True)
 
     log(f"Loading the dataset")
