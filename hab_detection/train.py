@@ -120,11 +120,20 @@ def train(
                         model.state_dict(), f"{model_save_folder}/epoch_{epoch + 1}.pt"
                     )
                     log("Getting actual test model performance")
-                    get_model_performance(model, test_loader, class_designation)
+                    get_model_performance(
+                        model,
+                        test_loader,
+                        class_designation,
+                        additional_str=f"Epoch {epoch+1} test ",
+                    )
                 else:
                     log("Getting subset test model performance")
                     get_model_performance(
-                        model, test_loader, class_designation, num_batches=10
+                        model,
+                        test_loader,
+                        class_designation,
+                        num_batches=10,
+                        additional_str=f"Epoch {epoch+1} test ",
                     )
                 if class_designation is not None:
                     log(f"Epoch {epoch + 1} train accuracy: {train_accuracy.compute()}")
@@ -136,7 +145,11 @@ def train(
                 else:
                     log("Getting subset train model performance")
                     get_model_performance(
-                        model, train_loader, class_designation, num_batches=10
+                        model,
+                        train_loader,
+                        class_designation,
+                        num_batches=10,
+                        additional_str=f"Epoch {epoch+1} train ",
                     )
 
             finally:

@@ -8,8 +8,11 @@ from .constants import device
 from .model import mse_loss_with_nans
 
 
-def get_model_performance(model, loader, class_designation, num_batches=-1):
+def get_model_performance(
+    model, loader, class_designation, num_batches=-1, additional_str=""
+):
     # model_cpu = model.cpu()
+    epoch_string = "" if epoch is None else f"Epoch {epoch}"
     with torch.no_grad():
         model.eval()
 
@@ -38,7 +41,7 @@ def get_model_performance(model, loader, class_designation, num_batches=-1):
                 del labels
                 del preds
 
-            log(f"Averaged MSE: {math.sqrt(sum / (batch_idx + 1))}")
+            log(f"{additional_str}MSE: {math.sqrt(sum / (batch_idx + 1))}")
         else:
             total_correct = 0
             total = 0
@@ -59,5 +62,5 @@ def get_model_performance(model, loader, class_designation, num_batches=-1):
 
                 cm.update(preds, labels)
                 accuracy.update(preds, labels)
-            log(f"Accuracy: {accuracy.compute()}")
-            log(f"Confusion matrix: {cm.compute()}")
+            log(f"{additional_str}accuracy: {accuracy.compute()}")
+            log(f"{additional_str}confusion matrix:\n{cm.compute()}")

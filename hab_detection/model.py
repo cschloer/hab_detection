@@ -78,11 +78,12 @@ def mask_and_flatten_output(pred, label, flatten=True):
 def mse_loss_with_nans(pred, label):
     # Custom loss function that changes removes any pixels that are 254 or 255 from consideration
 
-    pred, label = mask_and_flatten_output(pred, label)
+    # pred, label = mask_and_flatten_output(pred, label)
+    mask = label == -1
     # Multiply the flattened prediction by 253 to put it in the same range as the target
     pred = pred * 253
 
-    loss = torch.mean((pred - label) ** 2)
+    loss = torch.mean((pred[~mask] - label[~mask]) ** 2)
     return loss
 
 
