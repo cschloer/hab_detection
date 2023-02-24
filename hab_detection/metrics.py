@@ -19,45 +19,47 @@ from .model import mse_loss_with_nans
 
 def get_metric_tracker(class_designation):
     if class_designation is None:
-        return MetricTracker(
+        tracker = MetricTracker(
             MetricCollection(
                 [
                     MeanSquaredError(squared=False),
                 ]
             ),
         )
-
-    return MetricTracker(
-        MetricCollection(
-            [
-                Accuracy(
-                    task="multiclass",
-                    num_classes=len(class_designation),
-                    ignore_index=-1,
-                ).to(device),
-                ConfusionMatrix(
-                    task="multiclass",
-                    num_classes=len(class_designation),
-                    ignore_index=-1,
-                ).to(device),
-                Precision(
-                    task="multiclass",
-                    num_classes=len(class_designation),
-                    ignore_index=-1,
-                ).to(device),
-                Recall(
-                    task="multiclass",
-                    num_classes=len(class_designation),
-                    ignore_index=-1,
-                ).to(device),
-                Specificity(
-                    task="multiclass",
-                    num_classes=len(class_designation),
-                    ignore_index=-1,
-                ).to(device),
-            ]
-        )
-    ).to(device)
+    else:
+        tracker = MetricTracker(
+            MetricCollection(
+                [
+                    Accuracy(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                    ConfusionMatrix(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                    Precision(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                    Recall(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                    Specificity(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                    ).to(device),
+                ]
+            )
+        ).to(device)
+    tracker.increment()
+    return tracker
 
 
 def get_model_performance(
