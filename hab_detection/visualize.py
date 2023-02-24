@@ -7,7 +7,7 @@ from .constants import (
     ZIP_PATH_TEST,
     MODEL_SAVE_BASE_FOLDER,
 )
-from .metrics import get_metric_tracker
+from .metrics import get_metric_tracker, get_model_performance
 from .helpers import log, set_config
 from .dataset import get_image_dataset
 from .model import load_model
