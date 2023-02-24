@@ -106,7 +106,7 @@ def visualize(
         xticklabels=class_names,
         yticklabels=class_names,
     )
-    plt.yticks(rotation=90)
+    # plt.yticks(rotation=90)
 
     """
     cf_disp = ConfusionMatrixDisplay(cm)
