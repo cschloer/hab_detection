@@ -1,5 +1,6 @@
 import os
 from sklearn.metrics import ConfusionMatrixDisplay
+import seaborn as sns
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import numpy as np
@@ -58,9 +59,47 @@ def visualize(
 
     _, metrics = get_model_performance(model, loader, class_designation, num_batches=-1)
     log(f"\n{pprint.pformat(metrics)}")
-    cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
-    print(cm, cm.shape)
 
+    """ Confusion Matrix """
+    cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
+    vmin = np.min(cm)
+    vmax = np.max(cm)
+    off_diag_mask = np.eye(*cm.shape, dtype=bool)
+
+    fig = plt.figure()
+    gs0 = matplotlib.gridspec.GridSpec(1, 2, width_ratios=[20, 2], hspace=0.05)
+    gs00 = matplotlib.gridspec.GridSpecFromSubplotSpec(
+        1, 2, subplot_spec=gs0[1], hspace=0
+    )
+
+    ax = fig.add_subplot(gs0[0])
+    cax1 = fig.add_subplot(gs00[0])
+    cax2 = fig.add_subplot(gs00[1])
+
+    sns.heatmap(
+        cm,
+        annot=True,
+        mask=~off_diag_mask,
+        cmap="Blues",
+        vmin=vmin,
+        vmax=vmax,
+        ax=ax,
+        cbar_ax=cax2,
+    )
+    sns.heatmap(
+        cm,
+        annot=True,
+        mask=off_diag_mask,
+        cmap="OrRd",
+        vmin=vmin,
+        vmax=vmax,
+        ax=ax,
+        cbar_ax=cax1,
+        cbar_kws=dict(ticks=[]),
+    )
+
+    """
     cf_disp = ConfusionMatrixDisplay(cm)
     cf_disp.plot()
+    """
     save_plot(image_save_folder, "confusion_matrix")
