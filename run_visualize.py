@@ -1,7 +1,6 @@
 import sys
 import json
 from hab_detection.visualize import visualize
-from .run_experiment import get_input_experiment
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
