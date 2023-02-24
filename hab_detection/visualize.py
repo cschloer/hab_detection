@@ -57,6 +57,6 @@ def visualize(
     metrics = metrics.cpu()
     log(f"\n{pprint.pformat(metrics)}")
 
-    cf_disp = ConfusionMatrixDisplay(metrics["MulticlassConfusionMatrix"].numpy()))
+    cf_disp = ConfusionMatrixDisplay(metrics["MulticlassConfusionMatrix"].numpy())
     cf_disp.plot()
     save_plot(image_save_folder, "confusion_matrix")
