@@ -6,7 +6,7 @@
         "class_weights": null,
         "model_architecture": "resnet50"
     },
-    "experiment4": {
+    "experiment5": {
         "name": "experiment4",
         "batch_size": 32,
         "class_designation": [50, 100, 150, 200, 254],
