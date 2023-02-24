@@ -101,7 +101,7 @@ def train(
                     ):  # print every 99 mini-batches
                         avg_loss = math.sqrt(running_loss / NUM_BATCHES)
                         if class_designation is not None:
-                            avg_accuracy = math.sqrt(running_accuracy / NUM_BATCHES)
+                            avg_accuracy = running_accuracy / NUM_BATCHES
                             log(
                                 f"[{epoch + 1}, {batch_idx + 1:5d}] avg loss: {avg_loss :.3f}, avg accuracy: {avg_accuracy :.3f}"
                             )

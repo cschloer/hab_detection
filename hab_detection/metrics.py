@@ -12,7 +12,6 @@ def get_model_performance(
     model, loader, class_designation, num_batches=-1, additional_str=""
 ):
     # model_cpu = model.cpu()
-    epoch_string = "" if epoch is None else f"Epoch {epoch}"
     with torch.no_grad():
         model.eval()
 
