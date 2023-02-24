@@ -12,12 +12,15 @@ from .constants import (
 def visualize(
     experiment_name,
     class_designation,
-    model_file=None,
+    epoch,
+    model_file,
     dataset_type="test",
 ):
     # Set the config to print to stdout
     set_config("test")
-    model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
+
+    image_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}/visualize/{epoch}"
+    os.makedirs(image_save_folder, exist_ok=True)
 
     log(f"Loading the dataset")
     if dataset_type == "test":
@@ -49,8 +52,16 @@ def visualize(
         num_classes=len(class_designation),
         ignore_index=-1,
     ).to(device)
+    ss = ConfusionMatrix(
+        task="multiclass",
+        num_classes=len(class_designation),
+        ignore_index=-1,
+    ).to(device)
     model.eval()
+
     with torch.no_grad():
         for batch_idx, (inputs, labels, _) in enumerate(loader):
+            inputs = inputs.to(device, dtype=torch.float)
+            labels = labels.to(device)
 
-
+            preds = model(inputs)["out"]  # make prediction
