@@ -1,7 +1,6 @@
 from .constants import dataset_mean, dataset_std
 from .helpers import log
 
-from threading import Lock
 import torchvision.transforms as transforms
 import math
 import random
@@ -58,10 +57,8 @@ class ImageData(Dataset):
         self.zip_path = zip_path
         self.class_designation = class_designation
         self.randomize = randomize
-        self.lock = Lock()
 
         self.zip = None
-        self.open_zip()
         self.transform_input = transforms.Compose(
             [transforms.ToTensor(), transforms.Normalize(dataset_mean, dataset_std)]
         )
@@ -70,20 +67,22 @@ class ImageData(Dataset):
         return len(self.imgs)
 
     def _get_image(self, idx):
-        with self.lock:
-            filename = self.imgs[idx]
-            try:
-                image = np.load(self.zip.open(filename))
-            except Exception as e:
-                log(f"FAILED: {filename}")
-                raise e
-            if image is None:
-                raise FileNotFoundError(filename)
+        if self.zip == None:
+            self.open_zip()
 
-            label_filename = self.labels[idx]
-            label = np.load(self.zip.open(label_filename))
-            if label is None:
-                raise FileNotFoundError(label_filename)
+        filename = self.imgs[idx]
+        try:
+            image = np.load(self.zip.open(filename))
+        except Exception as e:
+            log(f"FAILED: {filename}")
+            raise e
+        if image is None:
+            raise FileNotFoundError(filename)
+
+        label_filename = self.labels[idx]
+        label = np.load(self.zip.open(label_filename))
+        if label is None:
+            raise FileNotFoundError(label_filename)
         return image, label
 
     def get_untransformed_image(self, idx):
