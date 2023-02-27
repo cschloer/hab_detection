@@ -47,7 +47,7 @@ def visualize(
     cur_epoch = None
     with open(log_file, "r") as f:
         for line in f.readlines():
-            result = re.search(r"^.*Epoch (\d*) ([a-z]*) loss: ([\d*[.]?\d*)", line)
+            result = re.search(r"^.*Epoch (\d*) ([a-z]*) loss: (\d*[.]?\d*)", line)
             if result is not None:
                 log(f"{result.groups()}: {line}")
                 epoch, t, loss = result.groups()
