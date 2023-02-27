@@ -51,6 +51,32 @@ def visualize(
             if result is not None:
                 log(f"{result.groups()}: {line}")
                 epoch, t, loss = result.groups()
+                if cur_epoch is None:
+                    cur_epoch = epoch
+                else:
+                    # Assert that train and test don't get misaligned
+                    assert cur_epoch = epoch
+                    cur_epoch = None
+                if t == "test":
+                    test_loss.append(float(loss))
+                elif t = "train":
+                    train_loss.append(float(loss))
+                else:
+                    raise Exception(f"Found unknown type {t} in log")
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+    ax.plot(test_loss, color="b", label="Test")
+    ax.plot(train_loss, color="r", label="Train")
+    ax.set(xlabel="Epoch", ylabel="Loss")
+
+    plt.legend()
+    plt.title("Loss across training epochs")
+
+    #plt.show()
+    save_plot(image_save_folder, "loss")
+
+
     return
 
     log(f"Loading the dataset")
