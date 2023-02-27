@@ -44,7 +44,7 @@ def train(
             train_dataset,
             batch_size=batch_size,
             shuffle=True,
-            num_workers=4,
+            num_workers=0,
             drop_last=True,
         )
 
