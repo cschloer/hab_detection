@@ -61,6 +61,26 @@ def load_model(
             )
         else:
             raise Exception("Regression not supported for ResNet18")
+    elif model_architecture == "deeplabv3-efficientnet-b0":
+        if class_designation is not None:
+            model = smp.DeepLabV3(
+                encoder_name="efficientnet-b0",
+                encoder_weights=None,
+                in_channels=12,
+                classes=num_classes,
+            )
+        else:
+            raise Exception("Regression not supported for EfficientNet-b0")
+    elif model_architecture == "deeplabv3-mobilenet_v2":
+        if class_designation is not None:
+            model = smp.DeepLabV3(
+                encoder_name="mobilenet_v2",
+                encoder_weights=None,
+                in_channels=12,
+                classes=num_classes,
+            )
+        else:
+            raise Exception("Regression not supported for MobileNet-v2")
     else:
         raise Exception(f"Unknown model architecture {model_architecture}")
 
