@@ -74,6 +74,9 @@ def train(
                     labels = labels.to(device)
 
                     optimizer.zero_grad()
+                    print("model", model)
+                    print("model of inputs", model(inputs))
+
                     preds = model(inputs)["out"]  # make prediction
                     loss = criterion(preds, labels)  # Calculate cross entropy loss
                     loss.backward()  # Backpropogate loss
