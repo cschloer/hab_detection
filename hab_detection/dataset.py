@@ -115,7 +115,9 @@ class ImageData(Dataset):
         # label = torch.from_numpy(label)
         # F.one_hot(label, num_classes=len(class_designation))
 
-        return label.reshape(label.shape[1], label.shape[2]).astype(np.int_)
+        return TF.to_tensor(
+            label.reshape(label.shape[1], label.shape[2]).astype(np.int_)
+        )
 
     def random_transform(self, image, label):
 
