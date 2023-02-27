@@ -36,15 +36,15 @@ dataset = get_image_dataset(
 
 loader = DataLoader(
     dataset,
-    batch_size=batch_size,
-    shuffle=True,
+    batch_size=32,
+    shuffle=False,
     num_workers=0,
     drop_last=False,
 )
 
 num_bins = len(e["class_designation"]) if e["class_designation"] is not None else 253
 labels_dist, _ = np.histogram([], bins=num_bins, range=(0, num_bins + 1))
-for batch_idx, (inputs, labels, _) in enumerate(test_loader):
+for batch_idx, (inputs, labels, _) in enumerate(loader):
     mask = labels == -1
 
     labels_dist_temp, _ = np.histogram(
