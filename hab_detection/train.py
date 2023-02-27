@@ -99,6 +99,7 @@ def train(
                             f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f}"
                         )
                         running_loss = 0.0
+                    break
 
                 torch.save(model.state_dict(), f"{model_save_folder}/epoch_recent.pt")
 
@@ -121,6 +122,7 @@ def train(
                         model.state_dict(), f"{model_save_folder}/epoch_{epoch + 1}.pt"
                     )
                 train_tracker.reset()
+                break
 
             finally:
                 try:
