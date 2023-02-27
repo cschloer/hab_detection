@@ -9,6 +9,7 @@ import torch
 import pprint
 from .constants import (
     device,
+    LOG_NAME,
     ZIP_PATH_TRAIN,
     ZIP_PATH_TEST,
     MODEL_SAVE_BASE_FOLDER,
@@ -36,7 +37,18 @@ def visualize(
 
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
     image_save_folder = f"{model_save_folder}/visualize/{epoch}"
+    log_save_file = f"{model_save_folder}/{LOG_NAME}"
+
     os.makedirs(image_save_folder, exist_ok=True)
+
+    test_loss = []
+    train_loss = []
+    cur_epoch = None
+    with open(log_file, "r") as f:
+        for line in f.readlines():
+            result = re.search(r"^.*Epoch (\d*) ([a-z]*) loss: (\d*)", line)
+            log(result.groups(), line)
+    return
 
     log(f"Loading the dataset")
     if dataset_type == "test":
