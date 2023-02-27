@@ -59,3 +59,5 @@ for batch_idx, (inputs, labels, _) in enumerate(loader):
 
 print("Labels Distribution:")
 print(labels_dist)
+print("Weights:")
+print(1 / (labels_dist / np.max(labels_dist)))

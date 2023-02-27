@@ -17,7 +17,8 @@
         "name": "experiment6",
         "batch_size": 32,
         "class_designation": [50, 100, 150, 200, 254],
-        "class_weights": [1, 100, 100, 100, 1000],
+        // Calculated using run_dataset_statistics.py
+        "class_weights": [1, 23.15763134, 10.1160977, 14.39714133, 184.89555124],
         "model_architecture": "deeplabv3-resnet18"
     }
 }
