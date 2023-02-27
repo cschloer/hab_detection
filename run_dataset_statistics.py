@@ -1,6 +1,7 @@
 from hab_detection.dataset import get_image_dataset
 import json
 import sys
+import numpy as np
 
 from hab_detection.constants import (
     device,
