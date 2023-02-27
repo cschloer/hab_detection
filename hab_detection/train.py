@@ -103,7 +103,7 @@ def train(
 
                 torch.save(model.state_dict(), f"{model_save_folder}/epoch_recent.pt")
 
-                log(f"Epoch {epoch} train loss: {total_loss / batch_idx}")
+                log(f"Epoch {epoch} train loss: {total_loss / (batch_idx + 1)}")
                 test_loss, test_metrics = get_model_performance(
                     model,
                     test_loader,
