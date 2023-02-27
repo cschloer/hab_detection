@@ -49,7 +49,7 @@ def visualize(
         for line in f.readlines():
             result = re.search(r"^.*Epoch (\d*) ([a-z]*) loss: (\d*)", line)
             if result is not None:
-                log(result.groups(), line)
+                log(f"{result.groups()}: {line}")
     return
 
     log(f"Loading the dataset")
