@@ -37,7 +37,7 @@ def visualize(
 
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
     image_save_folder = f"{model_save_folder}/visualize/{epoch}"
-    log_save_file = f"{model_save_folder}/{LOG_NAME}"
+    log_file = f"{model_save_folder}/{LOG_NAME}"
 
     os.makedirs(image_save_folder, exist_ok=True)
 
