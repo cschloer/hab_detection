@@ -49,7 +49,6 @@ def visualize(
         for line in f.readlines():
             result = re.search(r"^.*Epoch (\d*) ([a-z]*) loss: (\d*[.]?\d*)", line)
             if result is not None:
-                log(f"{result.groups()}: {line}")
                 epoch, t, loss = result.groups()
                 if cur_epoch is None:
                     cur_epoch = epoch
@@ -63,7 +62,6 @@ def visualize(
                     train_loss.append(float(loss))
                 else:
                     raise Exception(f"Found unknown type {t} in log")
-                log(f"{loss} ---- {float(loss)}")
 
     fig = plt.figure()
     ax = fig.add_subplot()
@@ -77,7 +75,6 @@ def visualize(
     # plt.show()
     save_plot(image_save_folder, "loss")
 
-    return
 
     log(f"Loading the dataset")
     if dataset_type == "test":
