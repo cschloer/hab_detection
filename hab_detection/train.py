@@ -99,18 +99,17 @@ def train(
                             f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f}"
                         )
                         running_loss = 0.0
-                    break
 
                 torch.save(model.state_dict(), f"{model_save_folder}/epoch_recent.pt")
 
-                log(f"Epoch {epoch} train loss: {total_loss / (batch_idx + 1)}")
+                log(f"Epoch {epoch + 1} train loss: {total_loss / (batch_idx + 1)}")
                 test_loss, test_metrics = get_model_performance(
                     model,
                     test_loader,
                     class_designation,
                     class_weights=class_weights,
                 )
-                log(f"Epoch {epoch} test loss: {test_loss}")
+                log(f"Epoch {epoch + 1} test loss: {test_loss}")
                 # Print out performance metrics
                 log(f"Train statistics:")
                 log(f"\n{pprint.pformat(train_tracker.compute_all())}")
@@ -122,7 +121,6 @@ def train(
                         model.state_dict(), f"{model_save_folder}/epoch_{epoch + 1}.pt"
                     )
                 train_tracker.reset()
-                break
 
             finally:
                 try:
