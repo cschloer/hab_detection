@@ -63,6 +63,7 @@ def visualize(
                     train_loss.append(float(loss))
                 else:
                     raise Exception(f"Found unknown type {t} in log")
+                log(f"{loss} ---- {float(loss)}")
 
     fig = plt.figure()
     ax = fig.add_subplot()
@@ -73,9 +74,8 @@ def visualize(
     plt.legend()
     plt.title("Loss across training epochs")
 
-    #plt.show()
+    # plt.show()
     save_plot(image_save_folder, "loss")
-
 
     return
 
