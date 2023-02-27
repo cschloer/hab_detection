@@ -56,6 +56,7 @@ class ImageData(Dataset):
         self.labels = labels
         self.zip_path = zip_path
         self.class_designation = class_designation
+        self.randomize = randomize
 
         self.zip = None
         self.open_zip()
