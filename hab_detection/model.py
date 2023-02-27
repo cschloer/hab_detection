@@ -1,8 +1,24 @@
 from .constants import device, LEARNING_RATE, MODEL_SAVE_BASE_FOLDER
 
 from torchvision import models
+import segmentation_models_pytorch as smp
 import torch
 import numpy as np
+
+
+def convert_batchnorm2d(model):
+    # Converts all BatchNorm2d to track_running_stats=False
+    # due to bug/unexpected behavior in BatchNorm2D
+    for child_name, child in model.named_children():
+        if isinstance(child, torch.nn.BatchNorm2d):
+            num_features = child.num_features
+            setattr(
+                model,
+                child_name,
+                torch.nn.BatchNorm2d(num_features, track_running_stats=False),
+            )
+        else:
+            convert_batchnorm2d(child)
 
 
 def load_model(
@@ -13,32 +29,26 @@ def load_model(
     model_folder,
     class_designation,
 ):
+    num_classes = None
+    if class_designation is not None:
+        num_classes = len(class_designation)
     if model_architecture == "resnet50":
         # Load resnet50 segmentation model
-        model = models.segmentation.deeplabv3_resnet50(weights=None)
-
-        # Fix BatchNorm2D Bug
-        model.backbone.bn1 = torch.nn.BatchNorm2d(64, track_running_stats=False)
-        model.classifier[2] = torch.nn.BatchNorm2d(256, track_running_stats=False)
-
-        # Chance first layer to accept 12 input bands (12 bands)
-        model.backbone.conv1 = torch.nn.Conv2d(
-            12, 64, kernel_size=(7, 7), stride=(2, 2)
-        )
-
         if class_designation is not None:
-            # It's a class based problem
-            num_classes = len(class_designation)
-            model.classifier[4] = torch.nn.Conv2d(
-                256,
-                num_classes,
-                kernel_size=(1, 1),
-                stride=(1, 1),
+            model = smp.Unet(
+                encoder_name="resnet50",
+                encoder_weights=None,
+                in_channels=12,
+                classes=num_classes,
             )
-
         else:
             # It's a regression problem
+            model = models.segmentation.deeplabv3_resnet50(weights=None)
 
+            # Chance first layer to accept 12 input bands (12 bands)
+            model.backbone.conv1 = torch.nn.Conv2d(
+                12, 64, kernel_size=(7, 7), stride=(2, 2)
+            )
             # Change final layer to 1 continuous output
             model.classifier[4] = torch.nn.Sequential(
                 torch.nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1)),
@@ -53,8 +63,19 @@ def load_model(
             else:
                 model_file_path = f"{model_folder}/{model_file}"
                 model.load_state_dict(torch.load(model_file_path, map_location=device))
+    elif model_architecture == "resnet18":
+        if class_designation is not None:
+            model = smp.Unet(
+                encoder_name="resnet18",
+                encoder_weights=None,
+                in_channels=12,
+                classes=num_classes,
+            )
+        else:
+            raise Exception("Regression not supported for ResNet18")
     else:
         raise Exception(f"Unknown model architecture {model_architecture}")
+    convert_batchnorm2d(model)
     return model
 
 
