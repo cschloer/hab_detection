@@ -115,9 +115,12 @@ class ImageData(Dataset):
         # label = torch.from_numpy(label)
         # F.one_hot(label, num_classes=len(class_designation))
 
-        return TF.to_tensor(
-            label.reshape(label.shape[1], label.shape[2]).astype(np.int_)
-        )
+        print(label.shape)
+        label = label.reshape(label.shape[1], label.shape[2]).astype(np.int_)
+        print(label.shape)
+        label = TF.to_tensor(label)
+        print(label.shape)
+        return label
 
     def random_transform(self, image, label):
 
@@ -133,7 +136,7 @@ class ImageData(Dataset):
 
         # Gaussian Blur
         sigma = np.random.uniform(0.1, 2.0)
-        kernel_size = int(random.random() * 3 + 3)
+        kernel_size = 3 if random.random() > 0.5 else 5
         image = TF.gaussian_blur(image, kernel_size, sigma)
 
         return image, label
