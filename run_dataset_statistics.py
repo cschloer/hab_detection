@@ -50,7 +50,7 @@ print(labels_dist)
 for batch_idx, (inputs, labels, _) in enumerate(loader):
     mask = labels == -1
 
-    labels_dist_temp, _ = np.bincount(
+    labels_dist_temp = np.bincount(
         labels[~mask].flatten(),
         minlength=num_classes,
     )
