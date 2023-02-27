@@ -12,7 +12,7 @@
         "class_designation": [50, 100, 150, 200, 254],
         "class_weights": [1, 100, 100, 100, 1000],
         "model_architecture": "deeplabv3-resnet50"
-    }
+    },
     "experiment6": {
         "name": "experiment6",
         "batch_size": 32,
