@@ -29,27 +29,30 @@ experiment_name = sys.argv[2]
 if experiment_name not in experiments:
     print(f"Experiment {experiment_name} not in experiments.json")
 e = experiments[experiment_name]
+cd = e["class_designation"]
 
 dataset = get_image_dataset(
     ZIP_PATH_TRAIN if t == "train" else ZIP_PATH_TEST,
-    e["class_designation"],
+    cd,
 )
 
 loader = DataLoader(
     dataset,
-    batch_size=32,
+    batch_size=128,
     shuffle=False,
     num_workers=0,
     drop_last=False,
 )
 
-num_bins = len(e["class_designation"]) if e["class_designation"] is not None else 253
-labels_dist, _ = np.histogram([], bins=num_bins, range=(0, num_bins + 1))
+num_classes = len(cd) if cd is not None else 254
+labels_dist = np.zeros(num_classes)
+print(labels_dist)
 for batch_idx, (inputs, labels, _) in enumerate(loader):
     mask = labels == -1
 
-    labels_dist_temp, _ = np.histogram(
-        labels[~mask], bins=num_bins, range=(0, num_bins + 1)
+    labels_dist_temp, _ = np.bincount(
+        np.flatten(labels[~mask]),
+        minlength=num_classes,
     )
 
     labels_dist = labels_dist + labels_dist_temp
