@@ -2,6 +2,9 @@ from .constants import dataset_mean, dataset_std
 from .helpers import log
 
 import torchvision.transforms as transforms
+import math
+import random
+import torchvision.transforms.functional as TF
 import torch.nn.functional as F
 import torch
 import zipfile
@@ -39,11 +42,6 @@ def get_data(zip_path):
     return imgs, labels, zip_path
 
 
-transform = transforms.Compose(
-    [transforms.ToTensor(), transforms.Normalize(dataset_mean, dataset_std)]
-)
-
-
 class ImageData(Dataset):
     def __init__(
         self,
@@ -51,6 +49,7 @@ class ImageData(Dataset):
         labels,
         zip_path,
         class_designation,
+        randomize=False,
     ):
         super().__init__()
         self.imgs = imgs
@@ -60,6 +59,9 @@ class ImageData(Dataset):
 
         self.zip = None
         self.open_zip()
+        self.transform_input = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize(dataset_mean, dataset_std)]
+        )
 
     def __len__(self):
         return len(self.imgs)
@@ -112,7 +114,28 @@ class ImageData(Dataset):
         # label = torch.from_numpy(label)
         # F.one_hot(label, num_classes=len(class_designation))
 
-        return label.reshape(label.shape[1], label.shape[2]).astype(np.int_)
+        return self._transform_label(
+            label.reshape(label.shape[1], label.shape[2]).astype(np.int_)
+        )
+
+    def random_transform(self, image, label):
+
+        # Random horizontal flipping
+        if random.random() > 0.5:
+            image = TF.hflip(image)
+            label = TF.hflip(label)
+
+        # Random vertical flipping
+        if random.random() > 0.5:
+            image = TF.vflip(image)
+            label = TF.vflip(label)
+
+        # Gaussian Blur
+        sigma = np.random.uniform(0.1, 2.0)
+        kernel_size = int(random.random() * 3 + 3)
+        image = TF.gaussian_blur(image, kernel_size, sigma)
+
+        return image, label
 
     def __getitem__(self, idx):
         image, label = self._get_image(idx)
@@ -123,9 +146,11 @@ class ImageData(Dataset):
         # 10,000 is the accepted number to get a brightness level
         image = image.astype(np.float32) / 10000
         # augmentations
-        image = transform(image)
-
+        image = self.transform_input(image)
         label = self.transform_label(label)
+
+        if self.randomize:
+            image, label = self.random_transform(image, label)
 
         return image, label, idx
 

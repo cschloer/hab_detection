@@ -29,43 +29,31 @@ def load_model(
     model_folder,
     class_designation,
 ):
-    num_classes = None
+    num_classes = 2
     if class_designation is not None:
         num_classes = len(class_designation)
-    if model_architecture == "resnet50":
+    if model_architecture == "deeplabv3-resnet50":
         # Load resnet50 segmentation model
-        if class_designation is not None:
-            model = smp.Unet(
-                encoder_name="resnet50",
-                encoder_weights=None,
-                in_channels=12,
-                classes=num_classes,
-            )
-        else:
-            # It's a regression problem
-            model = models.segmentation.deeplabv3_resnet50(weights=None)
-
+        model = smp.DeepLabV3(
+            encoder_name="resnet50",
+            encoder_weights=None,
+            in_channels=12,
+            classes=num_classes,
+        )
+        if class_designation is None:
             # Chance first layer to accept 12 input bands (12 bands)
             model.backbone.conv1 = torch.nn.Conv2d(
                 12, 64, kernel_size=(7, 7), stride=(2, 2)
             )
             # Change final layer to 1 continuous output
-            model.classifier[4] = torch.nn.Sequential(
+            model.decoder.segmentation_head[4] = torch.nn.Sequential(
                 torch.nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1)),
                 torch.nn.Sigmoid(),
             )
-        model = model.to(device)
 
-        if model_file is not None:
-            # An entire path was passed in
-            if model_file.startswith("/"):
-                model.load_state_dict(torch.load(model_file, map_location=device))
-            else:
-                model_file_path = f"{model_folder}/{model_file}"
-                model.load_state_dict(torch.load(model_file_path, map_location=device))
-    elif model_architecture == "resnet18":
+    elif model_architecture == "deeplabv3-resnet18":
         if class_designation is not None:
-            model = smp.Unet(
+            model = smp.DeepLabV3(
                 encoder_name="resnet18",
                 encoder_weights=None,
                 in_channels=12,
@@ -75,7 +63,17 @@ def load_model(
             raise Exception("Regression not supported for ResNet18")
     else:
         raise Exception(f"Unknown model architecture {model_architecture}")
+
     convert_batchnorm2d(model)
+
+    model = model.to(device)
+    if model_file is not None:
+        # An entire path was passed in
+        if model_file.startswith("/"):
+            model.load_state_dict(torch.load(model_file, map_location=device))
+        else:
+            model_file_path = f"{model_folder}/{model_file}"
+            model.load_state_dict(torch.load(model_file_path, map_location=device))
     return model
 
 

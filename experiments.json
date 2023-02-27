@@ -4,14 +4,21 @@
         "batch_size": 32,
         "class_designation": null,
         "class_weights": null,
-        "model_architecture": "resnet50"
+        "model_architecture": "deeplabv3-resnet50"
     },
     "experiment5": {
         "name": "experiment5",
         "batch_size": 32,
         "class_designation": [50, 100, 150, 200, 254],
         "class_weights": [1, 100, 100, 100, 1000],
-        "model_architecture": "resnet50"
+        "model_architecture": "deeplabv3-resnet50"
+    }
+    "experiment6": {
+        "name": "experiment6",
+        "batch_size": 32,
+        "class_designation": [50, 100, 150, 200, 254],
+        "class_weights": [1, 100, 100, 100, 1000],
+        "model_architecture": "deeplabv3-resnet18"
     }
 }
 
