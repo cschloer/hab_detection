@@ -43,6 +43,7 @@ train(
     e["class_designation"],
     e["class_weights"],
     e["model_architecture"],
+    e["randomize"],
     model_file=model_file,
     epoch_start=epoch_start,
 )

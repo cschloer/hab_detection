@@ -24,6 +24,7 @@ def train(
     class_designation,
     class_weights,
     model_architecture,
+    randomize,
     epoch_start=0,
     model_file=None,
 ):
@@ -36,7 +37,9 @@ def train(
         )
         log(f"Loading datasets...")
 
-        train_dataset = get_image_dataset(ZIP_PATH_TRAIN, class_designation)
+        train_dataset = get_image_dataset(
+            ZIP_PATH_TRAIN, class_designation, randomize=randomize
+        )
         train_loader = DataLoader(
             train_dataset,
             batch_size=batch_size,
@@ -94,7 +97,7 @@ def train(
                     if (
                         batch_idx % NUM_BATCHES == NUM_BATCHES - 1
                     ):  # print every 99 mini-batches
-                        avg_loss = math.sqrt(running_loss / NUM_BATCHES)
+                        avg_loss = running_loss / NUM_BATCHES
                         log(
                             f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f}"
                         )

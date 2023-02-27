@@ -4,6 +4,7 @@
         "batch_size": 32,
         "class_designation": null,
         "class_weights": null,
+        "randomize": false,
         "model_architecture": "deeplabv3-resnet50"
     },
     "experiment5": {
@@ -11,6 +12,7 @@
         "batch_size": 32,
         "class_designation": [50, 100, 150, 200, 254],
         "class_weights": [1, 100, 100, 100, 1000],
+        "randomize": false,
         "model_architecture": "deeplabv3-resnet50"
     },
     "experiment6": {
@@ -18,6 +20,15 @@
         "batch_size": 32,
         "class_designation": [50, 100, 150, 200, 254],
         "class_weights": [1, 23.15763134, 10.1160977, 14.39714133, 184.89555124],
+        "randomize": false,
+        "model_architecture": "deeplabv3-resnet18"
+    },
+    "experiment7": {
+        "name": "experiment7",
+        "batch_size": 32,
+        "class_designation": [50, 100, 150, 200, 254],
+        "class_weights": [1, 23.15763134, 10.1160977, 14.39714133, 184.89555124],
+        "randomize": true,
         "model_architecture": "deeplabv3-resnet18"
     }
 }

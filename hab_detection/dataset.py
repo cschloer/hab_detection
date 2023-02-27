@@ -154,7 +154,9 @@ class ImageData(Dataset):
         return image, label, idx
 
 
-def get_image_dataset(zip_path, class_designation):
+def get_image_dataset(zip_path, class_designation, randomize=False):
     imgs, labels, zip_path = get_data(zip_path)
-    image_dataset = ImageData(imgs, labels, zip_path, class_designation)
+    image_dataset = ImageData(
+        imgs, labels, zip_path, class_designation, randomize=randomize
+    )
     return image_dataset
