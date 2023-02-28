@@ -95,7 +95,13 @@ def visualize(
         model_architecture, model_file, model_save_folder, class_designation
     )
 
-    _, metrics = get_model_performance(model, loader, class_designation, num_batches=-1)
+    _, metrics, hist_2d = get_model_performance(
+        model,
+        loader,
+        class_designation,
+        num_batches=10,
+        calculate_2d_hist=True,
+    )
     log(f"\n{pprint.pformat(metrics)}")
 
     """ Confusion Matrix """
@@ -153,3 +159,14 @@ def visualize(
     cf_disp.plot()
     """
     save_plot(image_save_folder, "confusion_matrix")
+
+
+    if hist_2d is not None:
+        fig, axs = plt.subplots(1, 1, figsize=(12, 8))
+
+        for i in range(len(class_designation):
+            axs.plot(histogram[i], label=f"Class {i + 1}")
+
+        plt.legend()
+        save_plot(image_save_folder, "class_preds")
+

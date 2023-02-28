@@ -72,15 +72,17 @@ def get_model_performance(
     class_designation,
     class_weights=None,
     num_batches=-1,
+    calculate_2d_hist=False,
 ):
     # model_cpu = model.cpu()
     tracker = get_metric_tracker(class_designation)
+    hist_2d = np.zeros((len(class_designation), 254,)) if class_designation is not None else None
     with torch.no_grad():
         model.eval()
 
         total_loss = 0
         counter = 0
-        for batch_idx, (inputs, labels, _) in enumerate(loader):
+        for batch_idx, (inputs, labels, _, raw_labels) in enumerate(loader):
             # print(f"{batch_idx + 1} / {len(loader)}")
             inputs = inputs.to(device, dtype=torch.float)
             labels = labels.to(device)
@@ -92,15 +94,27 @@ def get_model_performance(
                 loss = criterion(preds, labels)  # Calculate cross entropy loss
                 total_loss += loss.item()
 
-            if class_designation is None:
-                # Mask the unused values for metrics
-                preds = preds[~labels == -1]
-                labels = labels[~labels == -1]
+            mask = labels==-1
+                preds = preds[~mask]
+                labels = labels[~mask]
 
             tracker.update(preds, labels)
+
+            if class_designation is not None and calculate_2d_hist:
+                raw_labels = raw_labels[~mask]
+                h, _ = np.histogramdd(
+                    np.array([preds, raw_labels]).T,
+                    bins=[len(class_designation), 254],
+                )
+                print(h.shape, hist_2d.shape)
+                hist_2d += h
+
+
+
+
 
             counter += 1
             if num_batches >= 0 and counter >= num_batches:
                 break
 
-    return total_loss / batch_idx, tracker.compute_all()
+    return total_loss / batch_idx, tracker.compute_all(), hist_2d

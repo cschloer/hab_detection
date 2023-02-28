@@ -100,9 +100,12 @@ class ImageData(Dataset):
         self.close_zip()
         self.zip = zipfile.ZipFile(self.zip_path, mode="r")
 
+    def mask_label(self, label):
+        return np.where((label >= 254), -1, label)
+
     def transform_label(self, label):
         # First set no data values to -1
-        label = np.where((label >= 254), -1, label)
+        label = self.mask_label(label)
         if self.class_designation is None:
             # It's a regression problem, no need to transform to class problem
             return label
@@ -140,8 +143,8 @@ class ImageData(Dataset):
         return image, label
 
     def __getitem__(self, idx):
-        image, label = self._get_image(idx)
-        image = image.transpose(1, 2, 0)
+        raw_image, raw_label = self._get_image(idx)
+        image = raw_image.transpose(1, 2, 0)
         image = image[:, :, 0:12]
 
         # We divide to make the numbers manageable for calculating mean and std and thus normalizing
@@ -149,12 +152,12 @@ class ImageData(Dataset):
         image = image.astype(np.float32) / 10000
         # augmentations
         image = self.transform_input(image)
-        label = self.transform_label(label)
+        label = self.transform_label(raw_label)
 
         if self.randomize:
             image, label = self.random_transform(image, label)
 
-        return image, label, idx
+        return image, label, raw_image, raw_label
 
 
 def get_image_dataset(zip_path, class_designation, randomize=False):

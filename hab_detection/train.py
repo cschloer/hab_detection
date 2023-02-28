@@ -71,7 +71,7 @@ def train(
             running_loss = 0
             total_loss = 0
             try:
-                for batch_idx, (inputs, labels, _) in enumerate(train_loader):
+                for batch_idx, (inputs, labels, _, _) in enumerate(train_loader):
                     model.train()
                     inputs = inputs.to(device, dtype=torch.float)
                     labels = labels.to(device)
@@ -106,7 +106,7 @@ def train(
                 torch.save(model.state_dict(), f"{model_save_folder}/epoch_recent.pt")
 
                 log(f"Epoch {epoch + 1} train loss: {total_loss / (batch_idx + 1)}")
-                test_loss, test_metrics = get_model_performance(
+                test_loss, test_metrics, _ = get_model_performance(
                     model,
                     test_loader,
                     class_designation,
