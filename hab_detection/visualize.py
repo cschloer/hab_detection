@@ -101,7 +101,7 @@ def visualize(
         model,
         loader,
         class_designation,
-        num_batches=10,
+        num_batches=-1,
         calculate_2d_hist=True,
     )
     log(f"\n{pprint.pformat(metrics)}")
