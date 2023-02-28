@@ -10,6 +10,7 @@ import torch
 import pprint
 from .constants import (
     device,
+    cyan_colormap,
     LOG_NAME,
     ZIP_PATH_TRAIN,
     ZIP_PATH_TEST,
@@ -164,7 +165,11 @@ def visualize(
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
         sums = hist_2d.astype("float").sum(axis=0) + 1
         for i in range(len(class_designation)):
-            axs.plot(hist_2d[i] / sums, label=f"Class {i + 1}")
+            axs.plot(
+                hist_2d[i] / sums,
+                label=f"Class {i + 1}",
+                color=cyan_colormap[class_designation[i]] / 255,
+            )
 
         plt.legend()
         save_plot(image_save_folder, "class_preds")
