@@ -222,5 +222,8 @@ def visualize(
 
         plt.autoscale(enable=True, axis="x", tight=True)
         axs.set_ylim(0.0, 1.0)
+        axs.set_title("Classification of Pixels vs Actual HAB Index")
+        plt.xlabel("Actual HAB Index")
+        plt.ylabel("Fraction Classified")
 
         save_plot(image_save_folder, "class_preds")
