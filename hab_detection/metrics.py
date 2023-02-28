@@ -103,17 +103,25 @@ def get_model_performance(
                 loss = criterion(preds, labels)  # Calculate cross entropy loss
                 total_loss += loss.item()
 
-            print("inputs shape", inputs.shape)
-            print("preds shape", preds.shape)
-            print("labels shape", labels.shape)
-            mask = labels == -1
-            preds = preds[~mask]
-            labels = labels[~mask]
+            if class_designation is None:
+                # Mask the unused values for metrics
+                preds = preds[~(labels == -1)]
+                labels = labels[~(labels == -1)]
+            labels =
 
             tracker.update(preds, labels)
 
             if class_designation is not None and calculate_2d_hist:
+                # Reverse the 1 hot encoding on preds
+                print("BEFORE PREDS SHAPE", preds.shape)
+                preds = torch.argmax(preds, dim=1, keepdim=False)
+                print("NEW PREDS SHAPE", preds.shape)
+
+                mask = labels == -1
+                preds = preds[~mask]
+                labels = labels[~mask]
                 raw_labels = raw_labels[~mask]
+
                 h, _ = np.histogramdd(
                     np.array([preds, raw_labels]).T,
                     bins=[len(class_designation), 254],
