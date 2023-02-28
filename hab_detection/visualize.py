@@ -197,7 +197,6 @@ def visualize(
                 range(floor, ceil),
                 normalized[floor:ceil],
                 color=cyan_colormap[ceil - 1] / 255,
-                linewidth=3.0,
             )
             plt.axvline(x=class_designation[i], color="black", alpha=0.5)
 
@@ -219,7 +218,6 @@ def visualize(
                 va="center",
             )
 
-        plt.legend()
         plt.autoscale(enable=True, axis="x", tight=True)
         axs.set_ylim(0.0, 1.0)
 
