@@ -100,9 +100,10 @@ def visualize(
 
     """ Confusion Matrix """
     cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
-    vmin = np.min(cm)
-    vmax = np.max(cm)
-    off_diag_mask = np.eye(*cm.shape, dtype=bool)
+    cmn = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+    vmin = np.min(cmn)
+    vmax = np.max(cmn)
+    off_diag_mask = np.eye(*cmn.shape, dtype=bool)
 
     fig = plt.figure()
     gs0 = matplotlib.gridspec.GridSpec(1, 2, width_ratios=[20, 2], hspace=0.05)
@@ -120,7 +121,7 @@ def visualize(
     ]
     """
     sns.heatmap(
-        cm,
+        cmn,
         annot=True,
         mask=~off_diag_mask,
         cmap="Blues",
@@ -133,7 +134,7 @@ def visualize(
     )
     """
     ax = sns.heatmap(
-        cm,
+        cmn,
         annot=True,
         # mask=off_diag_mask,
         cmap="OrRd",
