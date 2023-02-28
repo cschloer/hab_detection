@@ -168,9 +168,11 @@ def visualize(
             axs.plot(
                 hist_2d[i] / sums,
                 label=f"Class {i + 1}",
-                color=cyan_colormap[class_designation[i - 1]] / 255,
+                color=cyan_colormap[class_designation[i] - 1] / 255,
             )
-            plt.axvline(x=class_designation[i], color="black")
+            plt.axvline(x=class_designation[i], color="black", alpha=0.5)
 
         plt.legend()
+        plt.autoscale(enable=True, axis="x", tight=True)
+
         save_plot(image_save_folder, "class_preds")
