@@ -116,6 +116,7 @@ def get_model_performance(
                 labels = labels.cpu().numpy()
 
                 mask = labels == -1
+                print("NUM MASK", np.count_nonzero(mask))
                 preds = preds[~mask]
                 labels = labels[~mask]
                 raw_labels = np.squeeze(raw_labels.numpy())[~mask]
