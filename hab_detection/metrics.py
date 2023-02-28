@@ -123,6 +123,8 @@ def get_model_performance(
                 print("UNIQUE", np.unique(labels))
                 raw_labels = np.squeeze(raw_labels.numpy())[~mask]
                 print("MAX", raw_labels.max())
+                print("255", np.count_nonzero(raw_labels == 255))
+                print("254", np.count_nonzero(raw_labels == 254))
 
                 h, _ = np.histogramdd(
                     np.array([preds, raw_labels]).T,
