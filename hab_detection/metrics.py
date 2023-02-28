@@ -120,7 +120,7 @@ def get_model_performance(
                 mask = labels == -1
                 preds = preds[~mask]
                 labels = labels[~mask]
-                raw_labels = np.squeeze(raw_labels)[~mask]
+                raw_labels = np.squeeze(raw_labels.numpy())[~mask]
                 print(
                     "preds shape: ", preds.shape, "raw labels shpae;", raw_labels.shape
                 )
