@@ -119,6 +119,7 @@ def get_model_performance(
                 preds = preds[~mask]
                 labels = labels[~mask]
                 raw_labels = np.squeeze(raw_labels.numpy())[~mask]
+                print("MAX", raw_labels.max())
 
                 h, _ = np.histogramdd(
                     np.array([preds, raw_labels]).T,
