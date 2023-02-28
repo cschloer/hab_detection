@@ -162,9 +162,9 @@ def visualize(
 
     if hist_2d is not None:
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
-
+        sums = hist_2d.astype(np.float).sum(axis=0)
         for i in range(len(class_designation)):
-            axs.plot(hist_2d[i], label=f"Class {i + 1}")
+            axs.plot(hist_2d[i] / sums, label=f"Class {i + 1}")
 
         plt.legend()
         save_plot(image_save_folder, "class_preds")
