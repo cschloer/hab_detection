@@ -124,6 +124,7 @@ class ImageData(Dataset):
         return label
 
     def random_transform(self, image, label):
+        print("RANDOM TRANSFORM HAPPENING")
 
         # Random horizontal flipping
         if random.random() > 0.5:
