@@ -119,6 +119,7 @@ def get_model_performance(
                 print("NUM MASK", np.count_nonzero(mask))
                 preds = preds[~mask]
                 labels = labels[~mask]
+                print("UNIQUE", np.unique(labels))
                 raw_labels = np.squeeze(raw_labels.numpy())[~mask]
                 print("MAX", raw_labels.max())
 
