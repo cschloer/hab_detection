@@ -95,8 +95,8 @@ def get_model_performance(
                 total_loss += loss.item()
 
             mask = labels==-1
-                preds = preds[~mask]
-                labels = labels[~mask]
+            preds = preds[~mask]
+            labels = labels[~mask]
 
             tracker.update(preds, labels)
 
