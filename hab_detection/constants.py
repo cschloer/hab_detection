@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 
 ZIP_PATH_TRAIN = "/shared/datasets/hab/data/dataset4_train.zip"
 ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset4_test.zip"
