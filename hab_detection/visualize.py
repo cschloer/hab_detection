@@ -164,7 +164,7 @@ def visualize(
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
 
         for i in range(len(class_designation)):
-            axs.plot(histogram[i], label=f"Class {i + 1}")
+            axs.plot(hist_2d[i], label=f"Class {i + 1}")
 
         plt.legend()
         save_plot(image_save_folder, "class_preds")
