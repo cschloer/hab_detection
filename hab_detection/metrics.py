@@ -103,6 +103,9 @@ def get_model_performance(
                 loss = criterion(preds, labels)  # Calculate cross entropy loss
                 total_loss += loss.item()
 
+            print("inputs shape", inputs.shape)
+            print("preds shape", preds.shape)
+            print("labels shape", labels.shape)
             mask = labels == -1
             preds = preds[~mask]
             labels = labels[~mask]
