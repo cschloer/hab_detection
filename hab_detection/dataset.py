@@ -157,7 +157,7 @@ class ImageData(Dataset):
         if self.randomize:
             image, label = self.random_transform(image, label)
 
-        return image, label, raw_image, raw_label
+        return image, label, raw_image, raw_label.astype(np.int16)
 
 
 def get_image_dataset(zip_path, class_designation, randomize=False):
