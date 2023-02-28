@@ -160,13 +160,11 @@ def visualize(
     """
     save_plot(image_save_folder, "confusion_matrix")
 
-
     if hist_2d is not None:
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
 
-        for i in range(len(class_designation):
+        for i in range(len(class_designation)):
             axs.plot(histogram[i], label=f"Class {i + 1}")
 
         plt.legend()
         save_plot(image_save_folder, "class_preds")
-
