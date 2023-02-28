@@ -75,7 +75,6 @@ def visualize(
     # plt.show()
     save_plot(image_save_folder, "loss")
 
-
     log(f"Loading the dataset")
     if dataset_type == "test":
         dataset = get_image_dataset(ZIP_PATH_TEST, class_designation)
@@ -113,12 +112,13 @@ def visualize(
 
     ax = fig.add_subplot(gs0[0])
     cax1 = fig.add_subplot(gs00[0])
-    cax2 = fig.add_subplot(gs00[1])
+    # cax2 = fig.add_subplot(gs00[1])
 
     class_names = [
         f"{0 if i == 0 else class_designation[i-1]} - {a - 1}"
         for i, a in enumerate(class_designation)
     ]
+    """
     sns.heatmap(
         cm,
         annot=True,
@@ -131,16 +131,17 @@ def visualize(
         xticklabels=class_names,
         yticklabels=class_names,
     )
+    """
     ax = sns.heatmap(
         cm,
         annot=True,
-        mask=off_diag_mask,
+        # mask=off_diag_mask,
         cmap="OrRd",
         vmin=vmin,
         vmax=vmax,
         ax=ax,
         cbar_ax=cax1,
-        cbar_kws=dict(ticks=[]),
+        # cbar_kws=dict(ticks=[]),
         xticklabels=class_names,
         yticklabels=class_names,
     )
