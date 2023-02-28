@@ -117,6 +117,7 @@ def get_model_performance(
 
                 mask = labels == -1
                 print("NUM MASK", np.count_nonzero(mask))
+                print("UNIQUE BEFORE MASK", np.unique(labels))
                 preds = preds[~mask]
                 labels = labels[~mask]
                 print("UNIQUE", np.unique(labels))
