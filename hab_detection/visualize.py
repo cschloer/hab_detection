@@ -185,7 +185,7 @@ def visualize(
                 color=cyan_colormap[ceil - 1] / 255,
             )
 
-            normalized = hist2d[i] / sums
+            normalized = hist_2d[i] / sums
             axs.plot(
                 normalized,
                 label=f"Class {i + 1}",
