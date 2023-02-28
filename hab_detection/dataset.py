@@ -157,6 +157,9 @@ class ImageData(Dataset):
         if self.randomize:
             image, label = self.random_transform(image, label)
 
+        print(raw_image.dtype)
+        print(raw_label.dtype)
+        print(raw_label.astype(np.int16).dtype)
         return image, label, raw_image, raw_label.astype(np.int16)
 
 
