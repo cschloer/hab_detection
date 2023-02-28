@@ -114,12 +114,8 @@ class ImageData(Dataset):
             raise Exception("The last value of the class_designation must 254.")
         floor = 0
         for i, ceil in enumerate(self.class_designation):
-            print(f"{i} TRANSFORMING 254", np.count_nonzero(label == 254))
-            print(f"{i} TRANSFORMING 255", np.count_nonzero(label == 255))
             label = np.where((label >= floor) & (label < ceil), i, label)
             floor = ceil
-        print(f"DONE TRANSFORMING 254", np.count_nonzero(label == 254))
-        print(f"DONE TRANSFORMING 255", np.count_nonzero(label == 255))
 
         # label = torch.from_numpy(label)
         # F.one_hot(label, num_classes=len(class_designation))
