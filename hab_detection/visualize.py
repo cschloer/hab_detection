@@ -191,12 +191,14 @@ def visualize(
                 label=f"Class {i + 1}",
                 color=cyan_colormap[ceil - 1] / 255,
                 alpha=0.3,
+                linewidth=2.0,
             )
             # Plot thicker line inside of range where it is correct
             axs.plot(
                 range(floor, ceil),
                 normalized[floor:ceil],
                 color=cyan_colormap[ceil - 1] / 255,
+                linewidth=2.0,
             )
             plt.axvline(x=class_designation[i], color="black", alpha=0.5)
 
@@ -213,7 +215,7 @@ def visualize(
                 (cx, cy),
                 color="white",
                 weight="bold",
-                fontsize=6,
+                fontsize=10,
                 ha="center",
                 va="center",
             )
