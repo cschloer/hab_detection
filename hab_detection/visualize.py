@@ -4,6 +4,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 import seaborn as sns
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatch
 import matplotlib
 import numpy as np
 import torch
@@ -164,15 +165,61 @@ def visualize(
     if hist_2d is not None:
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
         sums = hist_2d.astype("float").sum(axis=0) + 1
+        rectangles = {}
+        ranges = [
+            (
+                0 if i == 0 else class_designation[i - 1],
+                class_designation[i],
+            )
+            for i in range(len(class_designation))
+        ]
+
         for i in range(len(class_designation)):
+            floor = ranges[i][0]
+            ceil = ranges[i][1]
+
+            rectangles[f"{floor} - {ceil -1}"] = mpatch.Rectangle(
+                (floor, 0.95),
+                ceil - floor,
+                0.05,
+                color=cyan_colormap[ceil - 1] / 255,
+            )
+
+            normalized = hist2d[i] / sums
             axs.plot(
-                hist_2d[i] / sums,
+                normalized,
                 label=f"Class {i + 1}",
-                color=cyan_colormap[class_designation[i] - 1] / 255,
+                color=cyan_colormap[ceil - 1] / 255,
+            )
+            # Plot thicker line inside of range where it is correct
+            axs.plot(
+                range(floor, ceil),
+                normalized[floor:ceil],
+                color=cyan_colormap[ceil - 1] / 255,
+                linewidth=3.0,
             )
             plt.axvline(x=class_designation[i], color="black", alpha=0.5)
 
+        # Plot rectangles
+        for r in rectangles:
+            rect = rectangles[r]
+            axs.add_artist(rect)
+            rx, ry = rect.get_xy()
+            cx = rx + rect.get_width() / 2.0
+            cy = ry + rect.get_height() / 2.0
+
+            axs.annotate(
+                r,
+                (cx, cy),
+                color="white",
+                weight="bold",
+                fontsize=6,
+                ha="center",
+                va="center",
+            )
+
         plt.legend()
         plt.autoscale(enable=True, axis="x", tight=True)
+        axs.set_ylim(0.0, 1.0)
 
         save_plot(image_save_folder, "class_preds")
