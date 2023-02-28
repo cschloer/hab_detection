@@ -113,14 +113,14 @@ def get_model_performance(
             if class_designation is not None and calculate_2d_hist:
                 # Reverse the 1 hot encoding on preds
                 print("BEFORE PREDS SHAPE", preds.shape)
-                preds = torch.argmax(preds, dim=1, keepdim=False)
+                preds = torch.argmax(preds, dim=1, keepdim=False).cpu()
+                labels = labels.cpu()
                 print("NEW PREDS SHAPE", preds.shape)
 
                 mask = labels == -1
                 preds = preds[~mask]
                 labels = labels[~mask]
-                raw_labels = torch.squeeze(raw_labels.to(device))
-                raw_labels = raw_labels[~mask]
+                raw_labels = torch.squeeze(raw_labels)[~mask]
 
                 h, _ = np.histogramdd(
                     np.array([preds, raw_labels]).T,
