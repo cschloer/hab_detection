@@ -170,6 +170,7 @@ def visualize(
                 label=f"Class {i + 1}",
                 color=cyan_colormap[class_designation[i]] / 255,
             )
+            plt.axvline(x=class_designation[i] * 50, color="black")
 
         plt.legend()
         save_plot(image_save_folder, "class_preds")
