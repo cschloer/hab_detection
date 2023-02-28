@@ -119,6 +119,7 @@ def get_model_performance(
                 mask = labels == -1
                 preds = preds[~mask]
                 labels = labels[~mask]
+                raw_labels = raw_labels.to(device)
                 raw_labels = raw_labels[~mask]
 
                 h, _ = np.histogramdd(
