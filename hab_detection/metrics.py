@@ -114,21 +114,16 @@ def get_model_performance(
                 # Reverse the 1 hot encoding on preds and bring everything to np
                 preds = torch.argmax(preds, dim=1, keepdim=False).cpu().numpy()
                 labels = labels.cpu().numpy()
+                print("SHAPES", labels.shape, raw_labels.shape)
 
                 mask = labels == -1
                 print("NUM MASK", np.count_nonzero(mask))
-                print("UNIQUE BEFORE MASK", np.unique(labels))
                 preds = preds[~mask]
                 labels = labels[~mask]
-                print("UNIQUE", np.unique(labels))
                 raw_labels = np.squeeze(raw_labels.numpy())
-                print("BEFORE MAX", raw_labels.max())
                 print("BEFORE 255", np.count_nonzero(raw_labels == 255))
-                print("BEFORE 254", np.count_nonzero(raw_labels == 254))
                 raw_labels = raw_labels[~mask]
-                print("AFTER MAX", raw_labels.max())
                 print("AFTER 255", np.count_nonzero(raw_labels == 255))
-                print("AFTER 254", np.count_nonzero(raw_labels == 254))
 
                 h, _ = np.histogramdd(
                     np.array([preds, raw_labels]).T,
