@@ -168,7 +168,7 @@ def visualize(
             axs.plot(
                 hist_2d[i] / sums,
                 label=f"Class {i + 1}",
-                color=cyan_colormap[class_designation[i]] / 255,
+                color=cyan_colormap[class_designation[i -1]] / 255,
             )
             plt.axvline(x=class_designation[i] * 50, color="black")
 
