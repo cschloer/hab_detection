@@ -107,7 +107,6 @@ def get_model_performance(
                 # Mask the unused values for metrics
                 preds = preds[~(labels == -1)]
                 labels = labels[~(labels == -1)]
-            labels =
 
             tracker.update(preds, labels)
 
