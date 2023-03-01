@@ -54,56 +54,57 @@ def normalize_sen2(red, green, blue):
 def visualize_full_image(
     model, dataset, class_designation, input_path, label_path, image_save_folder
 ):
-    model.eval()
-    fig, axs = plt.subplots(2, 2, figsize=(20, 16))
-    sen2_np = np.pad(
-        np.load(FULL_IMAGE_1_INPUT).astype(np.float32),
-        ((0, 0), (0, 6), (0, 2)),
-    )
-    sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
-    ax = axs[1, 0]
-    ax.set_title("Actual image")
-    ax.imshow(sen2_img)
-    ax.axis("off")
+    with torch.no_grad():
+        fig, axs = plt.subplots(2, 2, figsize=(20, 16))
+        sen2_np = np.pad(
+            np.load(FULL_IMAGE_1_INPUT).astype(np.float32),
+            ((0, 0), (0, 6), (0, 2)),
+        )
+        sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
+        ax = axs[1, 0]
+        ax.set_title("Actual image")
+        ax.imshow(sen2_img)
+        ax.axis("off")
 
-    cyan_np = np.load(label_path)
-    cyan_reshaped = np.pad(
-        cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]), ((0, 6), (0, 2))
-    )
-    print("SHAPE AFTER PAD", cyan_reshaped.shape)
+        cyan_np = np.load(label_path)
+        cyan_reshaped = np.pad(
+            cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]), ((0, 6), (0, 2))
+        )
+        print("SHAPE AFTER PAD", cyan_reshaped.shape)
 
-    custom_colormap = np.copy(cyan_colormap)
-    prev_val = 0
-    for i, c in enumerate(class_designation):
-        cur_color = cyan_colormap[c if i != 0 else 0]
-        print("CUR COLOR", cur_color)
-        for j in range(c - prev_val):
-            custom_colormap[prev_val + j] = cur_color
-        prev_val = c
+        custom_colormap = np.copy(cyan_colormap)
+        prev_val = 0
+        for i, c in enumerate(class_designation):
+            cur_color = cyan_colormap[c if i != 0 else 0]
+            print("CUR COLOR", cur_color)
+            for j in range(c - prev_val):
+                custom_colormap[prev_val + j] = cur_color
+            prev_val = c
 
-    print("UNQUE CUSTOM COLORMAP", np.unique(custom_colormap))
-    print(custom_colormap)
-    cyan_image = custom_colormap[cyan_reshaped]
-    ax = axs[0, 0]
-    ax.set_title("Actual HAB")
-    ax.imshow(cyan_image)
-    ax.axis("off")
+        print("UNQUE CUSTOM COLORMAP", np.unique(custom_colormap))
+        print(custom_colormap)
+        cyan_image = custom_colormap[cyan_reshaped]
+        ax = axs[0, 0]
+        ax.set_title("Actual HAB")
+        ax.imshow(cyan_image)
+        ax.axis("off")
 
-    transformed_sen2 = dataset.transform_input(
-        torch.from_numpy(sen2_np / 10000),
-    )
+        transformed_sen2 = dataset.transform_input(
+            torch.from_numpy(sen2_np / 10000),
+        )
 
-    transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
-    print("TRANSFORMED SHAPE", transformed_sen2.shape)
-    print("TRANSFORMED UNSEQUEEZED", torch.unsqueeze(transformed_sen2, axis=0).shape)
-    pred = model(torch.unsqueeze(transformed_sen2, axis=0))  # make prediction
-    pred = pred.cpu().detach()
-    print("PRED SHAPE", pred.shape)
+        transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
+        print("TRANSFORMED SHAPE", transformed_sen2.shape)
+        print("TRANSFORMED UNSEQUEEZED", torch.unsqueeze(transformed_sen2, axis=0).shape)
+        model.eval()
+        pred = model(torch.unsqueeze(transformed_sen2, axis=0))  # make prediction
+        pred = pred.cpu().detach()
+        print("PRED SHAPE", pred.shape)
 
-    pred = torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
-    print("PRED HSAPE AFTER", pred.shape)
+        pred = torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
+        print("PRED HSAPE AFTER", pred.shape)
 
-    save_plot(image_save_folder, "winnebago")
+        save_plot(image_save_folder, "winnebago")
 
 
 def visualize(

@@ -145,12 +145,10 @@ class ImageData(Dataset):
 
     def __getitem__(self, idx):
         raw_image, raw_label = self._get_image(idx)
-        image = raw_image.transpose(1, 2, 0)
-        image = image[:, :, 0:12]
 
         # We divide to make the numbers manageable for calculating mean and std and thus normalizing
         # 10,000 is the accepted number to get a brightness level
-        image = image.astype(np.float32) / 10000
+        image = raw_image.astype(np.float32) / 10000
         # augmentations
         image = self.transform_input(torch.from_numpy(image))
         label = self.transform_label(raw_label)
