@@ -51,7 +51,9 @@ def normalize_sen2(red, green, blue):
     return pixvals
 
 
-def visualize_full_image(model, input_path, label_path, image_save_folder):
+def visualize_full_image(
+    model, class_designation, input_path, label_path, image_save_folder
+):
     model.eval()
     fig, axs = plt.subplots(2, 2, figsize=(20, 16))
     sen2_np = np.load(FULL_IMAGE_1_INPUT).astype(np.float32)
@@ -61,6 +63,24 @@ def visualize_full_image(model, input_path, label_path, image_save_folder):
     ax.imshow(sen2_img)
     ax.axis("off")
     save_plot(image_save_folder, "winnebago")
+
+    cyan_np = np.load(label_path)
+    cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])
+
+    custom_colormap = np.copy(cyan_colormap)
+    prev_val = 0
+    for i, c in enumerate(class_designation):
+        cur_color = cyan_colormap[c if i != 0 else 0]
+        for j in range(c - prev_val):
+            custom_colormap[prev_val + j] = cur_color
+
+    print("UNQUE CUSTOM COLORMAP", numpy.unique(custom_colormap))
+    cyan_image = custom_colormap[cyan_reshaped]
+    ax = axs[0, 0]
+    ax.set_title("Actual HAB")
+    ax.imshow(cyan_image)
+    ax.axis("off")
+
 
 
 def visualize(
@@ -85,7 +105,11 @@ def visualize(
     )
 
     visualize_full_image(
-        model, FULL_IMAGE_1_INPUT, FULL_IMAGE_1_LABEL, image_save_folder
+        model,
+        class_designation,
+        FULL_IMAGE_1_INPUT,
+        FULL_IMAGE_1_LABEL,
+        image_save_folder,
     )
 
     return
@@ -223,14 +247,14 @@ def visualize(
                 (floor, 0.95),
                 ceil - floor,
                 0.05,
-                color=cyan_colormap[ceil - 1] / 255,
+                color=cyan_colormap[ceil - 1 if floor != 0 else 0] / 255,
             )
 
             normalized = hist_2d[i] / sums
             axs.plot(
                 normalized,
                 label=f"Class {i + 1}",
-                color=cyan_colormap[ceil - 1] / 255,
+                color=cyan_colormap[ceil - 1 if floor != 0 else 0] / 255,
                 alpha=0.3,
                 linewidth=2.0,
             )
@@ -238,7 +262,7 @@ def visualize(
             axs.plot(
                 range(floor, ceil),
                 normalized[floor:ceil],
-                color=cyan_colormap[ceil - 1] / 255,
+                color=cyan_colormap[ceil - 1 if floor != 0] / 255,
                 linewidth=2.0,
             )
             plt.axvline(x=class_designation[i], color="black", alpha=0.5)
