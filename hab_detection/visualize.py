@@ -83,9 +83,12 @@ def visualize_full_image(
     ax.imshow(cyan_image)
     ax.axis("off")
 
+    print("sen2 shape", sen2_np.transpose(1,2,0))
     transformed_sen2 = dataset.transform_input(
-        sen2_np.transpose(1, 2, 0) / 10000
+        np.pad(sen2_np.transpose(1, 2, 0) / 10000, ((1290, 1296), (2014, 2016)))
     )
+    print("sen2 shape", transformed_sen2)
+
     transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
     pred = model(torch.unsqueeze(transformed_sen2, axis=0))  # make prediction
     pred = pred.cpu().detach()
@@ -176,7 +179,6 @@ def visualize(
 
     # plt.show()
     save_plot(image_save_folder, "loss")
-
 
     _, metrics, hist_2d = get_model_performance(
         model,
