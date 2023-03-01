@@ -74,13 +74,12 @@ def visualize_full_image(
         for j in range(c - prev_val):
             custom_colormap[prev_val + j] = cur_color
 
-    print("UNQUE CUSTOM COLORMAP", numpy.unique(custom_colormap))
+    print("UNQUE CUSTOM COLORMAP", np.unique(custom_colormap))
     cyan_image = custom_colormap[cyan_reshaped]
     ax = axs[0, 0]
     ax.set_title("Actual HAB")
     ax.imshow(cyan_image)
     ax.axis("off")
-
 
 
 def visualize(
