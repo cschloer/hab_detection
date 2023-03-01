@@ -57,7 +57,7 @@ def visualize_full_image(
     model.eval()
     fig, axs = plt.subplots(2, 2, figsize=(20, 16))
     sen2_np = np.load(FULL_IMAGE_1_INPUT).astype(np.float32)
-    print("SHAPE", sen2_img.shape)
+    print("SHAPE", sen2_np.shape)
     sen2_img = np.pad(
         normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :]),
         ((0, 0), (0, 6), (0, 2)),
@@ -93,24 +93,8 @@ def visualize_full_image(
 
     print("sen2 shape", sen2_np.transpose(1, 2, 0).shape)
 
-    padded = np.pad(
-        sen2_np.transpose(1, 2, 0) / 10000,
-        (
-            (0, 6),
-            (0, 2),
-            (0, 0),
-        ),
-    )
-    print("PADDED", padded.shape)
     transformed_sen2 = dataset.transform_input(
-        np.pad(
-            sen2_np.transpose(1, 2, 0) / 10000,
-            (
-                (0, 6),
-                (0, 2),
-                (0, 0),
-            ),
-        )
+        sen2_np.transpose(1, 2, 0) / 10000,
     )
     print("sen2 shape", transformed_sen2)
 
