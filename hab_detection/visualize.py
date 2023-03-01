@@ -88,9 +88,9 @@ def visualize_full_image(
     padded = np.pad(
         sen2_np.transpose(1, 2, 0) / 10000,
         (
-            (1290, 1296),
-            (2014, 2016),
-            (12, 12),
+            (0, 4),
+            (0, 2),
+            (0, 0),
         ),
     )
     print("PADDED", padded.shape)
@@ -98,9 +98,9 @@ def visualize_full_image(
         np.pad(
             sen2_np.transpose(1, 2, 0) / 10000,
             (
-                (1290, 1296),
-                (2014, 2016),
-                (12, 12),
+                (0, 4),
+                (0, 2),
+                (0, 0),
             ),
         )
     )
