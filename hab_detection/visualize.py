@@ -3,6 +3,8 @@ import re
 from sklearn.metrics import ConfusionMatrixDisplay
 import seaborn as sns
 from torch.utils.data import DataLoader
+from PIL import Image
+
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatch
 import matplotlib
