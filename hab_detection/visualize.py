@@ -62,7 +62,6 @@ def visualize_full_image(
     ax.set_title("Actual image")
     ax.imshow(sen2_img)
     ax.axis("off")
-    save_plot(image_save_folder, "winnebago")
 
     cyan_np = np.load(label_path)
     cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])
@@ -80,6 +79,8 @@ def visualize_full_image(
     ax.set_title("Actual HAB")
     ax.imshow(cyan_image)
     ax.axis("off")
+
+    save_plot(image_save_folder, "winnebago")
 
 
 def visualize(
