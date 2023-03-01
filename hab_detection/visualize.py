@@ -89,13 +89,9 @@ def visualize_full_image(
     ax.imshow(cyan_image)
     ax.axis("off")
 
-    print("before transopsoe", sen2_np.shape)
-    sen2_np = sen2_np.transpose(1, 2, 0)
-    print("after transopsoe", sen2_np.shape)
     transformed_sen2 = dataset.transform_input(
         torch.from_numpy(sen2_np / 10000),
     )
-    print("sen2 shape after transform", transformed_sen2.shape)
 
     transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
     print("TRANSFORMED SHAPE", transformed_sen2.shape)
