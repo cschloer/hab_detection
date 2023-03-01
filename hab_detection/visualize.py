@@ -94,9 +94,10 @@ def visualize_full_image(
     transformed_sen2 = dataset.transform_input(
         sen2_np.transpose(1, 2, 0) / 10000,
     )
-    print("sen2 shape", transformed_sen2)
+    print("sen2 shape after", transformed_sen2.shape)
 
     transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
+    print("TRANSFORMED SHAPE", transformed_sen2.shape)
     pred = model(torch.unsqueeze(transformed_sen2, axis=0))  # make prediction
     pred = pred.cpu().detach()
     print("PRED SHAPE", pred.shape)
