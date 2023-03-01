@@ -57,14 +57,22 @@ def visualize_full_image(
     model.eval()
     fig, axs = plt.subplots(2, 2, figsize=(20, 16))
     sen2_np = np.load(FULL_IMAGE_1_INPUT).astype(np.float32)
-    sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
+    print("SHAPE", sen2_img.shape)
+    sen2_img = np.pad(
+        normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :]),
+        ((0, 0), (0, 6), (0, 2)),
+    )
+    print("SHAPE AFTER PAD SEN2", sen2_img.shape)
     ax = axs[1, 0]
     ax.set_title("Actual image")
     ax.imshow(sen2_img)
     ax.axis("off")
 
     cyan_np = np.load(label_path)
-    cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])
+    cyan_reshaped = np.pad(
+        cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]), ((0, 6), (0, 2))
+    )
+    print("SHAPE AFTER PAD", cyan_reshaped.shape)
 
     custom_colormap = np.copy(cyan_colormap)
     prev_val = 0
@@ -88,7 +96,7 @@ def visualize_full_image(
     padded = np.pad(
         sen2_np.transpose(1, 2, 0) / 10000,
         (
-            (0, 4),
+            (0, 6),
             (0, 2),
             (0, 0),
         ),
@@ -98,7 +106,7 @@ def visualize_full_image(
         np.pad(
             sen2_np.transpose(1, 2, 0) / 10000,
             (
-                (0, 4),
+                (0, 6),
                 (0, 2),
                 (0, 0),
             ),
