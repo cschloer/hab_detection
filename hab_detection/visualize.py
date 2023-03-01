@@ -93,7 +93,7 @@ def visualize_full_image(
     sen2_np = sen2_np.transpose(1, 2, 0)
     print("after transopsoe", sen2_np.shape)
     transformed_sen2 = dataset.transform_input(
-        sen2_np / 10000,
+        torch.from_numpy(sen2_np / 10000),
     )
     print("sen2 shape after transform", transformed_sen2.shape)
 
