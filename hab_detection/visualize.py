@@ -95,9 +95,12 @@ def visualize_full_image(
 
         transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
         print("TRANSFORMED SHAPE", transformed_sen2.shape)
-        print("TRANSFORMED UNSEQUEEZED", torch.unsqueeze(transformed_sen2, axis=0).shape)
+        print(
+            "TRANSFORMED UNSEQUEEZED", torch.unsqueeze(transformed_sen2, axis=0).shape
+        )
+        transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
         model.eval()
-        pred = model(torch.unsqueeze(transformed_sen2, axis=0))  # make prediction
+        pred = model(transformed_sen2_batch)  # make prediction
         pred = pred.cpu().detach()
         print("PRED SHAPE", pred.shape)
 
@@ -143,6 +146,7 @@ def visualize(
         drop_last=True,
     )
 
+    """
     visualize_full_image(
         model,
         dataset,
@@ -153,6 +157,7 @@ def visualize(
     )
 
     return
+    """
 
     test_loss = []
     train_loss = []
