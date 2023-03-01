@@ -16,7 +16,10 @@ from .constants import (
     ZIP_PATH_TRAIN,
     ZIP_PATH_TEST,
     MODEL_SAVE_BASE_FOLDER,
+    FULL_IMAGE_1_INPUT,
+    FULL_IMAGE_1_LABEL,
 )
+
 from .metrics import get_metric_tracker, get_model_performance
 from .helpers import log, set_config
 from .dataset import get_image_dataset
@@ -25,6 +28,37 @@ from .model import load_model
 
 def save_plot(image_save_folder, filename):
     plt.savefig(f"{image_save_folder}/{filename}.png")
+
+
+def normalize_sen2(red, green, blue):
+    def normalize(arr):
+        """Function to normalize an input array to 0-1"""
+        arr_min = arr.min()
+        arr_max = arr.max()
+        return (arr - arr_min) / (arr_max - arr_min)
+
+    img = np.dstack((normalize(red), normalize(green), normalize(blue)))
+
+    # Increase contrast
+    pixvals = img
+    minval = np.percentile(pixvals, 5)
+    maxval = np.percentile(pixvals, 95)
+    pixvals = np.clip(pixvals, minval, maxval)
+    pixvals = ((pixvals - minval) / (maxval - minval)) * 1
+    Image.fromarray(pixvals.astype(np.uint8))
+    return pixvals
+
+
+def visualize_full_image(model, input_path, label_path, image_save_folder):
+    model.eval()
+    fig, axs = plt.subplots(2, 2, figsize=(20, 16))
+    sen2_np = np.load(FULL_IMAGE_1_INPUT).astype(np.float32)
+    sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
+    ax = axs[1, 0]
+    ax.set_title("Actual image")
+    ax.imshow(sen2_img)
+    ax.axis("off")
+    save_plot(image_save_folder, "winnebago")
 
 
 def visualize(
@@ -42,6 +76,17 @@ def visualize(
     log_file = f"{model_save_folder}/{LOG_NAME}"
 
     os.makedirs(image_save_folder, exist_ok=True)
+    log(f"Loading the model")
+
+    model = load_model(
+        model_architecture, model_file, model_save_folder, class_designation
+    )
+
+    visualize_full_image(
+        model, FULL_IMAGE_1_INPUT, FULL_IMAGE_1_LABEL, image_save_folder
+    )
+
+    return
 
     test_loss = []
     train_loss = []
@@ -89,11 +134,6 @@ def visualize(
         shuffle=False,
         num_workers=0,
         drop_last=True,
-    )
-
-    log(f"Loading the model")
-    model = load_model(
-        model_architecture, model_file, model_save_folder, class_designation
     )
 
     _, metrics, hist_2d = get_model_performance(

@@ -6,6 +6,9 @@ ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset4_test.zip"
 MODEL_SAVE_BASE_FOLDER = "/shared/datasets/hab/models"
 LOG_NAME = "log.txt"
 
+FULL_IMAGE_1_INPUT = "/shared/datasets/hab/images/sen2.npy"
+FULL_IMAGE_1_LABEL = "/shared/datasets/hab/images/cyan.npy"
+
 LEARNING_RATE = 1e-5
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
