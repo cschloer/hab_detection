@@ -143,10 +143,9 @@ def visualize(
         batch_size=32,
         shuffle=False,
         num_workers=0,
-        drop_last=True,
+        drop_last=False,
     )
 
-    """
     visualize_full_image(
         model,
         dataset,
@@ -157,7 +156,6 @@ def visualize(
     )
 
     return
-    """
 
     test_loss = []
     train_loss = []
