@@ -70,15 +70,25 @@ def visualize_full_image(
     prev_val = 0
     for i, c in enumerate(class_designation):
         cur_color = cyan_colormap[c if i != 0 else 0]
+        print("CUR COLOR", cur_color)
         for j in range(c - prev_val):
             custom_colormap[prev_val + j] = cur_color
+        prev_val = c
 
     print("UNQUE CUSTOM COLORMAP", np.unique(custom_colormap))
+    print(custom_colormap)
     cyan_image = custom_colormap[cyan_reshaped]
     ax = axs[0, 0]
     ax.set_title("Actual HAB")
     ax.imshow(cyan_image)
     ax.axis("off")
+
+    transformed_sen2 = hab_detection.dataset.transform_input(
+        sen2_np.transpose(1, 2, 0) / 10000
+    )
+    transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
+    pred = model(torch.unsqueeze(transformed_sen2, axis=0))  # make prediction
+    pred = pred.cpu().detach()
 
     save_plot(image_save_folder, "winnebago")
 
