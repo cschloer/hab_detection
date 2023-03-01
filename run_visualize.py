@@ -20,7 +20,7 @@ dataset_type = "test"
 if len(sys.argv) >= 3:
     dataset_type = sys.argv[2]
 
-model_file = None
+model_file = "epoch_recent.pt"
 if len(sys.argv) == 4:
     model_file = sys.argv[3]
 
