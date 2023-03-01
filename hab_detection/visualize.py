@@ -262,7 +262,7 @@ def visualize(
             axs.plot(
                 range(floor, ceil),
                 normalized[floor:ceil],
-                color=cyan_colormap[ceil - 1 if floor != 0] / 255,
+                color=cyan_colormap[ceil - 1 if floor != 0 else 0] / 255,
                 linewidth=2.0,
             )
             plt.axvline(x=class_designation[i], color="black", alpha=0.5)
