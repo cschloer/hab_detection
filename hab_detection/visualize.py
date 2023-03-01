@@ -24,7 +24,7 @@ from .constants import (
 
 from .metrics import get_metric_tracker, get_model_performance
 from .helpers import log, set_config
-from .dataset import get_image_dataset,
+from .dataset import get_image_dataset
 from .model import load_model
 
 
