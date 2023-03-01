@@ -96,7 +96,7 @@ def visualize_full_image(
 
     transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
     print("TRANSFORMED SHAPE", transformed_sen2.shape)
-    print("TRANSFORMED UNSEQUEEZED", torch.unsqueeze(transformed_sen2, axis=0))
+    print("TRANSFORMED UNSEQUEEZED", torch.unsqueeze(transformed_sen2, axis=0).shape)
     pred = model(torch.unsqueeze(transformed_sen2, axis=0))  # make prediction
     pred = pred.cpu().detach()
     print("PRED SHAPE", pred.shape)
