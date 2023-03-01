@@ -24,7 +24,7 @@ from .constants import (
 
 from .metrics import get_metric_tracker, get_model_performance
 from .helpers import log, set_config
-from .dataset import get_image_dataset
+from .dataset import get_image_dataset,
 from .model import load_model
 
 
@@ -52,7 +52,7 @@ def normalize_sen2(red, green, blue):
 
 
 def visualize_full_image(
-    model, class_designation, input_path, label_path, image_save_folder
+    model, dataset, class_designation, input_path, label_path, image_save_folder
 ):
     model.eval()
     fig, axs = plt.subplots(2, 2, figsize=(20, 16))
@@ -83,12 +83,16 @@ def visualize_full_image(
     ax.imshow(cyan_image)
     ax.axis("off")
 
-    transformed_sen2 = hab_detection.dataset.transform_input(
+    transformed_sen2 = dataset.transform_input(
         sen2_np.transpose(1, 2, 0) / 10000
     )
     transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
     pred = model(torch.unsqueeze(transformed_sen2, axis=0))  # make prediction
     pred = pred.cpu().detach()
+    print("PRED SHAPE", pred.shape)
+
+    pred = torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
+    print("PRED HSAPE AFTER", pred.shape)
 
     save_plot(image_save_folder, "winnebago")
 
@@ -114,8 +118,24 @@ def visualize(
         model_architecture, model_file, model_save_folder, class_designation
     )
 
+    log(f"Loading the dataset")
+    if dataset_type == "test":
+        dataset = get_image_dataset(ZIP_PATH_TEST, class_designation)
+    elif dataset_type == "train":
+        dataset = get_image_dataset(ZIP_PATH_TRAIN, class_designation)
+    else:
+        raise Exception(f"Unknown dataset type {dataset_type}")
+    loader = DataLoader(
+        dataset,
+        batch_size=32,
+        shuffle=False,
+        num_workers=0,
+        drop_last=True,
+    )
+
     visualize_full_image(
         model,
+        dataset,
         class_designation,
         FULL_IMAGE_1_INPUT,
         FULL_IMAGE_1_LABEL,
@@ -157,20 +177,6 @@ def visualize(
     # plt.show()
     save_plot(image_save_folder, "loss")
 
-    log(f"Loading the dataset")
-    if dataset_type == "test":
-        dataset = get_image_dataset(ZIP_PATH_TEST, class_designation)
-    elif dataset_type == "train":
-        dataset = get_image_dataset(ZIP_PATH_TRAIN, class_designation)
-    else:
-        raise Exception(f"Unknown dataset type {dataset_type}")
-    loader = DataLoader(
-        dataset,
-        batch_size=32,
-        shuffle=False,
-        num_workers=0,
-        drop_last=True,
-    )
 
     _, metrics, hist_2d = get_model_performance(
         model,
