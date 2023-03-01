@@ -32,14 +32,13 @@ def visualize(
     class_designation,
     model_architecture,
     model_file,
-    epoch,
     dataset_type="test",
 ):
     # Set the config to print to stdout
     set_config("test")
 
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
-    image_save_folder = f"{model_save_folder}/visualize/{epoch}"
+    image_save_folder = f"{model_save_folder}/visualize/{dataset_type}"
     log_file = f"{model_save_folder}/{LOG_NAME}"
 
     os.makedirs(image_save_folder, exist_ok=True)

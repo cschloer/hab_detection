@@ -5,25 +5,20 @@ from hab_detection.visualize import visualize
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
 
-# First argument is experiment id, second argument is the epoch start
 
 if len(sys.argv) < 2:
     print(f"run_visualize.py requires atleast 1 argument, the experiment id.")
     exit()
 if len(sys.argv) > 4:
     print(
-        "run_visualize.py takes maximally 3 arguments, the experiment id, the start epoch, and the filename/path of the model to preload ."
+        "run_visualize.py takes maximally 3 arguments, the experiment id, the dataset type, and the filename/path of the model to preload ."
     )
     exit()
 
 e = sys.argv[1]
-epoch = 0
+dataset_type = "test"
 if len(sys.argv) >= 3:
-    epoch_str = sys.argv[2]
-    if not epoch_str.isdigit():
-        print("The second argument must be an integer")
-        exit()
-    epoch = int(epoch_str)
+    dataset_type = sys.argv[2]
 
 model_file = None
 if len(sys.argv) == 4:
@@ -40,5 +35,5 @@ visualize(
     e["class_designation"],
     e["model_architecture"],
     model_file,
-    epoch,
+    dataset_type=dataset_type,
 )
