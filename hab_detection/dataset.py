@@ -60,7 +60,7 @@ class ImageData(Dataset):
 
         self.zip = None
         self.transform_input = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize(dataset_mean, dataset_std)]
+            [transforms.Normalize(dataset_mean, dataset_std)]
         )
 
     def __len__(self):
