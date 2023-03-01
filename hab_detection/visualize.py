@@ -56,13 +56,11 @@ def visualize_full_image(
 ):
     model.eval()
     fig, axs = plt.subplots(2, 2, figsize=(20, 16))
-    sen2_np = np.load(FULL_IMAGE_1_INPUT).astype(np.float32)
-    print("SHAPE", sen2_np.shape)
-    sen2_img = np.pad(
-        normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :]),
+    sen2_np = np.pad(
+        np.load(FULL_IMAGE_1_INPUT).astype(np.float32),
         ((0, 0), (0, 6), (0, 2)),
     )
-    print("SHAPE AFTER PAD SEN2", sen2_img.shape)
+    sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
     ax = axs[1, 0]
     ax.set_title("Actual image")
     ax.imshow(sen2_img)
