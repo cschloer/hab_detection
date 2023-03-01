@@ -84,6 +84,16 @@ def visualize_full_image(
     ax.axis("off")
 
     print("sen2 shape", sen2_np.transpose(1, 2, 0).shape)
+
+    padded = np.pad(
+        sen2_np.transpose(1, 2, 0) / 10000,
+        (
+            (1290, 1296),
+            (2014, 2016),
+            (12, 12),
+        ),
+    )
+    print("PADDED", padded.shape)
     transformed_sen2 = dataset.transform_input(
         np.pad(
             sen2_np.transpose(1, 2, 0) / 10000,
