@@ -120,7 +120,7 @@ class ImageData(Dataset):
         # label = torch.from_numpy(label)
         # F.one_hot(label, num_classes=len(class_designation))
 
-        label = torch.squeeze(TF.to_tensor(label.astype(np.int_)))
+        label = torch.squeeze(torch.from_numpy(label.astype(np.int_)))
         return label
 
     def random_transform(self, image, label):
@@ -152,7 +152,7 @@ class ImageData(Dataset):
         # 10,000 is the accepted number to get a brightness level
         image = image.astype(np.float32) / 10000
         # augmentations
-        image = self.transform_input(image)
+        image = self.transform_input(torch.from_numpy(image))
         label = self.transform_label(raw_label)
 
         if self.randomize:
@@ -162,7 +162,7 @@ class ImageData(Dataset):
             image,
             label,
             raw_image.astype(np.int16),
-            torch.squeeze(TF.to_tensor(raw_label.astype(np.int_))),
+            torch.squeeze(torch.from_numpy(raw_label.astype(np.int_))),
         )
 
 
