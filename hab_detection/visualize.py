@@ -89,9 +89,9 @@ def visualize_full_image(
     ax.imshow(cyan_image)
     ax.axis("off")
 
-    print("before transopsoe", sen2_np)
+    print("before transopsoe", sen2_np.shape)
     sen2_np = sen2_np.transpose(1, 2, 0)
-    print("after transopsoe", sen2_np)
+    print("after transopsoe", sen2_np.shape)
     transformed_sen2 = dataset.transform_input(
         sen2_np / 10000,
     )
