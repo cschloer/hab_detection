@@ -47,7 +47,7 @@ loader = DataLoader(
 num_classes = len(cd) if cd is not None else 254
 labels_dist = np.zeros(num_classes)
 print(labels_dist)
-for batch_idx, (_, labels, _) in enumerate(loader):
+for batch_idx, (_, labels, _, _) in enumerate(loader):
     mask = labels == -1
 
     labels_dist_temp = np.bincount(
@@ -85,7 +85,7 @@ psum_sq = np.zeros((12,))
 # loop through images
 counter = 0
 count = 0
-for (inputs, _, _) in loader:
+for (inputs, _, _, _) in loader:
 
     psum += inputs.sum(axis=[0, 1, 2]).numpy()
     psum_sq += (inputs ** 2).sum(axis=[0, 1, 2]).numpy()
