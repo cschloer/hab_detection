@@ -27,13 +27,12 @@ def use_groupnorm(model):
         if isinstance(child, torch.nn.BatchNorm2d):
             num_features = child.num_features
             num_groups = 32
-            while num_features <= num_groups or num_features % num_features != 0:
-                num_groups = num_groups / 2
-                if num_groups < 0:
+            while num_features <= num_groups or num_features % num_groups != 0:
+                num_groups = int(num_groups / 2)
+                if num_groups < 1:
                     # We shouldn't get here
                     assert False
 
-            print(num_groups, " - ", num_features)
             setattr(
                 model,
                 child_name,
