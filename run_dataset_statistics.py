@@ -46,7 +46,6 @@ loader = DataLoader(
 
 num_classes = len(cd) if cd is not None else 254
 labels_dist = np.zeros(num_classes)
-print(labels_dist)
 for batch_idx, (_, labels, _, _) in enumerate(loader):
     mask = labels == -1
 

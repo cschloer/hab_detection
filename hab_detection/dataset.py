@@ -154,6 +154,8 @@ class ImageData(Dataset):
         if self.do_transform:
             image = self.transform_input(torch.from_numpy(image))
             label = self.transform_label(raw_label)
+        else:
+            label = raw_label
 
         if self.randomize:
             image, label = self.random_transform(image, label)
