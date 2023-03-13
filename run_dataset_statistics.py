@@ -47,7 +47,7 @@ loader = DataLoader(
 num_classes = len(cd) if cd is not None else 254
 labels_dist = np.zeros(num_classes)
 print(labels_dist)
-for batch_idx, (inputs, labels, _) in enumerate(loader):
+for batch_idx, (_, labels, _) in enumerate(loader):
     mask = labels == -1
 
     labels_dist_temp = np.bincount(
@@ -61,3 +61,42 @@ print("Labels Distribution:")
 print(labels_dist)
 print("Weights:")
 print(1 / (labels_dist / np.max(labels_dist)))
+
+print("Calculating mean and std now.")
+
+dataset = get_image_dataset(
+    ZIP_PATH_TRAIN if t == "train" else ZIP_PATH_TEST,
+    cd,
+    transform=False,
+)
+
+loader = DataLoader(
+    dataset,
+    batch_size=128,
+    shuffle=False,
+    num_workers=0,
+    drop_last=False,
+)
+
+psum = np.zeros((12,))
+psum_sq = np.zeros((12,))
+
+
+# loop through images
+counter = 0
+count = 0
+for (inputs, _, _) in loader:
+
+    psum += inputs.sum(axis=[0, 1, 2]).numpy()
+    psum_sq += (inputs ** 2).sum(axis=[0, 1, 2]).numpy()
+    counter += 1
+    count += inputs.shape[0] * inputs.shape[1] * inputs.shape[2]
+
+# mean and STD
+mean = psum / count
+var = (psum_sq / count) - (mean ** 2)
+std = np.sqrt(var)
+# output
+print("Data stats:")
+print(f"- mean: {mean}")
+print(f"- std:  {std}")

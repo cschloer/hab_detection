@@ -50,6 +50,7 @@ class ImageData(Dataset):
         zip_path,
         class_designation,
         randomize=False,
+        transform=True,
     ):
         super().__init__()
         self.imgs = imgs
@@ -57,6 +58,7 @@ class ImageData(Dataset):
         self.zip_path = zip_path
         self.class_designation = class_designation
         self.randomize = randomize
+        self.do_transform = transform
 
         self.zip = None
         self.transform_input = transforms.Compose(
@@ -124,7 +126,6 @@ class ImageData(Dataset):
         return label
 
     def random_transform(self, image, label):
-        print("RANDOM TRANSFORM HAPPENING")
 
         # Random horizontal flipping
         if random.random() > 0.5:
@@ -150,8 +151,9 @@ class ImageData(Dataset):
         # 10,000 is the accepted number to get a brightness level
         image = raw_image.astype(np.float32) / 10000
         # augmentations
-        image = self.transform_input(torch.from_numpy(image))
-        label = self.transform_label(raw_label)
+        if self.do_transform:
+            image = self.transform_input(torch.from_numpy(image))
+            label = self.transform_label(raw_label)
 
         if self.randomize:
             image, label = self.random_transform(image, label)
@@ -164,9 +166,14 @@ class ImageData(Dataset):
         )
 
 
-def get_image_dataset(zip_path, class_designation, randomize=False):
+def get_image_dataset(zip_path, class_designation, randomize=False, transform=True):
     imgs, labels, zip_path = get_data(zip_path)
     image_dataset = ImageData(
-        imgs, labels, zip_path, class_designation, randomize=randomize
+        imgs,
+        labels,
+        zip_path,
+        class_designation,
+        randomize=randomize,
+        transform=transform,
     )
     return image_dataset
