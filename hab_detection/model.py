@@ -33,6 +33,7 @@ def use_groupnorm(model):
                     # We shouldn't get here
                     assert False
 
+            print(num_groups, " - ", num_features)
             setattr(
                 model,
                 child_name,
