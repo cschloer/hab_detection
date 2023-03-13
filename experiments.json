@@ -54,7 +54,7 @@
         "class_weights": [1, 23.15763134, 10.1160977, 14.39714133, 184.89555124],
         "randomize": true,
         "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm"
-    }
+    },
     "experiment11": {
         "name": "experiment11",
         "batch_size": 32,
