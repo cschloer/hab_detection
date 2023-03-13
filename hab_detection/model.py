@@ -92,11 +92,7 @@ def load_model(
             )
         else:
             raise Exception("Regression not supported for EfficientNet-b0")
-    elif (
-        model_architecture == "deeplabv3-mobilenet_v2"
-        or model_architecture == "deeplabv3-mobilenet_v2#no_replace_batchnorm"
-        or model_architecture == "deeplabv3-mobilenet_v2#use_group_norm"
-    ):
+    elif model_architecture.startswith("deeplabv3-mobilenet_v2"):
         if class_designation is not None:
             model = smp.DeepLabV3(
                 encoder_name="mobilenet_v2",
@@ -111,7 +107,7 @@ def load_model(
 
     if "no_replace_batchnorm" not in model_architecture:
         convert_batchnorm2d(model)
-    if "use_group_norm" in model_architecture:
+    if "use_groupnorm" in model_architecture:
         use_groupnorm(model)
 
     model = model.to(device)
