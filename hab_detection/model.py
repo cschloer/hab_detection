@@ -21,6 +21,27 @@ def convert_batchnorm2d(model):
             convert_batchnorm2d(child)
 
 
+def use_groupnorm(model):
+    # Converts all BatchNorm2d to GroupNorm
+    for child_name, child in model.named_children():
+        if isinstance(child, torch.nn.BatchNorm2d):
+            num_features = child.num_features
+            num_groups = 32
+            while num_features <= num_groups or num_features % num_features != 0:
+                num_groups = num_groups / 2
+                if num_groups < 0:
+                    # We shouldn't get here
+                    assert False
+
+            setattr(
+                model,
+                child_name,
+                torch.nn.GroupNorm(num_groups, num_features),
+            )
+        else:
+            use_groupnorm(child)
+
+
 def load_model(
     model_architecture,
     # model_file is None if we shouldn't load from a previous model.
@@ -71,7 +92,11 @@ def load_model(
             )
         else:
             raise Exception("Regression not supported for EfficientNet-b0")
-    elif model_architecture == "deeplabv3-mobilenet_v2":
+    elif (
+        model_architecture == "deeplabv3-mobilenet_v2"
+        or model_architecture == "deeplabv3-mobilenet_v2#no_replace_batchnorm"
+        or model_architecture == "deeplabv3-mobilenet_v2#use_group_norm"
+    ):
         if class_designation is not None:
             model = smp.DeepLabV3(
                 encoder_name="mobilenet_v2",
@@ -84,7 +109,10 @@ def load_model(
     else:
         raise Exception(f"Unknown model architecture {model_architecture}")
 
-    convert_batchnorm2d(model)
+    if "no_replace_batchnorm" not in model_architecture:
+        convert_batchnorm2d(model)
+    if "use_group_norm" in model_architecture:
+        use_groupnorm(model)
 
     model = model.to(device)
     if model_file is not None:
