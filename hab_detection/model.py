@@ -51,6 +51,7 @@ def load_model(
     class_designation,
 ):
     num_classes = 2
+    aux_params = {"classes": num_classes}
     if class_designation is not None:
         num_classes = len(class_designation)
     if model_architecture == "deeplabv3-resnet50":
@@ -60,6 +61,7 @@ def load_model(
             encoder_weights=None,
             in_channels=12,
             classes=num_classes,
+            aux_params=aux_params,
         )
         if class_designation is None:
             # Chance first layer to accept 12 input bands (12 bands)
@@ -79,6 +81,7 @@ def load_model(
                 encoder_weights=None,
                 in_channels=12,
                 classes=num_classes,
+                aux_params=aux_params,
             )
         else:
             raise Exception("Regression not supported for ResNet18")
@@ -89,11 +92,11 @@ def load_model(
                 encoder_weights=None,
                 in_channels=12,
                 classes=num_classes,
+                aux_params=aux_params,
             )
         else:
             raise Exception("Regression not supported for EfficientNet-b0")
     elif model_architecture.startswith("deeplabv3-mobilenet_v2"):
-        aux_params = {"classes": num_classes}
         if "use_dropout" in model_architecture:
             aux_params["dropout"] = 0.5
         if class_designation is not None:

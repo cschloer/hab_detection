@@ -79,8 +79,7 @@ def train(
 
                     optimizer.zero_grad()
 
-                    preds = model(inputs)  # make prediction
-                    print("OPREDS", preds)
+                    preds, _ = model(inputs)  # make prediction
                     loss = criterion(preds, labels)  # Calculate cross entropy loss
 
                     loss.backward()  # Backpropogate loss
