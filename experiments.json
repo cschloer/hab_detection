@@ -62,6 +62,14 @@
         "class_weights": [1, 23.15763134, 10.1160977, 14.39714133, 184.89555124],
         "randomize": true,
         "model_architecture": "deeplabv3-mobilenet_v2#use_groupnorm"
+    },
+    "experiment12": {
+        "name": "experiment12",
+        "batch_size": 32,
+        "class_designation": [1, 50, 100, 150, 200, 254],
+        "class_weights": [1, 1, 23.15763134, 10.1160977, 14.39714133, 184.89555124],
+        "randomize": true,
+        "model_architecture": "deeplabv3-mobilenet_v2#use_groupnorm"
     }
 }
 
