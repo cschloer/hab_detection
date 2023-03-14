@@ -95,7 +95,7 @@ def get_model_performance(
             # print(f"{batch_idx + 1} / {len(loader)}")
             inputs = inputs.to(device, dtype=torch.float)
             labels = labels.to(device)
-            preds = model(inputs)  # make prediction
+            preds, _ = model(inputs)  # make prediction
 
             # Only calculate the loss if its regression or class weights is passed in
             if class_designation is None or class_weights is not None:
