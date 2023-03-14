@@ -115,6 +115,7 @@ def load_model(
         use_groupnorm(model)
 
     model = model.to(device)
+    print(model)
     if model_file is not None:
         # An entire path was passed in
         if model_file.startswith("/"):
