@@ -65,11 +65,13 @@
     },
     "experiment12": {
         "name": "experiment12",
+        "description": "Added dropout and weight decay (l2 normalization)",
         "batch_size": 32,
         "class_designation": [1, 50, 100, 150, 200, 254],
-        "class_weights": [1, 1, 23.15763134, 10.1160977, 14.39714133, 184.89555124],
+        "class_weights": [1, 27.35918386,  22.34104821, 9.75938442, 13.88947011, 178.37577436],
+        "weight_decay": 0.002,
         "randomize": true,
-        "model_architecture": "deeplabv3-mobilenet_v2#use_groupnorm"
+        "model_architecture": "deeplabv3-mobilenet_v2#use_dropout"
     }
 }
 

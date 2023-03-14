@@ -93,12 +93,16 @@ def load_model(
         else:
             raise Exception("Regression not supported for EfficientNet-b0")
     elif model_architecture.startswith("deeplabv3-mobilenet_v2"):
+        aux_params = {"classes": num_classes}
+        if "use_dropout" in model_architecture:
+            aux_params["dropout"] = 0.5
         if class_designation is not None:
             model = smp.DeepLabV3(
                 encoder_name="mobilenet_v2",
                 encoder_weights=None,
                 in_channels=12,
                 classes=num_classes,
+                aux_params=aux_params,
             )
         else:
             raise Exception("Regression not supported for MobileNet-v2")
@@ -143,11 +147,11 @@ def get_criterion(class_designation, class_weights):
         return lf
 
 
-def get_optimizer(model):
+def get_optimizer(model, weight_decay=0):
     # Create adam optimizer
     optimizer = torch.optim.Adam(
         params=model.parameters(),
         lr=LEARNING_RATE,
-        # weight_decay=weight_decay,
+        weight_decay=weight_decay,
     )
     return optimizer

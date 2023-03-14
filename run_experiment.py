@@ -46,4 +46,5 @@ train(
     e["randomize"],
     model_file=model_file,
     epoch_start=epoch_start,
+    weight_decay=e.get("weight_decay", 0),
 )

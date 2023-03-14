@@ -139,7 +139,7 @@ class ImageData(Dataset):
 
         # Gaussian Blur
         sigma = np.random.uniform(0.1, 2.0)
-        kernel_size = 3 if random.random() > 0.5 else 5
+        kernel_size = 7
         image = TF.gaussian_blur(image, kernel_size, sigma)
 
         return image, label

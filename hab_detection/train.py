@@ -27,6 +27,7 @@ def train(
     randomize,
     epoch_start=0,
     model_file=None,
+    weight_decay=0,
 ):
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
     os.makedirs(model_save_folder, exist_ok=True)
@@ -61,7 +62,7 @@ def train(
         model = load_model(
             model_architecture, model_file, model_save_folder, class_designation
         )
-        optimizer = get_optimizer(model)
+        optimizer = get_optimizer(model, weight_decay=weight_decay)
         criterion = get_criterion(class_designation, class_weights)
 
         train_tracker = get_metric_tracker(class_designation)
@@ -80,6 +81,12 @@ def train(
 
                     preds = model(inputs)  # make prediction
                     loss = criterion(preds, labels)  # Calculate cross entropy loss
+
+                    # Add l2 loss
+                    l2_lambda = 0.001
+                    l2_norm = sum(p.pow(2.0).sum() for p in model.parameters())
+                    loss = loss + l2_lambda * l2_norm
+
                     loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
 
