@@ -76,7 +76,7 @@ def train(
                 for batch_idx, (inputs, labels, _, _) in enumerate(train_loader):
                     model.train()
                     inputs = inputs.to(device, dtype=torch.float)
-                    labels = labels.to(device).long()
+                    labels = labels.to(device)
 
                     optimizer.zero_grad()
 

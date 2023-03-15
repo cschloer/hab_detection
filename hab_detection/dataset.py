@@ -123,7 +123,7 @@ class ImageData(Dataset):
         # label = torch.from_numpy(label)
         # F.one_hot(label, num_classes=len(class_designation))
 
-        label = torch.squeeze(label.int())
+        label = torch.squeeze(label.long())
         return label
 
     def random_transform(self, image, label):
