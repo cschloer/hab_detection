@@ -137,6 +137,12 @@ class ImageData(Dataset):
             image = TF.vflip(image)
             label = TF.vflip(label)
 
+        # Random crop
+        x_offset = random.randrange(32)
+        y_offset = random.randrange(32)
+        image = TF.crop(image, y_offset, x_offset, 32, 32)
+        label = TF.crop(label, y_offset, x_offset, 32, 32)
+
         # Gaussian Blur
         sigma = np.random.uniform(0.1, 2.0)
         kernel_size = 7

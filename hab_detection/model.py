@@ -65,9 +65,10 @@ def load_model(
         )
         if class_designation is None:
             # Chance first layer to accept 12 input bands (12 bands)
-            model.backbone.conv1 = torch.nn.Conv2d(
-                12, 64, kernel_size=(7, 7), stride=(2, 2)
-            )
+            # model.backbone.conv1 = torch.nn.Conv2d(
+            #    12, 64, kernel_size=(7, 7), stride=(2, 2)
+            # )
+
             # Change final layer to 1 continuous output
             model.decoder.segmentation_head[4] = torch.nn.Sequential(
                 torch.nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1)),
@@ -118,7 +119,6 @@ def load_model(
         use_groupnorm(model)
 
     model = model.to(device)
-    print(model)
     if model_file is not None:
         # An entire path was passed in
         if model_file.startswith("/"):
