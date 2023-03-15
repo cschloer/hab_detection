@@ -1,6 +1,7 @@
 import os
 import re
 from sklearn.metrics import ConfusionMatrixDisplay
+import zipfile
 import seaborn as sns
 from torch.utils.data import DataLoader
 from PIL import Image
