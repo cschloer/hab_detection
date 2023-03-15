@@ -233,6 +233,14 @@ def visualize(
         "winnebago_2019_7_25_x32_y1600_64x64_28",
         ZIP_PATH_TRAIN,
     )
+    visualize_patch(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "winnebago_2019_7_25_x736_y1152_64x64_666",
+        ZIP_PATH_TRAIN,
+    )
     log("Done visualizing full images.")
 
     log("Generating loss plot.")
