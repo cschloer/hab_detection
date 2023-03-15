@@ -234,7 +234,9 @@ def visualize(
                 label = labels[image_index, :, :]
                 pred = model(torch.unsqueeze(inp, 0))  # make prediction
                 itracker.update(preds, labels)
-                acc_total += itracker.compute_all()["MulticlassAccuracy"][0]
+                iacc = itracker.compute_all()["MulticlassAccuracy"][0]
+                acc_total += iacc
+                print("INDIVUDAL ACC: ", iacc)
 
             print(f"Batch: {acc} ---- Avg individual: {acc_total/(image_index + 1)}")
             counter += 1

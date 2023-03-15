@@ -35,10 +35,9 @@ def get_data(zip_path):
                     f'Corresponding label file doesn\'t exist: "{label_filename}"'
                 )
 
-            if f.startswith("winnebago_2019_7_25_x320_y1344_64x64_214"):
-                for i in range(64):
-                    imgs.append(f)
-                    labels.append(label_filename)
+            if f.startswith("winnebago_2019_7_25_x32"):
+                imgs.append(f)
+                labels.append(label_filename)
 
     zip.close()
     return imgs, labels, zip_path
