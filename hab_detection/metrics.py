@@ -92,7 +92,6 @@ def get_model_performance(
         total_loss = 0
         counter = 0
         for batch_idx, (inputs, labels, _, raw_labels) in enumerate(loader):
-            batch_tracker = get_metric_tracker(class_designation)
             # print(f"{batch_idx + 1} / {len(loader)}")
             inputs = inputs.to(device, dtype=torch.float)
             labels = labels.to(device)
@@ -111,7 +110,6 @@ def get_model_performance(
                 labels = labels[~(labels == -1)]
 
             tracker.update(preds, labels)
-            batch_tracker.update(preds, labels)
 
             if class_designation is not None and calculate_2d_hist:
                 # Reverse the 1 hot encoding on preds and bring everything to np
@@ -130,9 +128,6 @@ def get_model_performance(
                 )
                 hist_2d += h
 
-            log(
-                f"BATCH {batch_idx + 1} MulticlassAccuracy: {batch_tracker.compute_all()['MulticlassAccuracy'][0]}"
-            )
             counter += 1
             if num_batches >= 0 and counter >= num_batches:
                 break
