@@ -192,13 +192,14 @@ def visualize(
     # plt.show()
     save_plot(image_save_folder, "loss")
 
-    _, metrics, hist_2d = get_model_performance(
+    test_loss, metrics, hist_2d = get_model_performance(
         model,
         loader,
         class_designation,
         num_batches=-1,
         calculate_2d_hist=True,
     )
+    print(f"Loss with this model was: {test_loss}")
     log(f"\n{pprint.pformat(metrics)}")
 
     """ Confusion Matrix """
