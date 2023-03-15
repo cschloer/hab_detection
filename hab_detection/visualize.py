@@ -145,7 +145,7 @@ def visualize_image(
         ax.axis("off")
 
         transformed_sen2 = dataset.transform_input(
-            torch.from_numpy(sen2_np / 10000),
+            torch.from_numpy(sen2_np.astype(np.float32) / 10000),
         )
 
         transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
