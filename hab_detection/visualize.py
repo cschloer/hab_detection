@@ -238,7 +238,7 @@ def visualize(
         dataset,
         class_designation,
         image_save_folder,
-        "winnebago_2019_7_25_x736_y1152_64x64_666",
+        "winnebago_2019_7_25_x864_y1056_64x64_788",
         ZIP_PATH_TRAIN,
     )
     log("Done visualizing full images.")
