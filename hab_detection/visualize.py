@@ -155,7 +155,7 @@ def visualize_image(
         pred = model(transformed_sen2_batch)  # make prediction
 
         tracker.update(
-            pred, torch.unsqueeze(dataset.transform_label(cyan_reshaped).to(device), 0)
+            pred, torch.unsqueeze(dataset.transform_label(cyan_reshaped), 0).to(device)
         )
         pred = pred.cpu().detach()
 
@@ -170,8 +170,11 @@ def visualize_image(
         ax.axis("off")
 
         save_plot(image_save_folder, image_name)
+        # log(
+        #    f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
+        # )
         log(
-            f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
+            f"MulticlassAccuracy for {image_name}: \n\n{pprint.pformat(tracker.compute_all())}"
         )
 
 
@@ -233,7 +236,7 @@ def visualize(
                 itracker.update(preds, labels)
                 acc_total += itracker.compute_all()["MulticlassAccuracy"][0]
 
-            print(f"Batch: {acc} ---- Avg individual: {acc_total/image_index}")
+            print(f"Batch: {acc} ---- Avg individual: {acc_total/(image_index + 1)}")
             counter += 1
             if counter > 10:
                 break
