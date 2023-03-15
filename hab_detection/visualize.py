@@ -77,7 +77,9 @@ def visualize_full_image(
 
         cyan_np = np.load(label_path)
         cyan_reshaped = np.pad(
-            cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]), ((0, ypad), (0, xpad))
+            cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]),
+            ((0, ypad), (0, xpad)),
+            constant_values=255,
         )
         ax = axs[0, 0]
         ax.set_title("Actual HAB Index")
