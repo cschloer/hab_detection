@@ -76,14 +76,12 @@ def train(
                 for batch_idx, (inputs, labels, _, _) in enumerate(train_loader):
                     model.train()
                     inputs = inputs.to(device, dtype=torch.float)
-                    labels = labels.to(device)
+                    labels = labels.to(device).long()
 
                     optimizer.zero_grad()
 
                     preds = model(inputs)  # make prediction
-                    loss = criterion(
-                        preds, labels.long()
-                    )  # Calculate cross entropy loss
+                    loss = criterion(preds, labels)  # Calculate cross entropy loss
 
                     loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
