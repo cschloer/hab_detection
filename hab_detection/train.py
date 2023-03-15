@@ -81,7 +81,9 @@ def train(
                     optimizer.zero_grad()
 
                     preds = model(inputs)  # make prediction
-                    loss = criterion(preds, labels)  # Calculate cross entropy loss
+                    loss = criterion(
+                        preds, labels.long()
+                    )  # Calculate cross entropy loss
 
                     loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
