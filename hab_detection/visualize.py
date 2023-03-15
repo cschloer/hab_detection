@@ -155,7 +155,7 @@ def visualize_image(
         pred = model.predict(transformed_sen2_batch)  # make prediction
 
         label = torch.unsqueeze(
-            dataset.transform_label(torch.from_numpy(cyan_reshaped)), 0
+            dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
         ).to(device)
         print(label.shape, torch.unique(label))
 
