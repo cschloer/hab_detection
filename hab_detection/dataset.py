@@ -143,10 +143,10 @@ class ImageData(Dataset):
         y_offset = random.randrange(16)
         cropped_size = 64 - max([random.randrange(16), x_offset, y_offset])
         image = TF.resized_crop(
-            image, y_offset, x_offset, cropped_size, cropped_size, 64, 64
+            image, y_offset, x_offset, cropped_size, cropped_size, 64
         )
         label = TF.resized_crop(
-            label, y_offset, x_offset, cropped_size, cropped_size, 64, 64
+            label, y_offset, x_offset, cropped_size, cropped_size, 64
         )
 
         # Gaussian Blur
