@@ -248,7 +248,7 @@ def visualize(
 
             print(f"Batch: {acc} ---- Avg individual: {acc_total/(image_index + 1)}")
             counter += 1
-            if counter > 10:
+            if counter >= 2:
                 break
 
     log("Visualizing full images.")
