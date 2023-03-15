@@ -160,7 +160,6 @@ def visualize_image(
         pred = pred.cpu().detach()
 
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
-        print("UNIQUE", np.unique(pred))
         pred_masked = np.where(
             cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
         )
@@ -171,12 +170,12 @@ def visualize_image(
         ax.axis("off")
 
         save_plot(image_save_folder, image_name)
-        # log(
-        #    f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
-        # )
         log(
-            f"MulticlassAccuracy for {image_name}: \n\n{pprint.pformat(tracker.compute_all())}"
+            f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
         )
+        # log(
+        #    f"MulticlassAccuracy for {image_name}: \n\n{pprint.pformat(tracker.compute_all())}"
+        # )
 
 
 def visualize(
