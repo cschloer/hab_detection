@@ -155,7 +155,10 @@ def visualize_image(
         pred = model.predict(transformed_sen2_batch)  # make prediction
 
         tracker.update(
-            pred, torch.unsqueeze(dataset.transform_label(cyan_reshaped), 0).to(device)
+            pred,
+            torch.unsqueeze(
+                dataset.transform_label(torch.from_numpy(cyan_reshaped)), 0
+            ).to(device),
         )
         pred = pred.cpu().detach()
 
