@@ -81,7 +81,7 @@
         "class_weights": [1, 12.29839017, 9.75938442, 13.88947011, 178.37577436],
         "weight_decay": 0.002,
         "randomize": true,
-        "model_architecture": "deeplabv3-mobilenet_v2#use_dropout&no_replace_batchnorm"
+        "model_architecture": "deeplabv3-mobilenet_v2no_replace_batchnorm"
     }
 }
 
