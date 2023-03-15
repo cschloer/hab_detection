@@ -214,6 +214,7 @@ def visualize(
     print("Calculating batch vs indiviudal performance")
     with torch.no_grad():
         model.eval()
+        counter = 0
         for batch_idx, (inputs, labels, _, _) in enumerate(loader):
             tracker = get_metric_tracker(class_designation)
             inputs = inputs.to(device, dtype=torch.float)
@@ -226,15 +227,17 @@ def visualize(
             acc_total = 0
             print(inputs.shape, labels.shape)
             for image_index in range(inputs.shape[0]):
-                tracker = get_metric_tracker(class_designation)
+                itracker = get_metric_tracker(class_designation)
                 inp = inputs[image_index, :, :, :]
                 label = labels[image_index, :, :]
                 pred = model(torch.unsqueeze(inp, 0))  # make prediction
-                tracker.update(preds, labels)
-                acc_total += tracker.compute_all()["MulticlassAccuracy"][0]
+                itracker.update(preds, labels)
+                acc_total += itracker.compute_all()["MulticlassAccuracy"][0]
 
             print(f"Batch: {acc} ---- Avg individual: {acc_total/image_index}")
-            break
+            counter += 1
+            if counter > 10:
+                break
 
     log("Visualizing full images.")
     visualize_full_image(
