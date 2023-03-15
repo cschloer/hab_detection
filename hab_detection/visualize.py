@@ -90,7 +90,7 @@ def visualize_full_image(
 
         print("LEFT OVER", used)
 
-        print("UNQUE CUSTOM COLORMAP", np.unique(custom_colormap))
+        print("UNQUE CUSTOM COLORMAP", np.unique(custom_colormap, axis=0))
         print(custom_colormap)
         cyan_image = custom_colormap[cyan_reshaped]
         ax = axs[0, 1]
