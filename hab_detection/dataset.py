@@ -39,6 +39,7 @@ def get_data(zip_path):
                 imgs.append(f)
                 labels.append(label_filename)
 
+    print("LEN", len(imgs))
     zip.close()
     return imgs, labels, zip_path
 
