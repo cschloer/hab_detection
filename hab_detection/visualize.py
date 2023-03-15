@@ -62,28 +62,12 @@ def visualize_full_image(
     with torch.no_grad():
         model.eval()
         fig, axs = plt.subplots(2, 2, figsize=(20, 16))
-        sen2_np_unpadded = np.load(input_path).astype(np.float32)
-        ypad = 8 - sen2_np_unpadded.shape[1] % 8
-        xpad = 8 - sen2_np_unpadded.shape[2] % 8
-        sen2_np = np.pad(
-            sen2_np_unpadded,
-            ((0, 0), (0, ypad), (0, xpad)),
-            # Set constant to the mean value
-            constant_values=[
-                0.04235201,
-                0.04784579,
-                0.05547756,
-                0.04363304,
-                0.05092298,
-                0.05012781,
-                0.05277098,
-                0.05194422,
-                0.05095484,
-                0.05174823,
-                0.03550878,
-                0.02762647,
-            ],
-        )
+        sen2_np = np.load(input_path).astype(np.float32)
+        height = sen2_np.shape[1]
+        width = sen2_np.shape[2]
+        ycrop = height % 8
+        xcrop = width % 8
+        sen2_np = sen2_np[:, 0 : height - ycrop, 0 : width - xcrop]
         sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
         ax = axs[1, 0]
         ax.set_title("Actual image")
@@ -91,11 +75,9 @@ def visualize_full_image(
         ax.axis("off")
 
         cyan_np = np.load(label_path)
-        cyan_reshaped = np.pad(
-            cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]),
-            ((0, ypad), (0, xpad)),
-            constant_values=255,
-        )
+        cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])[
+            0 : height - ycrop, 0 : width - xcrop
+        ]
         ax = axs[0, 0]
         ax.set_title("Actual HAB Index")
         ax.imshow(cyan_colormap[cyan_reshaped])
