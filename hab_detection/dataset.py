@@ -141,7 +141,7 @@ class ImageData(Dataset):
         # Random crop
         x_offset = random.randrange(16)
         y_offset = random.randrange(16)
-        cropped_size = 64 - np.maximum([random.randrange(16), x_offset, y_offset])
+        cropped_size = 64 - max([random.randrange(16), x_offset, y_offset])
         image = TF.resized_crop(
             image, y_offset, x_offset, cropped_size, cropped_size, 64, 64
         )
