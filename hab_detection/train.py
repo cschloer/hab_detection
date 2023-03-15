@@ -62,6 +62,7 @@ def train(
         model = load_model(
             model_architecture, model_file, model_save_folder, class_designation
         )
+        print(model)
         optimizer = get_optimizer(model, weight_decay=weight_decay)
         criterion = get_criterion(class_designation, class_weights)
 

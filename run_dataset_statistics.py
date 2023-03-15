@@ -31,6 +31,7 @@ if experiment_name not in experiments:
 e = experiments[experiment_name]
 cd = e["class_designation"]
 
+print("Getting dataset.")
 dataset = get_image_dataset(
     ZIP_PATH_TRAIN if t == "train" else ZIP_PATH_TEST,
     cd,
@@ -43,6 +44,7 @@ loader = DataLoader(
     num_workers=0,
     drop_last=False,
 )
+print("Dataset loaded. Calculating labels distribution.")
 
 num_classes = len(cd) if cd is not None else 254
 labels_dist = np.zeros(num_classes)
