@@ -65,6 +65,7 @@ def visualize_full_image(
         sen2_np_unpadded = np.load(input_path).astype(np.float32)
         ypad = 8 - sen2_np.unpadded.shape[1] % 8
         xpad = 8 - sen2_np.unpadded.shape[2] % 8
+        print("PADDING BY ", ypad, " and", xpad)
         sen2_np = np.pad(
             sen2_np_unpadded,
             ((0, 0), (0, ypad), (0, xpad)),
