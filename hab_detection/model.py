@@ -42,6 +42,34 @@ def use_groupnorm(model):
             use_groupnorm(child)
 
 
+# A custom segmentation head that adds dropout
+class SegmentationHeadDropout(torch.nn.Sequential):
+    def __init__(
+        self,
+        in_channels,
+        out_channels,
+        kernel_size=3,
+        dropout=0.5,
+        activation=None,
+        upsampling=1,
+    ):
+        dropout = (
+            torch.nn.Dropout(p=dropout, inplace=True)
+            if dropout
+            else torch.nn.Identity()
+        )
+        conv2d = torch.nn.Conv2d(
+            in_channels, out_channels, kernel_size=kernel_size, padding=kernel_size // 2
+        )
+        upsampling = (
+            torch.nn.UpsamplingBilinear2d(scale_factor=upsampling)
+            if upsampling > 1
+            else torch.nn.Identity()
+        )
+        activation = Activation(activation)
+        super().__init__(dropout, conv2d, upsampling, activation)
+
+
 def load_model(
     model_architecture,
     # model_file is None if we shouldn't load from a previous model.
@@ -53,7 +81,6 @@ def load_model(
     num_classes = 2
     if class_designation is not None:
         num_classes = len(class_designation)
-    aux_params = {"classes": num_classes, "dropout": None}
     if model_architecture == "deeplabv3-resnet50":
         # Load resnet50 segmentation model
         model = smp.DeepLabV3(
@@ -61,7 +88,6 @@ def load_model(
             encoder_weights=None,
             in_channels=12,
             classes=num_classes,
-            aux_params=aux_params,
         )
         if class_designation is None:
             # Chance first layer to accept 12 input bands (12 bands)
@@ -82,7 +108,6 @@ def load_model(
                 encoder_weights=None,
                 in_channels=12,
                 classes=num_classes,
-                aux_params=aux_params,
             )
         else:
             raise Exception("Regression not supported for ResNet18")
@@ -93,21 +118,16 @@ def load_model(
                 encoder_weights=None,
                 in_channels=12,
                 classes=num_classes,
-                aux_params=aux_params,
             )
         else:
             raise Exception("Regression not supported for EfficientNet-b0")
     elif model_architecture.startswith("deeplabv3-mobilenet_v2"):
-        if "use_dropout" in model_architecture:
-            aux_params["dropout"] = 0.5
         if class_designation is not None:
             model = smp.DeepLabV3(
                 encoder_name="mobilenet_v2",
                 encoder_weights=None,
                 in_channels=12,
                 classes=num_classes,
-                # TODO UNCOMMENT AFTER IMGAE TESTING
-                # aux_params=aux_params,
             )
         else:
             raise Exception("Regression not supported for MobileNet-v2")
@@ -118,6 +138,14 @@ def load_model(
         convert_batchnorm2d(model)
     if "use_groupnorm" in model_architecture:
         use_groupnorm(model)
+    if "use_dropout" in model_architecture:
+        model.segmentation_head = SegmentationHeadDropout(
+            in_channels=model.decoder.out_channels,
+            out_channels=num_classes,
+            activation=None,
+            kernel_size=1,
+            upsampling=8,
+        )
 
     model = model.to(device)
     if model_file is not None:
