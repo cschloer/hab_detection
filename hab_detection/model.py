@@ -51,9 +51,9 @@ def load_model(
     class_designation,
 ):
     num_classes = 2
-    aux_params = {"classes": num_classes}
     if class_designation is not None:
         num_classes = len(class_designation)
+    aux_params = {"classes": num_classes, "dropout": None }
     if model_architecture == "deeplabv3-resnet50":
         # Load resnet50 segmentation model
         model = smp.DeepLabV3(
