@@ -233,6 +233,7 @@ def visualize(
             labels = labels.to(device)
             # TODO PUT BACK AFTER VUISUALIZATION TESTING
             preds = model.predict(inputs)  # make prediction
+            print(preds.shape, preds)
             tracker.update(preds, labels)
             acc = tracker.compute_all()["MulticlassAccuracy"][0]
 
