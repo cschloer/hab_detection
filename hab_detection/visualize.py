@@ -156,8 +156,8 @@ def visualize_image(
         pred = pred.cpu().detach()
 
         print(pred.shape)
-        print(dataset.transform_label(cyan_reshaped).shape)
-        tracker.update(pred, dataset.transform_label(cyan_reshaped))
+        print(np.unsqueeze(dataset.transform_label(cyan_reshaped)).shape)
+        tracker.update(pred, np.unsqueeze(dataset.transform_label(cyan_reshaped)))
 
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
         pred_masked = np.where(
