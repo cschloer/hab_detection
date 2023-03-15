@@ -170,7 +170,9 @@ def visualize_image(
         ax.axis("off")
 
         save_plot(image_save_folder, image_name)
-        log(f"MulticlassAccuracy for {image_name}: \n\n {tracker.compute_all()['MulticlassAccuracy'][0]}")
+        log(
+            f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
+        )
 
 
 def visualize(
