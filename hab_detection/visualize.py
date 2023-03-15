@@ -232,7 +232,7 @@ def visualize(
                 itracker = get_metric_tracker(class_designation)
                 inp = inputs[image_index, :, :, :]
                 label = labels[image_index, :, :]
-                pred = model(torch.unsqueeze(inp, 0))  # make prediction
+                pred = model.predict(torch.unsqueeze(inp, 0))  # make prediction
                 itracker.update(pred, torch.unsqueeze(label, 0))
                 iacc = itracker.compute_all()["MulticlassAccuracy"][0]
                 acc_total += iacc
