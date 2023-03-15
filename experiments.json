@@ -72,6 +72,16 @@
         "weight_decay": 0.002,
         "randomize": true,
         "model_architecture": "deeplabv3-mobilenet_v2#use_dropout"
+    },
+    "experiment13": {
+        "name": "experiment13",
+        "description": "New random crop, lower learning rate. Previous experiment didn't actually add dropout. Now it should be there.",
+        "batch_size": 32,
+        "class_designation": [1, 100, 150, 200, 254],
+        "class_weights": [1, 22.34104821, 9.75938442, 13.88947011, 178.37577436],
+        "weight_decay": 0.002,
+        "randomize": true,
+        "model_architecture": "deeplabv3-mobilenet_v2#use_dropout&no_replace_batchnorm"
     }
 }
 
