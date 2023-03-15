@@ -155,7 +155,7 @@ def visualize_image(
         pred = model(transformed_sen2_batch)  # make prediction
         pred = pred.cpu().detach()
 
-        tracker.update(preds, dataset.transform_label(cyan_reshaped))
+        tracker.update(pred, dataset.transform_label(cyan_reshaped))
 
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
         pred_masked = np.where(
