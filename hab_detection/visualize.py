@@ -214,7 +214,8 @@ def visualize(
         drop_last=False,
     )
 
-    print("Calculating batch vs indiviudal performance")
+    print("Calculating batch vs individual performance")
+    count = 0
     for m in model.modules():
         if isinstance(m, torch.nn.BatchNorm2d):
             count += 1  # skip the first BatchNorm layer
