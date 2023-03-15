@@ -65,7 +65,6 @@ def visualize_full_image(
         sen2_np_unpadded = np.load(input_path).astype(np.float32)
         ypad = 8 - sen2_np_unpadded.shape[1] % 8
         xpad = 8 - sen2_np_unpadded.shape[2] % 8
-        print("PADDING BY ", ypad, " and", xpad)
         sen2_np = np.pad(
             sen2_np_unpadded,
             ((0, 0), (0, ypad), (0, xpad)),
@@ -172,6 +171,13 @@ def visualize(
         class_designation,
         image_save_folder,
         "greenbay",
+    )
+    visualize_full_image(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "erie",
     )
 
     return
