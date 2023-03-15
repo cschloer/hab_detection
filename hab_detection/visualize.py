@@ -18,8 +18,7 @@ from .constants import (
     ZIP_PATH_TRAIN,
     ZIP_PATH_TEST,
     MODEL_SAVE_BASE_FOLDER,
-    FULL_IMAGE_1_INPUT,
-    FULL_IMAGE_1_LABEL,
+    FULL_IMAGE_BASE_FOLDER,
 )
 
 from .metrics import get_metric_tracker, get_model_performance
@@ -52,8 +51,14 @@ def normalize_sen2(red, green, blue):
 
 
 def visualize_full_image(
-    model, dataset, class_designation, input_path, label_path, image_save_folder
+    model,
+    dataset,
+    class_designation,
+    image_save_folder,
+    image_name,
 ):
+    input_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/sen2.npy"
+    label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
     with torch.no_grad():
         model.eval()
         fig, axs = plt.subplots(2, 2, figsize=(20, 16))
@@ -71,7 +76,6 @@ def visualize_full_image(
         cyan_reshaped = np.pad(
             cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]), ((0, 6), (0, 2))
         )
-        print("SHAPE AFTER PAD", cyan_reshaped.shape)
         ax = axs[0, 0]
         ax.set_title("Actual HAB Index")
         ax.imshow(cyan_colormap[cyan_reshaped])
@@ -82,16 +86,11 @@ def visualize_full_image(
         used = list(range(len(cyan_colormap)))
         for i, c in enumerate(class_designation):
             cur_color = cyan_colormap[c - 1 if i != 0 else 0]
-            print("CUR COLOR", cur_color, "index ", c)
             for j in range(c - prev_val):
                 custom_colormap[prev_val + j] = cur_color
                 used.remove(prev_val + j)
             prev_val = c
 
-        print("LEFT OVER", used)
-
-        print("UNQUE CUSTOM COLORMAP", np.unique(custom_colormap, axis=0))
-        print(custom_colormap)
         cyan_image = custom_colormap[cyan_reshaped]
         ax = axs[0, 1]
         ax.set_title("Actual HAB Class")
@@ -103,31 +102,21 @@ def visualize_full_image(
         )
 
         transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
-        print("TRANSFORMED SHAPE", transformed_sen2.shape)
-        print(
-            "TRANSFORMED UNSEQUEEZED", torch.unsqueeze(transformed_sen2, axis=0).shape
-        )
         transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
+
         pred = model(transformed_sen2_batch)  # make prediction
         pred = pred.cpu().detach()
-        print("PRED SHAPE", pred.shape)
-        print(cyan_reshaped[600, 1000], " -------- ", pred[0, :, 600, 1000])
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
-        print("PRED UNIQUE AFTER", np.unique(pred))
-        print("PRED type AFTER", pred.dtype)
-        print("PRED HSAPE AFTER", pred.shape)
         pred_masked = np.where(
             cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
         )
-        print("PRED MASK SHAPE AFTER", pred_masked.shape)
-        print("PRED MASK UNIQUE", np.unique(pred_masked.shape))
 
         ax = axs[1, 1]
         ax.set_title("Prediction HAB Class")
         ax.imshow(custom_colormap[pred_masked])
         ax.axis("off")
 
-        save_plot(image_save_folder, "winnebago")
+        save_plot(image_save_folder, image_name)
 
 
 def visualize(
@@ -170,9 +159,15 @@ def visualize(
         model,
         dataset,
         class_designation,
-        FULL_IMAGE_1_INPUT,
-        FULL_IMAGE_1_LABEL,
         image_save_folder,
+        "winnebago",
+    )
+    visualize_full_image(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "greenbay",
     )
 
     return

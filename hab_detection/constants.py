@@ -6,8 +6,7 @@ ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset4_test.zip"
 MODEL_SAVE_BASE_FOLDER = "/shared/datasets/hab/models"
 LOG_NAME = "log.txt"
 
-FULL_IMAGE_1_INPUT = "/shared/datasets/hab/images/winnebago/sen2.npy"
-FULL_IMAGE_1_LABEL = "/shared/datasets/hab/images/winnebago/cyan.npy"
+FULL_IMAGE_BASE_FOLDER = "/shared/datasets/hab/images"
 
 LEARNING_RATE = 1e-5
 
