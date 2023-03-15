@@ -73,7 +73,7 @@ def visualize_full_image(
         )
         print("SHAPE AFTER PAD", cyan_reshaped.shape)
         ax = axs[0, 0]
-        ax.set_title("Actual HAB Index Based")
+        ax.set_title("Actual HAB Index")
         ax.imshow(cyan_colormap[cyan_reshaped])
         ax.axis("off")
 
@@ -94,7 +94,7 @@ def visualize_full_image(
         print(custom_colormap)
         cyan_image = custom_colormap[cyan_reshaped]
         ax = axs[0, 1]
-        ax.set_title("Actual HAB Class Based")
+        ax.set_title("Actual HAB Class")
         ax.imshow(cyan_image)
         ax.axis("off")
 
@@ -112,8 +112,13 @@ def visualize_full_image(
         pred = pred.cpu().detach()
         print("PRED SHAPE", pred.shape)
 
-        pred = torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
+        pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
         print("PRED HSAPE AFTER", pred.shape)
+
+        ax = axs[1, 1]
+        ax.set_title("Prediction HAB Class")
+        ax.imshow(custom_colormap[pred])
+        ax.axis("off")
 
         save_plot(image_save_folder, "winnebago")
 
