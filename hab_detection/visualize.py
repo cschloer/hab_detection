@@ -100,7 +100,7 @@ def visualize_full_image(
             "TRANSFORMED UNSEQUEEZED", torch.unsqueeze(transformed_sen2, axis=0).shape
         )
         transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
-        pred, _ = model(transformed_sen2_batch)  # make prediction
+        pred = model(transformed_sen2_batch)  # make prediction
         pred = pred.cpu().detach()
         print("PRED SHAPE", pred.shape)
 

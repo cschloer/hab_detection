@@ -107,7 +107,7 @@ def load_model(
                 in_channels=12,
                 classes=num_classes,
                 # TODO UNCOMMENT AFTER IMGAE TESTING
-                #aux_params=aux_params,
+                # aux_params=aux_params,
             )
         else:
             raise Exception("Regression not supported for MobileNet-v2")
