@@ -106,6 +106,7 @@ def visualize_image(
     sen2_np,
     cyan_np,
 ):
+    tracker = get_metric_tracker(class_designation)
     with torch.no_grad():
         model.eval()
         fig, axs = plt.subplots(2, 2, figsize=(20, 16))
@@ -135,7 +136,6 @@ def visualize_image(
             cur_color = cyan_colormap[c - 1 if i != 0 else 0]
             for j in range(c - prev_val):
                 custom_colormap[prev_val + j] = cur_color
-                used.remove(prev_val + j)
             prev_val = c
 
         cyan_image = custom_colormap[cyan_reshaped]
@@ -154,6 +154,9 @@ def visualize_image(
         # TODO RETURN TWO AFTER IMAGE TESTING
         pred = model(transformed_sen2_batch)  # make prediction
         pred = pred.cpu().detach()
+
+        tracker.update(preds, dataset.transform_label(cyan_reshaped))
+
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
         pred_masked = np.where(
             cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
@@ -165,6 +168,7 @@ def visualize_image(
         ax.axis("off")
 
         save_plot(image_save_folder, image_name)
+        log(f"For {image_name}: \n\n {pprint.pformat(tracker.compute_all())}")
 
 
 def visualize(
