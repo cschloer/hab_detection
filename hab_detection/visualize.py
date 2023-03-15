@@ -225,7 +225,6 @@ def visualize(
             acc = tracker.compute_all()["MulticlassAccuracy"][0]
 
             acc_total = 0
-            print(inputs.shape, labels.shape)
             for image_index in range(inputs.shape[0]):
                 itracker = get_metric_tracker(class_designation)
                 inp = inputs[image_index, :, :, :]
