@@ -96,7 +96,7 @@ def get_model_performance(
             inputs = inputs.to(device, dtype=torch.float)
             labels = labels.to(device)
             # TODO PUT BACK AFTER VUISUALIZATION TESTING
-            preds = model(inputs)  # make prediction
+            preds = model.predict(inputs)  # make prediction
 
             # Only calculate the loss if its regression or class weights is passed in
             if class_designation is None or class_weights is not None:
