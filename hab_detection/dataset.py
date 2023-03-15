@@ -104,7 +104,7 @@ class ImageData(Dataset):
         self.zip = zipfile.ZipFile(self.zip_path, mode="r")
 
     def mask_label(self, label):
-        return torch.where((label >= 254), -1, label)
+        return torch.where(label >= 254, -1, label)
 
     def transform_label(self, label):
         # First set no data values to -1
