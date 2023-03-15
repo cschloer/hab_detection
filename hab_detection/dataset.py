@@ -36,6 +36,7 @@ def get_data(zip_path):
                 )
 
             if f.startswith("winnebago_2019_7_25_x32"):
+                print(f)
                 imgs.append(f)
                 labels.append(label_filename)
 
