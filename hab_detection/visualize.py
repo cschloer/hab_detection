@@ -198,7 +198,6 @@ def visualize(
     model = load_model(
         model_architecture, model_file, model_save_folder, class_designation
     )
-    print(model)
 
     log(f"Loading the dataset")
     if dataset_type == "test":
