@@ -111,7 +111,7 @@ def visualize_full_image(
         pred = model(transformed_sen2_batch)  # make prediction
         pred = pred.cpu().detach()
         print("PRED SHAPE", pred.shape)
-        print(pred[0, :, 0, 0], " -------- ", pred[0, :, 600, 1000])
+        print(cyan_reshaped[600, 1000], " -------- ", pred[0, :, 600, 1000])
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
         print("PRED UNIQUE AFTER", np.unique(pred))
         print("PRED type AFTER", pred.dtype)
