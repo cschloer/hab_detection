@@ -154,9 +154,9 @@ def visualize_image(
         # TODO RETURN TWO AFTER IMAGE TESTING
         pred = model(transformed_sen2_batch)  # make prediction
 
-        print(pred.shape)
-        print(torch.unsqueeze(dataset.transform_label(cyan_reshaped), 0).shape)
-        tracker.update(pred, torch.unsqueeze(dataset.transform_label(cyan_reshaped).to(device), 0))
+        tracker.update(
+            pred, torch.unsqueeze(dataset.transform_label(cyan_reshaped).to(device), 0)
+        )
         pred = pred.cpu().detach()
 
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
@@ -170,7 +170,7 @@ def visualize_image(
         ax.axis("off")
 
         save_plot(image_save_folder, image_name)
-        log(f"For {image_name}: \n\n {pprint.pformat(tracker.compute_all())}")
+        log(f"MulticlassAccuracy for {image_name}: \n\n {tracker.compute_all()['MulticlassAccuracy'][0]}")
 
 
 def visualize(
