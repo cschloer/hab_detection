@@ -111,9 +111,9 @@ def visualize_full_image(
         pred = model(transformed_sen2_batch)  # make prediction
         pred = pred.cpu().detach()
         print("PRED SHAPE", pred.shape)
-        print("PRED UNIQUE", np.unique(pred))
-        print("PRED type", pred.dtype)
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
+        print("PRED UNIQUE AFTER", np.unique(pred))
+        print("PRED type AFTER", pred.dtype)
         print("PRED HSAPE AFTER", pred.shape)
         pred_masked = np.where(cyan_image > 253, 255, class_designation[pred])
         print("PRED MASK SHAPE AFTER", pred_masked.shape)
