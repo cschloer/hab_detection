@@ -104,7 +104,7 @@ class ImageData(Dataset):
         self.zip = zipfile.ZipFile(self.zip_path, mode="r")
 
     def mask_label(self, label):
-        return torch.where((label >= 254), -1, label)
+        return np.where((label >= 254), -1, label)
 
     def transform_label(self, label):
         # First set no data values to -1
@@ -117,13 +117,13 @@ class ImageData(Dataset):
             raise Exception("The last value of the class_designation must be 254.")
         floor = 0
         for i, ceil in enumerate(self.class_designation):
-            label = torch.where((label >= floor) & (label < ceil), i, label)
+            label = np.where((label >= floor) & (label < ceil), i, label)
             floor = ceil
 
         # label = torch.from_numpy(label)
         # F.one_hot(label, num_classes=len(class_designation))
 
-        label = torch.squeeze(label.int())
+        label = torch.squeeze(torch.from_numpy(label.astype(np.int_)))
         return label
 
     def random_transform(self, image, label):
@@ -139,15 +139,11 @@ class ImageData(Dataset):
             label = TF.vflip(label)
 
         # Random crop
-        x_offset = random.randrange(16)
-        y_offset = random.randrange(16)
-        cropped_size = 64 - np.maximum([random.randrange(16), x_offset, y_offset])
-        image = TF.resized_crop(
-            image, y_offset, x_offset, cropped_size, cropped_size, 64, 64
-        )
-        label = TF.resized_crop(
-            label, y_offset, x_offset, cropped_size, cropped_size, 64, 64
-        )
+
+        x_offset = random.randrange(32)
+        y_offset = random.randrange(32)
+        image = TF.crop(image, y_offset, x_offset, 32, 32)
+        label = TF.crop(label, y_offset, x_offset, 32, 32)
 
         # Gaussian Blur
         sigma = np.random.uniform(0.1, 2.0)
@@ -165,12 +161,12 @@ class ImageData(Dataset):
         # augmentations
         if self.do_transform:
             image = self.transform_input(torch.from_numpy(image))
-            label = torch.from_numpy(raw_label)
-            if self.randomize:
-                image, label = self.random_transform(image, label)
-            label = self.transform_label(label)
+            label = self.transform_label(raw_label)
         else:
             label = raw_label
+
+        if self.randomize:
+            image, label = self.random_transform(image, label)
 
         return (
             image,
