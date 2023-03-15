@@ -160,6 +160,7 @@ def visualize_image(
         pred = pred.cpu().detach()
 
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
+        print("UNIQUE", np.unique(pred))
         pred_masked = np.where(
             cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
         )
