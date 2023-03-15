@@ -108,7 +108,6 @@ class ImageData(Dataset):
 
     def transform_label(self, label):
         # First set no data values to -1
-        label = label.int()
         label = self.mask_label(label)
         if self.class_designation is None:
             # It's a regression problem, no need to transform to class problem
@@ -166,7 +165,7 @@ class ImageData(Dataset):
         # augmentations
         if self.do_transform:
             image = self.transform_input(torch.from_numpy(image))
-            label = torch.from_numpy(raw_label)
+            label = torch.from_numpy(raw_label).int()
             if self.randomize:
                 image, label = self.random_transform(image, label)
             label = self.transform_label(label)
