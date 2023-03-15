@@ -2,6 +2,7 @@ from .constants import device, LEARNING_RATE, MODEL_SAVE_BASE_FOLDER
 
 from torchvision import models
 import segmentation_models_pytorch as smp
+from segmentation_models_pytorch.base.modules import Activation
 import torch
 import numpy as np
 
