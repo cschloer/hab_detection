@@ -215,6 +215,13 @@ def visualize(
     )
 
     print("Calculating batch vs indiviudal performance")
+    for m in model.modules():
+        if isinstance(m, torch.nn.BatchNorm2d):
+            count += 1  # skip the first BatchNorm layer
+            if count >= 2:
+                m.eval()
+                m.weight.requires_grad = False
+                m.bias.requires_grad = False
     with torch.no_grad():
         model.eval()
         counter = 0
