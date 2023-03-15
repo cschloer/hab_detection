@@ -79,12 +79,16 @@ def visualize_full_image(
 
         custom_colormap = np.copy(cyan_colormap)
         prev_val = 0
+        used = list(range(len(cyan_colormap)))
         for i, c in enumerate(class_designation):
             cur_color = cyan_colormap[c if i != 0 else 0]
             print("CUR COLOR", cur_color, "index ", c)
             for j in range(c - prev_val):
                 custom_colormap[prev_val + j] = cur_color
+                used.remove(prev_val + j)
             prev_val = c
+
+        print("LEFT OVER", used)
 
         print("UNQUE CUSTOM COLORMAP", np.unique(custom_colormap))
         print(custom_colormap)
