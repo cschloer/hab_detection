@@ -179,7 +179,6 @@ def visualize(
         "erie",
     )
 
-    return
 
     test_loss = []
     train_loss = []
