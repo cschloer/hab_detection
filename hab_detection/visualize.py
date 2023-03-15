@@ -63,7 +63,7 @@ def visualize_full_image(
         model.eval()
         fig, axs = plt.subplots(2, 2, figsize=(20, 16))
         sen2_np = np.pad(
-            np.load(FULL_IMAGE_1_INPUT).astype(np.float32),
+            np.load(input_path).astype(np.float32),
             ((0, 0), (0, 6), (0, 2)),
         )
         sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
