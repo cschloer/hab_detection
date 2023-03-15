@@ -215,10 +215,13 @@ def visualize(
     )
 
     print("Calculating batch vs individual performance")
-    for module in model.modules():
-        module.training = True
-        if isinstance(module, torch.nn.BatchNorm2d):
-            module.momentum = 0.0
+    for m in model.modules():
+    for child in m.children():
+        if type(child) == torch.nn.BatchNorm2d:
+            child.track_running_stats = False
+            child.running_mean = None
+            child.running_var = None
+            child.momentum = 0.0
 
     with torch.no_grad():
         model.eval()
