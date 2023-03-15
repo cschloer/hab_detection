@@ -81,7 +81,7 @@ def visualize_full_image(
         prev_val = 0
         used = list(range(len(cyan_colormap)))
         for i, c in enumerate(class_designation):
-            cur_color = cyan_colormap[c if i != 0 else 0]
+            cur_color = cyan_colormap[c - 1 if i != 0 else 0]
             print("CUR COLOR", cur_color, "index ", c)
             for j in range(c - prev_val):
                 custom_colormap[prev_val + j] = cur_color
