@@ -56,7 +56,7 @@ for batch_idx, (_, labels, _, _) in enumerate(loader):
 
     labels_dist = labels_dist + labels_dist_temp
     if batch_idx % 100 == 0:
-        print(f"Batch {batch_idx})
+        print(f"Batch {batch_idx}")
 
 print("Labels Distribution:")
 print(labels_dist)
