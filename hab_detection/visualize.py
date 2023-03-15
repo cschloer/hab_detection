@@ -72,12 +72,16 @@ def visualize_full_image(
             cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]), ((0, 6), (0, 2))
         )
         print("SHAPE AFTER PAD", cyan_reshaped.shape)
+        ax = axs[0, 0]
+        ax.set_title("Actual HAB Index Based")
+        ax.imshow(cyan_colormap[cyan_reshaped])
+        ax.axis("off")
 
         custom_colormap = np.copy(cyan_colormap)
         prev_val = 0
         for i, c in enumerate(class_designation):
             cur_color = cyan_colormap[c if i != 0 else 0]
-            print("CUR COLOR", cur_color)
+            print("CUR COLOR", cur_color, "index ", c)
             for j in range(c - prev_val):
                 custom_colormap[prev_val + j] = cur_color
             prev_val = c
@@ -85,8 +89,8 @@ def visualize_full_image(
         print("UNQUE CUSTOM COLORMAP", np.unique(custom_colormap))
         print(custom_colormap)
         cyan_image = custom_colormap[cyan_reshaped]
-        ax = axs[0, 0]
-        ax.set_title("Actual HAB")
+        ax = axs[0, 1]
+        ax.set_title("Actual HAB Class Based")
         ax.imshow(cyan_image)
         ax.axis("off")
 
