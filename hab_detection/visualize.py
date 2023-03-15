@@ -116,6 +116,7 @@ def visualize_full_image(
         print("PRED UNIQUE AFTER", np.unique(pred))
         print("PRED type AFTER", pred.dtype)
         print("PRED HSAPE AFTER", pred.shape)
+        print(class_designation[pred])
         pred_masked = np.where(cyan_reshaped > 253, 255, class_designation[pred])
         print("PRED MASK SHAPE AFTER", pred_masked.shape)
         print("PRED MASK UNIQUE", np.unique(pred_masked.shape))
