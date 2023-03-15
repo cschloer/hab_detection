@@ -53,7 +53,7 @@ def load_model(
     num_classes = 2
     if class_designation is not None:
         num_classes = len(class_designation)
-    aux_params = {"classes": num_classes, "dropout": None }
+    aux_params = {"classes": num_classes, "dropout": None}
     if model_architecture == "deeplabv3-resnet50":
         # Load resnet50 segmentation model
         model = smp.DeepLabV3(
@@ -106,7 +106,8 @@ def load_model(
                 encoder_weights=None,
                 in_channels=12,
                 classes=num_classes,
-                aux_params=aux_params,
+                # TODO UNCOMMENT AFTER IMGAE TESTING
+                #aux_params=aux_params,
             )
         else:
             raise Exception("Regression not supported for MobileNet-v2")
