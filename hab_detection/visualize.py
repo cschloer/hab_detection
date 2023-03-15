@@ -55,6 +55,7 @@ def visualize_full_image(
     model, dataset, class_designation, input_path, label_path, image_save_folder
 ):
     with torch.no_grad():
+        model.eval()
         fig, axs = plt.subplots(2, 2, figsize=(20, 16))
         sen2_np = np.pad(
             np.load(FULL_IMAGE_1_INPUT).astype(np.float32),
@@ -99,7 +100,6 @@ def visualize_full_image(
             "TRANSFORMED UNSEQUEEZED", torch.unsqueeze(transformed_sen2, axis=0).shape
         )
         transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
-        model.eval()
         pred, _ = model(transformed_sen2_batch)  # make prediction
         pred = pred.cpu().detach()
         print("PRED SHAPE", pred.shape)
