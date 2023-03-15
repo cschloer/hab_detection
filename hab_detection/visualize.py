@@ -154,11 +154,14 @@ def visualize_image(
         # TODO RETURN TWO AFTER IMAGE TESTING
         pred = model.predict(transformed_sen2_batch)  # make prediction
 
+        label = torch.unsqueeze(
+            dataset.transform_label(torch.from_numpy(cyan_reshaped)), 0
+        ).to(device)
+        print(label.shape, torch.unique(label))
+
         tracker.update(
             pred,
-            torch.unsqueeze(
-                dataset.transform_label(torch.from_numpy(cyan_reshaped)), 0
-            ).to(device),
+            label,
         )
         pred = pred.cpu().detach()
 
@@ -228,10 +231,8 @@ def visualize(
             labels = labels.to(device)
             # TODO PUT BACK AFTER VUISUALIZATION TESTING
             preds_old = model(inputs)  # make prediction
-            print("OLD", preds_old.shape)
             preds = model.predict(inputs)  # make prediction
-            print(preds.shape)
-            print(labels.shape)
+
             tracker.update(preds, labels)
             acc = tracker.compute_all()["MulticlassAccuracy"][0]
 
