@@ -50,6 +50,30 @@ def normalize_sen2(red, green, blue):
     return pixvals
 
 
+def visualize_patch(
+    model,
+    dataset,
+    class_designation,
+    image_save_folder,
+    tile_base_name,
+    zip_path,
+):
+    z = zipfile.ZipFile(zip_path, mode="r")
+    sen2_np = np.load(z.open(f"{tile_base_name}_sen2.npy"))
+    cyan_np = np.load(z.open(f"{tile_base_name}_cyan.npy"))
+    z.close()
+
+    return visualize_image(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        tile_base_name,
+        sen2_np,
+        cyan_np,
+    )
+
+
 def visualize_full_image(
     model,
     dataset,
@@ -59,10 +83,31 @@ def visualize_full_image(
 ):
     input_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/sen2.npy"
     label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
+    sen2_np = np.load(input_path).astype(np.float32)
+    cyan_np = np.load(label_path)
+    return visualize_image(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        image_name,
+        sen2_np,
+        cyan_np,
+    )
+
+
+def visualize_image(
+    model,
+    dataset,
+    class_designation,
+    image_save_folder,
+    image_name,
+    sen2_np,
+    cyan_np,
+):
     with torch.no_grad():
         model.eval()
         fig, axs = plt.subplots(2, 2, figsize=(20, 16))
-        sen2_np = np.load(input_path).astype(np.float32)
         height = sen2_np.shape[1]
         width = sen2_np.shape[2]
         ycrop = height % 8
@@ -74,7 +119,6 @@ def visualize_full_image(
         ax.imshow(sen2_img)
         ax.axis("off")
 
-        cyan_np = np.load(label_path)
         cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])[
             0 : height - ycrop, 0 : width - xcrop
         ]
@@ -106,6 +150,7 @@ def visualize_full_image(
         transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
         transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
 
+        # TODO RETURN TWO AFTER IMAGE TESTING
         pred = model(transformed_sen2_batch)  # make prediction
         pred = pred.cpu().detach()
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
@@ -178,6 +223,14 @@ def visualize(
         class_designation,
         image_save_folder,
         "erie",
+    )
+    visualize_patch(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "winnebago_2019_7_25_x32_y1600_64x64_28",
+        ZIP_PATH_TRAIN,
     )
     log("Done visualizing full images.")
 
