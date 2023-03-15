@@ -36,8 +36,9 @@ def get_data(zip_path):
                 )
 
             if f.startswith("winnebago_2019_7_25_x320_y1344_64x64_214"):
-                imgs.append(f)
-                labels.append(label_filename)
+                for i in range(64):
+                    imgs.append(f)
+                    labels.append(label_filename)
 
     zip.close()
     return imgs, labels, zip_path
