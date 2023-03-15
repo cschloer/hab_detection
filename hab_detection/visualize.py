@@ -157,6 +157,7 @@ def visualize(
         drop_last=False,
     )
 
+    log("Visualizing full images.")
     visualize_full_image(
         model,
         dataset,
@@ -178,11 +179,13 @@ def visualize(
         image_save_folder,
         "erie",
     )
+    log("Done visualizing full images.")
 
-    test_loss = []
-    train_loss = []
-    cur_epoch = None
+    log("Generating loss plot.")
     try:
+        test_loss = []
+        train_loss = []
+        cur_epoch = None
         with open(log_file, "r") as f:
             for line in f.readlines():
                 result = re.search(r"^.*Epoch (\d*) ([a-z]*) loss: (\d*[.]?\d*)", line)
@@ -213,16 +216,15 @@ def visualize(
         # plt.show()
         save_plot(image_save_folder, "loss")
     except FileNotFoundError as e:
-        print("Log file not found. Skipping the loss plot.")
+        log("Log file not found. Skipping the loss plot.")
 
-    test_loss, metrics, hist_2d = get_model_performance(
+    _, metrics, hist_2d = get_model_performance(
         model,
         loader,
         class_designation,
         num_batches=-1,
         calculate_2d_hist=True,
     )
-    print(f"Loss with this model was: {test_loss}")
     log(f"\n{pprint.pformat(metrics)}")
 
     """ Confusion Matrix """
