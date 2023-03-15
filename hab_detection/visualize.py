@@ -62,9 +62,12 @@ def visualize_full_image(
     with torch.no_grad():
         model.eval()
         fig, axs = plt.subplots(2, 2, figsize=(20, 16))
+        sen2_np_unpadded = np.load(input_path).astype(np.float32)
+        ypad = 8 - sen2_np.unpadded.shape[1] % 8
+        xpad = 8 - sen2_np.unpadded.shape[2] % 8
         sen2_np = np.pad(
-            np.load(input_path).astype(np.float32),
-            ((0, 0), (0, 6), (0, 2)),
+            sen2_np_unpadded,
+            ((0, 0), (0, ypad), (0, xpad)),
         )
         sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
         ax = axs[1, 0]
@@ -74,7 +77,7 @@ def visualize_full_image(
 
         cyan_np = np.load(label_path)
         cyan_reshaped = np.pad(
-            cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]), ((0, 6), (0, 2))
+            cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2]), ((0, ypad), (0, xpad))
         )
         ax = axs[0, 0]
         ax.set_title("Actual HAB Index")
