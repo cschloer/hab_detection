@@ -68,6 +68,21 @@ def visualize_full_image(
         sen2_np = np.pad(
             sen2_np_unpadded,
             ((0, 0), (0, ypad), (0, xpad)),
+            # Set constant to the mean value
+            constant_values=[
+                0.04235201,
+                0.04784579,
+                0.05547756,
+                0.04363304,
+                0.05092298,
+                0.05012781,
+                0.05277098,
+                0.05194422,
+                0.05095484,
+                0.05174823,
+                0.03550878,
+                0.02762647,
+            ],
         )
         sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
         ax = axs[1, 0]
