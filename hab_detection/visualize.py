@@ -157,7 +157,6 @@ def visualize_image(
         label = torch.unsqueeze(
             dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
         ).to(device)
-        print(label.shape, torch.unique(label))
 
         tracker.update(
             pred,
@@ -222,35 +221,36 @@ def visualize(
 
     print("Calculating batch vs individual performance")
 
-    with torch.no_grad():
-        model.eval()
-        counter = 0
-        for batch_idx, (inputs, labels, _, _) in enumerate(loader):
-            tracker = get_metric_tracker(class_designation)
-            inputs = inputs.to(device, dtype=torch.float)
-            labels = labels.to(device)
-            # TODO PUT BACK AFTER VUISUALIZATION TESTING
-            preds_old = model(inputs)  # make prediction
-            preds = model.predict(inputs)  # make prediction
+    # with torch.no_grad():
+    #    model.eval()
+    model.train()
+    counter = 0
+    for batch_idx, (inputs, labels, _, _) in enumerate(loader):
+        tracker = get_metric_tracker(class_designation)
+        inputs = inputs.to(device, dtype=torch.float)
+        labels = labels.to(device)
+        # TODO PUT BACK AFTER VUISUALIZATION TESTING
+        preds_old = model(inputs)  # make prediction
+        preds = model.predict(inputs)  # make prediction
 
-            tracker.update(preds, labels)
-            acc = tracker.compute_all()["MulticlassAccuracy"][0]
+        tracker.update(preds, labels)
+        acc = tracker.compute_all()["MulticlassAccuracy"][0]
 
-            acc_total = 0
-            for image_index in range(inputs.shape[0]):
-                itracker = get_metric_tracker(class_designation)
-                inp = inputs[image_index, :, :, :]
-                label = labels[image_index, :, :]
-                pred = model.predict(torch.unsqueeze(inp, 0))  # make prediction
-                itracker.update(pred, torch.unsqueeze(label, 0))
-                iacc = itracker.compute_all()["MulticlassAccuracy"][0]
-                acc_total += iacc
-                print("INDIVUDAL ACC: ", iacc)
+        acc_total = 0
+        for image_index in range(inputs.shape[0]):
+            itracker = get_metric_tracker(class_designation)
+            inp = inputs[image_index, :, :, :]
+            label = labels[image_index, :, :]
+            pred = model.predict(torch.unsqueeze(inp, 0))  # make prediction
+            itracker.update(pred, torch.unsqueeze(label, 0))
+            iacc = itracker.compute_all()["MulticlassAccuracy"][0]
+            acc_total += iacc
+            print("INDIVUDAL ACC: ", iacc)
 
-            print(f"Batch: {acc} ---- Avg individual: {acc_total/(image_index + 1)}")
-            counter += 1
-            if counter >= 2:
-                break
+        print(f"Batch: {acc} ---- Avg individual: {acc_total/(image_index + 1)}")
+        counter += 1
+        if counter >= 2:
+            break
 
     log("Visualizing full images.")
     visualize_full_image(
