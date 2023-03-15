@@ -108,9 +108,8 @@ class ImageData(Dataset):
 
     def transform_label(self, label):
         # First set no data values to -1
-        print(torch.unique(label))
+        label = label.int()
         label = self.mask_label(label)
-        print(torch.unique(label))
         if self.class_designation is None:
             # It's a regression problem, no need to transform to class problem
             return label
@@ -126,8 +125,6 @@ class ImageData(Dataset):
         # F.one_hot(label, num_classes=len(class_designation))
 
         label = torch.squeeze(label.int())
-        print(torch.unique(label))
-        print("-----------------------------")
         return label
 
     def random_transform(self, image, label):
