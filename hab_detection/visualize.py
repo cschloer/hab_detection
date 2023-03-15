@@ -114,10 +114,13 @@ def visualize_full_image(
 
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
         print("PRED HSAPE AFTER", pred.shape)
+        pred_masked = np.where(cyan_image > 253, 255, class_designation[pred])
+        print("PRED MASK SHAPE AFTER", pred_masked.shape)
+        print("PRED MASK UNIQUE", np.unique(pred_masked.shape))
 
         ax = axs[1, 1]
         ax.set_title("Prediction HAB Class")
-        ax.imshow(custom_colormap[pred])
+        ax.imshow(custom_colormap[pred_masked])
         ax.axis("off")
 
         save_plot(image_save_folder, "winnebago")
