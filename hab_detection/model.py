@@ -54,11 +54,7 @@ class SegmentationHeadDropout(torch.nn.Sequential):
         activation=None,
         upsampling=1,
     ):
-        dropout = (
-            torch.nn.Dropout(p=dropout, inplace=True)
-            if dropout
-            else torch.nn.Identity()
-        )
+        dropout = torch.nn.Dropout(p=dropout) if dropout else torch.nn.Identity()
         conv2d = torch.nn.Conv2d(
             in_channels, out_channels, kernel_size=kernel_size, padding=kernel_size // 2
         )
