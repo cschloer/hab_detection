@@ -232,8 +232,11 @@ def visualize(
             inputs = inputs.to(device, dtype=torch.float)
             labels = labels.to(device)
             # TODO PUT BACK AFTER VUISUALIZATION TESTING
+            preds_old = model(inputs)  # make prediction
+            print("OLD", preds_old.shape)
             preds = model.predict(inputs)  # make prediction
-            print(preds.shape, preds)
+            print(preds.shape)
+            print(labels.shape)
             tracker.update(preds, labels)
             acc = tracker.compute_all()["MulticlassAccuracy"][0]
 
