@@ -128,6 +128,18 @@ def load_model(
             )
         else:
             raise Exception("Regression not supported for MobileNet-v2")
+    elif model_architecture.startswith("deeplabv3-timm-mobilenetv3_small_minimal_100"):
+        if class_designation is not None:
+            model = smp.DeepLabV3(
+                encoder_name="timm-mobilenetv3_small_minimal_100",
+                encoder_weights=None,
+                in_channels=12,
+                classes=num_classes,
+            )
+        else:
+            raise Exception(
+                "Regression not supported for timm-mobilenetv3_small_minimal_100"
+            )
     else:
         raise Exception(f"Unknown model architecture {model_architecture}")
 
