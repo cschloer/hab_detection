@@ -92,6 +92,16 @@
         "weight_decay": 0.002,
         "randomize": true,
         "model_architecture": "deeplabv3-timm-mobilenetv3_small_minimal_100#use_dropout&no_replace_batchnorm"
+    },
+    "experiment15": {
+        "name": "experiment15",
+        "description": "Updated the dataset so that every scene is represented in training set, in order to test for distribution issues.",
+        "batch_size": 32,
+        "class_designation": [1, 100, 150, 200, 254],
+        "class_weights": [1, 12.29839017, 9.75938442, 13.88947011, 178.37577436],
+        "weight_decay": 0.002,
+        "randomize": true,
+        "model_architecture": "deeplabv3-mobilenet_v2#use_dropout&no_replace_batchnorm"
     }
 }
 
