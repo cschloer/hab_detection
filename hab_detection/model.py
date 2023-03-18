@@ -98,7 +98,7 @@ def load_model(
                 torch.nn.Sigmoid(),
             )
 
-    elif model_architecture == "deeplabv3-resnet18":
+    elif model_architecture.startswith("deeplabv3-resnet18"):
         if class_designation is not None:
             model = smp.DeepLabV3(
                 encoder_name="resnet18",
