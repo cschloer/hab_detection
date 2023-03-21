@@ -137,6 +137,7 @@ class ImageData(Dataset):
             image = TF.vflip(image)
             label = TF.vflip(label)
 
+        """
         # Random crop
         x_offset = random.randrange(16)
         y_offset = random.randrange(16)
@@ -152,6 +153,7 @@ class ImageData(Dataset):
         sigma = np.random.uniform(0.1, 2.0)
         kernel_size = 7
         image = TF.gaussian_blur(image, kernel_size, sigma)
+        """
 
         return image, label
 

@@ -53,7 +53,7 @@ def train(
         test_loader = DataLoader(
             test_dataset,
             batch_size=batch_size,
-            shuffle=False,
+            shuffle=True,
             num_workers=0,
             drop_last=True,
         )
@@ -74,21 +74,20 @@ def train(
             total_loss = 0
             try:
                 for batch_idx, (inputs, labels, _, _) in enumerate(train_loader):
-                    with torch.autograd.set_detect_anomaly(True):
-                        model.train()
-                        inputs = inputs.to(device, dtype=torch.float)
-                        labels = labels.to(device)
+                    model.train()
+                    inputs = inputs.to(device, dtype=torch.float)
+                    labels = labels.to(device)
 
-                        optimizer.zero_grad()
+                    optimizer.zero_grad()
 
-                        preds = model(inputs)  # make prediction
-                        loss = criterion(preds, labels)  # Calculate cross entropy loss
+                    preds = model(inputs)  # make prediction
+                    loss = criterion(preds, labels)  # Calculate cross entropy loss
 
-                        loss.backward()  # Backpropogate loss
-                        optimizer.step()  # Apply gradient descent change to weight
+                    loss.backward()  # Backpropogate loss
+                    optimizer.step()  # Apply gradient descent change to weight
 
-                        running_loss += loss.item()
-                        total_loss += loss.item()
+                    running_loss += loss.item()
+                    total_loss += loss.item()
 
                     if class_designation is None:
                         # Mask the unused values for metrics
