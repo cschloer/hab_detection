@@ -132,6 +132,16 @@
         "weight_decay": 0.002,
         "randomize": true,
         "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm"
+    },
+    "experiment19": {
+        "name": "experiment19",
+        "description": "Train and test set are the same. Test bug. Lower learning rate.",
+        "batch_size": 32,
+        "class_designation": [1, 100, 150, 200, 254],
+        "class_weights": [1, 12.29839017, 9.75938442, 13.88947011, 178.37577436],
+        "weight_decay": 0.002,
+        "randomize": true,
+        "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm"
     }
 }
 
