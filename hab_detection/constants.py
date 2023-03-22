@@ -4,7 +4,8 @@ import numpy as np
 # ZIP_PATH_TRAIN = "/shared/datasets/hab/data/dataset4_train.zip"
 # ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset4_test.zip"
 ZIP_PATH_TRAIN = "/shared/datasets/hab/data/dataset_dist_train.zip"
-ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset_dist_test.zip"
+# ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset_dist_test.zip"
+ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset_dist_train.zip"
 MODEL_SAVE_BASE_FOLDER = "/shared/datasets/hab/models"
 LOG_NAME = "log.txt"
 
