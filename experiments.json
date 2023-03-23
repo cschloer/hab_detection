@@ -143,8 +143,8 @@
         "randomize": true,
         "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm"
     },
-    "experiment19": {
-        "name": "experiment19",
+    "experiment20": {
+        "name": "experiment20",
         "description": "Same as experiment 17 but lower learning rate and remove l2 normaliziation",
         "batch_size": 32,
         "class_designation": [1, 100, 150, 200, 254],
