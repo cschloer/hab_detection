@@ -25,6 +25,7 @@ def train(
     class_weights,
     model_architecture,
     randomize,
+    learning_rate,
     epoch_start=0,
     model_file=None,
     weight_decay=0,
@@ -63,7 +64,7 @@ def train(
             model_architecture, model_file, model_save_folder, class_designation
         )
         print(model)
-        optimizer = get_optimizer(model, weight_decay=weight_decay)
+        optimizer = get_optimizer(model, learning_rate, weight_decay=weight_decay)
         criterion = get_criterion(class_designation, class_weights)
 
         train_tracker = get_metric_tracker(class_designation)

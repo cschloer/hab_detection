@@ -1,4 +1,4 @@
-from .constants import device, LEARNING_RATE, MODEL_SAVE_BASE_FOLDER
+from .constants import device, MODEL_SAVE_BASE_FOLDER
 
 from torchvision import models
 import segmentation_models_pytorch as smp
@@ -189,11 +189,11 @@ def get_criterion(class_designation, class_weights):
         return lf
 
 
-def get_optimizer(model, weight_decay=0):
+def get_optimizer(model, learning_rate, weight_decay=0):
     # Create adam optimizer
     optimizer = torch.optim.Adam(
         params=model.parameters(),
-        lr=LEARNING_RATE,
+        lr=learning_rate,
         weight_decay=weight_decay,
     )
     return optimizer

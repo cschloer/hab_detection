@@ -44,6 +44,7 @@ train(
     e["class_weights"],
     e["model_architecture"],
     e["randomize"],
+    e.get("learning_rate", 1e-3),
     model_file=model_file,
     epoch_start=epoch_start,
     weight_decay=e.get("weight_decay", 0),
