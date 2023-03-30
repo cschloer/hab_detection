@@ -1,5 +1,4 @@
 from helpers import get_cyan_url, TEMP_FOLDER, SAVE_FOLDER
-from archive import trigger_lta
 
 import os
 import json
@@ -32,7 +31,9 @@ scenes = {}
 
 
 def get_scene_id(region_id, x, y):
-    return f"{region_id}_X{x}_Y{y}"
+    return (
+        f"{region_id}_X{str(x).zfill(4)}_Y{str(y).zfill(4)}_S{str(SCENE_SIZE).zfill(3)}"
+    )
 
 
 for i, region_id in enumerate(region_ids):
@@ -101,6 +102,7 @@ for i, region_id in enumerate(region_ids):
                             scenes[scene_id] = {
                                 "window": window,
                                 "cyan_id": region_id,
+                                "id": scene_id,
                                 "hab": [],
                             }
 

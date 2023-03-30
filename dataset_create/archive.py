@@ -1,10 +1,9 @@
-from helpers import api
 from sentinelsat import (
     LTAError,
 )
 
 
-def get_products(window, from_date, to_date):
+def get_products(api, window, from_date, to_date):
     footprint = f"POLYGON(({window[0]} {window[1]}, {window[2]}  {window[1]}, {window[2]}  {window[3]}, {window[0]}  {window[3]}, {window[0]}  {window[1]}))"
     # footprint = 'POLYGON((-80.9024320429559 27.045685751980283,-80.63601358592464 27.045685751980283,-80.63601358592464 26.85961871658263,-80.9024320429559 26.85961871658263,-80.9024320429559 27.045685751980283))'
 
@@ -20,7 +19,7 @@ def get_products(window, from_date, to_date):
     return api.to_dataframe(products)
 
 
-def trigger_lta(window, from_date, to_date):
+def trigger_lta(api, window, from_date, to_date):
     get_products(window, from_date, to_date)
     print(f"Number of products found: {len(products_df.index)}")
     return
