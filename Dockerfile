@@ -29,5 +29,5 @@ ARG ESA_USER2
 ARG SAVE_FOLDER
 
 
-CMD ["python3", "/home/conrad/hab_detection/dataset_create/create_dataset.py", ">", "/shared/datasets/hab/new_data/output.txt]
+CMD ["python3", "/home/conrad/hab_detection/dataset_create/create_dataset.py", ">", "/shared/datasets/hab/new_data/output.txt"]
 
