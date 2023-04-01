@@ -76,6 +76,7 @@ def get_model_performance(
 ):
     # model_cpu = model.cpu()
     tracker = get_metric_tracker(class_designation)
+    tracker2 = get_metric_tracker(class_designation)
     hist_2d = (
         np.zeros(
             (
@@ -127,12 +128,11 @@ def get_model_performance(
                     bins=[len(class_designation), 254],
                 )
                 hist_2d += h
+                tracker2.update(preds, labels)
 
             counter += 1
             if num_batches >= 0 and counter >= num_batches:
                 break
-    print(1, hist_2d[1, 100:150])
-    print(2, hist_2d[2, 100:150])
-    print(3, hist_2d[3, 100:150])
 
+    print(tracker2.compute_all())
     return total_loss / (batch_idx + 1), tracker.compute_all(), hist_2d
