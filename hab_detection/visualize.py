@@ -443,7 +443,7 @@ def visualize(
             plt.plot(
                 -10,
                 normalized[0],
-                marker="o",
+                marker="hline",
                 markersize=10 if i != 0 else 20,
                 markeredgecolor=color,
                 markerfacecolor=color,
