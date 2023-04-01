@@ -26,6 +26,8 @@ SHELL ["/bin/bash", "-c"]
 RUN set -a
 RUN source .env
 
+ADD ./bin/start.sh .
 
-CMD ["python3", "/home/conrad/hab_detection/dataset_create/create_dataset.py", ">", "/shared/datasets/hab/new_data/output.txt"]
+
+CMD ["sh", "./start.sh"]
 
