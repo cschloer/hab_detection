@@ -135,6 +135,7 @@ def get_model_performance(
                     # np.array([preds, raw_labels]).T,
                     histogram_input,
                     bins=[len(class_designation), 254],
+                    density=False,
                 )
                 hist_2d += h
 
