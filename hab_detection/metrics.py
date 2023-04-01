@@ -112,7 +112,7 @@ def get_model_performance(
                 labels = labels[~(labels == -1)]
 
             tracker.update(preds, labels)
-            tracker2.update
+            tracker2.update(
                 torch.argmax(preds, dim=1, keepdim=False)[~(labels == -1)],
                 labels[~(labels == -1)],
             )
