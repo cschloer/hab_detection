@@ -400,6 +400,8 @@ def visualize(
     if hist_2d is not None:
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
         sums = hist_2d.astype("float").sum(axis=0) + 1
+        print("SUMS SHAPE", sums.shape)
+        print("SUMS", sums)
         rectangles = {}
         ranges = [
             (
@@ -413,7 +415,9 @@ def visualize(
             floor = ranges[i][0]
             ceil = ranges[i][1]
 
-            rectangles[f"{floor} - {ceil -1}"] = mpatch.Rectangle(
+            rectangles[
+                f"{floor} - {ceil -1}" if i is not 0 else "0"
+            ] = mpatch.Rectangle(
                 (floor, 0.95),
                 ceil - floor,
                 0.05,
@@ -457,6 +461,7 @@ def visualize(
 
         plt.autoscale(enable=True, axis="x", tight=True)
         axs.set_ylim(0.0, 1.0)
+        axs.set_xlim(-20, 254)
         axs.set_title("Classification of Pixels vs Actual HAB Index")
         plt.xlabel("Actual HAB Index")
         plt.ylabel("Fraction Classified")
