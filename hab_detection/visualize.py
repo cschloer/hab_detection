@@ -444,7 +444,7 @@ def visualize(
                 normalized[0],
                 marker="o",
                 markersize=10 if i != 0 else 20,
-                markeredgecolor="black",
+                markeredgecolor=color if i != 0 else "black",
                 markerfacecolor=color,
             )
             plt.axvline(x=class_designation[i], color="black", alpha=0.5)
