@@ -31,5 +31,5 @@ RUN pip install -r requirements.txt
 
 #ADD ./run.sh .
 #CMD ["./run.sh"]
-CMD ["python3", "/home/conrad/hab_detection/dataset_create/create_dataset.py"]
+CMD ["python3", "-u", "/home/conrad/hab_detection/dataset_create/create_dataset.py"]
 
