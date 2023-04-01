@@ -470,6 +470,12 @@ def visualize(
         plt.autoscale(enable=True, axis="x", tight=True)
         axs.set_ylim(0.0, 1.0)
         axs.set_xlim(-20, 254)
+        locs, labels = plt.xticks()
+        print("LOCS", locs)
+        print("LABELS", labels)
+        locks[0] = -5
+        plt.xticks(locs, labels)
+
         axs.set_title("Classification of Pixels vs Actual HAB Index")
         plt.xlabel("Actual HAB Index")
         plt.ylabel("Fraction Classified")
