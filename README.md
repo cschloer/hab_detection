@@ -10,3 +10,4 @@
 `scp conrad@portia.cv.tu-berlin.de:/shared/datasets/hab/models/experiment12/visualize:`
 
 
+docker build -t first-image .
