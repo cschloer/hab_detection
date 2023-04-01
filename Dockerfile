@@ -22,11 +22,22 @@ ADD . .
 RUN pip install -r requirements.txt
 
 ARG CYAN_APP_KEY 
+ENV CYAN_APP_KEY=$CYAN_APP_KEY
+
 ARG ESA_PASSWORD1
+ENV ESA_PASSWORD1=$ESA_PASSWORD1
+
 ARG ESA_USER1
+ENV ESA_USER1=$ESA_USER1
+
 ARG ESA_PASSWORD2
+ENV ESA_PASSWORD2=$ESA_PASSWORD2
+
 ARG ESA_USER2
+ENV ESA_USER2=$ESA_USER2
+
 ARG SAVE_FOLDER
+ENV SAVE_FOLDER=$SAVE_FOLDER
 
 
 CMD ["python3", "/home/conrad/hab_detection/dataset_create/create_dataset.py", ">", "/shared/datasets/hab/new_data/output.txt"]
