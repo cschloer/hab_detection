@@ -131,5 +131,8 @@ def get_model_performance(
             counter += 1
             if num_batches >= 0 and counter >= num_batches:
                 break
+    print(1, hist_2d[1, :])
+    print(2, hist_2d[2, :])
+    print(3, hist_2d[3, :])
 
     return total_loss / (batch_idx + 1), tracker.compute_all(), hist_2d
