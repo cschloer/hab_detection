@@ -448,7 +448,8 @@ def visualize(
                 markeredgecolor=color,
                 markerfacecolor=color,
             )
-            plt.axvline(x=class_designation[i], color="black", alpha=0.5)
+        for i in range(len(class_designation)):
+            plt.axvline(x=class_designation[i], color="black", alpha=1.0)
 
         # Plot rectangles
         for r in rectangles:
