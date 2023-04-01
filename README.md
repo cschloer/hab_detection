@@ -10,4 +10,5 @@
 `scp conrad@portia.cv.tu-berlin.de:/shared/datasets/hab/models/experiment12/visualize:`
 
 
-docker build -t first-image .
+docker build -t dataset .
+docker run -d -v /shared/datasets/hab/new_data:/shared/datasets/hab/new_data -v /home/conrad:/home/conrad dataset
