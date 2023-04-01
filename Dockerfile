@@ -15,6 +15,8 @@ RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get install -y python3-pip
 
 RUN pip install torch sentinelsat rasterio gdal-utils torchvision
+
+RUN apt-get -y install git
 WORKDIR /repo
 ADD . .
 RUN pip install -r requirements.txt
