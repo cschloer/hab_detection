@@ -18,7 +18,7 @@ RUN pip install torch sentinelsat rasterio gdal-utils torchvision
 
 RUN apt-get -y install git
 WORKDIR /repo
-ADD ./requirementx.txt .
+ADD ./requirements.txt .
 RUN pip install -r requirements.txt
 
 ARG CYAN_APP_KEY 
