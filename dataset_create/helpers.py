@@ -2,9 +2,9 @@ import os
 from sentinelsat import SentinelAPI
 import numpy as np
 
-CYAN_APP_KEY = os.environ.get("CYAN_APP_KEY")
+CYAN_APP_KEY = os.environ.get("CYAN_APP_KEY").strip('"')
 TEMP_FOLDER = "/tmp/hab"
-SAVE_FOLDER = os.environ.get("SAVE_FOLDER")
+SAVE_FOLDER = os.environ.get("SAVE_FOLDER").strip('"')
 ZIP_FILE_TRAIN = f"{SAVE_FOLDER}/dataset_train.zip"
 ZIP_FILE_TEST = f"{SAVE_FOLDER}/dataset_test.zip"
 os.makedirs(TEMP_FOLDER, exist_ok=True)

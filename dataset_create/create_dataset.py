@@ -153,8 +153,8 @@ with open(f"{SAVE_FOLDER}/data.json", "r") as f:
     scenes = json.load(f)
 
 api = get_api(
-    os.environ.get("ESA_USER1"),
-    os.environ.get("ESA_PASSWORD1"),
+    os.environ.get("ESA_USER1").strip('"'),
+    os.environ.get("ESA_PASSWORD1").strip('"'),
 )
 
 with lock_trigger_list:
@@ -205,8 +205,8 @@ except:
 # LTA Thread 2
 try:
     api2 = get_api(
-        os.environ.get("ESA_USER2"),
-        os.environ.get("ESA_PASSWORD2"),
+        os.environ.get("ESA_USER2").strip('"'),
+        os.environ.get("ESA_PASSWORD2").strip('"'),
     )
     thread_triggers2 = Thread(
         target=manage_triggers,
