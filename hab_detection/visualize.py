@@ -414,28 +414,38 @@ def visualize(
         for i in range(len(class_designation)):
             floor = ranges[i][0]
             ceil = ranges[i][1]
+            color = cyan_colormap[ceil - 1 if floor != 0 else 0] / 255
 
             rectangles[f"{floor} - {ceil -1}" if i != 0 else "0"] = mpatch.Rectangle(
                 (floor, 0.95),
                 ceil - floor,
                 0.05,
-                color=cyan_colormap[ceil - 1 if floor != 0 else 0] / 255,
+                color=color,
             )
 
             normalized = hist_2d[i] / sums
             axs.plot(
-                normalized,
+                normalized[1:],
                 label=f"Class {i + 1}",
-                color=cyan_colormap[ceil - 1 if floor != 0 else 0] / 255,
+                color=color,
                 alpha=0.3,
                 linewidth=2.0,
             )
             # Plot thicker line inside of range where it is correct
-            axs.plot(
-                range(floor, ceil),
-                normalized[floor:ceil] if i != 0 else [normalized[0]] * (ceil - floor),
-                color=cyan_colormap[ceil - 1 if floor != 0 else 0] / 255,
-                linewidth=2.0,
+            if i != 0:
+                axs.plot(
+                    range(floor, ceil),
+                    normalized[floor:ceil],
+                    color=color,
+                    linewidth=2.0,
+                )
+            plt.plot(
+                -10,
+                normalized[0],
+                marker="o",
+                markersize=10 if i != 0 else 20,
+                markeredgecolor="black",
+                markerfacecolor=color,
             )
             plt.axvline(x=class_designation[i], color="black", alpha=0.5)
 
