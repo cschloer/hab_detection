@@ -134,7 +134,7 @@ def get_model_performance(
                 histogram_input = np.concatenate(
                     (
                         preds_flat,
-                        raw_labels.float.T,
+                        raw_labels.T,
                     ),
                     axis=1,
                 )
