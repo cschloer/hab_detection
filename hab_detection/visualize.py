@@ -417,11 +417,10 @@ def visualize(
             color = cyan_colormap[ceil - 1 if floor != 0 else 0] / 255
 
             rectangles[f"{floor} - {ceil -1}" if i != 0 else "0"] = mpatch.Rectangle(
-                (floor, 1.0),
+                (floor, 1.02),
                 ceil - floor,
                 0.05,
                 color=color,
-                edgecolor="black",
             )
 
             normalized = hist_2d[i] / sums
@@ -471,7 +470,7 @@ def visualize(
             )
 
         plt.autoscale(enable=True, axis="x", tight=True)
-        axs.set_ylim(0.0, 1.05)
+        axs.set_ylim(0.0, 1.07)
         axs.set_xlim(-20, 253)
         plt.xticks([-10, 1, 100, 150, 200, 253], [0, 1, 100, 150, 200, 253])
         plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.2, 0.4, 0.6, 0.8, 1.0])
