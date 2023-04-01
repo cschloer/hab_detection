@@ -11,4 +11,4 @@
 
 
 docker build -t dataset .
-docker run -d -v /shared/datasets/hab/new_data:/shared/datasets/hab/new_data -v /home/conrad:/home/conrad dataset
+docker run -d --env-file ./dataset_create/.env -v /shared/datasets/hab/new_data:/shared/datasets/hab/new_data -v /home/conrad:/home/conrad dataset
