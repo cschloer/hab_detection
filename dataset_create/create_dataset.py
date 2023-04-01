@@ -202,7 +202,6 @@ except:
     print("Failed to make thread 1")
 
 # LTA Thread 2
-"""
 try:
     api2 = get_api(
         os.environ.get("ESA_USER2").strip('"'),
@@ -215,7 +214,6 @@ try:
     thread_triggers2.start()
 except:
     print("Failed to make thread 1")
-"""
 
 # Download thread
 thread_downloads = Thread(
