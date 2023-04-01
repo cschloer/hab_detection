@@ -22,6 +22,7 @@ ADD ./requirements.txt .
 RUN pip install -r requirements.txt
 
 ADD ./dataset_create/.env .
+SHELL ["/bin/bash", "-c"]
 RUN set -a
 RUN source .env
 
