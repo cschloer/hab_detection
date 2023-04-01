@@ -421,6 +421,7 @@ def visualize(
                 ceil - floor,
                 0.05,
                 color=color,
+                edgecolor="black",
             )
 
             normalized = hist_2d[i] / sums
