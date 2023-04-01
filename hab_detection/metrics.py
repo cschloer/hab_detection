@@ -128,8 +128,23 @@ def get_model_performance(
                 raw_labels = np.squeeze(raw_labels.numpy())
                 raw_labels = raw_labels[~mask]
 
+                preds_flat = preds.flatten()
+                raw_labels_flat = raw_labels.flatten()
+                print(preds_flat.shape, raw_labels_flat.shape)
+                histogram_input = np.concatenate(
+                    (
+                        preds_flat,
+                        raw_labels.float.T,
+                    ),
+                    axis=1,
+                )
+                print(histogram_input)
                 h, _ = np.histogramdd(
-                    np.array([preds, raw_labels]).T,
+                    # np.array([preds, raw_labels]).T,
+                    (
+                        preds.flatten(),
+                        raw_labels.flatten(),
+                    ),
                     bins=[len(class_designation), 254],
                 )
                 hist_2d += h

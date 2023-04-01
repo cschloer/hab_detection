@@ -253,6 +253,7 @@ def visualize(
                 break
     """
 
+    """
     log("Visualizing full images.")
     visualize_full_image(
         model,
@@ -329,6 +330,7 @@ def visualize(
         save_plot(image_save_folder, "loss")
     except FileNotFoundError as e:
         log("Log file not found. Skipping the loss plot.")
+    """
 
     _, metrics, hist_2d = get_model_performance(
         model,
