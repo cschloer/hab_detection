@@ -405,7 +405,7 @@ def visualize(
         rectangles = {}
         ranges = [
             (
-                0 if i == 0 else class_designation[i - 1],
+                -20 if i == 0 else class_designation[i - 1],
                 class_designation[i],
             )
             for i in range(len(class_designation))
@@ -415,9 +415,7 @@ def visualize(
             floor = ranges[i][0]
             ceil = ranges[i][1]
 
-            rectangles[
-                f"{floor} - {ceil -1}" if i is not 0 else "0"
-            ] = mpatch.Rectangle(
+            rectangles[f"{floor} - {ceil -1}" if i != 0 else "0"] = mpatch.Rectangle(
                 (floor, 0.95),
                 ceil - floor,
                 0.05,
@@ -435,7 +433,7 @@ def visualize(
             # Plot thicker line inside of range where it is correct
             axs.plot(
                 range(floor, ceil),
-                normalized[floor:ceil],
+                normalized[floor:ceil] if i != 0 else [normalized[0]] * (ceil - floor),
                 color=cyan_colormap[ceil - 1 if floor != 0 else 0] / 255,
                 linewidth=2.0,
             )
