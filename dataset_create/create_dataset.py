@@ -179,7 +179,6 @@ with lock_trigger_list:
                     "designation": scene["designation"],
                 }
             )
-        break
     print(f"Found {len(trigger_list)} total items.")
 
 with lock_existing_prefixes:
