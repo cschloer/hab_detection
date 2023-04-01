@@ -418,13 +418,14 @@ def visualize(
 
             rectangles[f"{floor} - {ceil -1}" if i != 0 else "0"] = mpatch.Rectangle(
                 (floor, 0.95),
-                ceil - floor,
+                ceil - floor + 1,
                 0.05,
                 color=color,
             )
 
             normalized = hist_2d[i] / sums
             axs.plot(
+                range(1, 254),
                 normalized[1:],
                 label=f"Class {i + 1}",
                 color=color,
@@ -470,11 +471,7 @@ def visualize(
         plt.autoscale(enable=True, axis="x", tight=True)
         axs.set_ylim(0.0, 1.0)
         axs.set_xlim(-20, 254)
-        locs, labels = plt.xticks()
-        print("LOCS", locs)
-        print("LABELS", labels)
-        locks[0] = -5
-        plt.xticks(locs, labels)
+        plt.xticks([-10, 50, 100, 150, 200, 254], [0, 50, 100, 150, 200, 254])
 
         axs.set_title("Classification of Pixels vs Actual HAB Index")
         plt.xlabel("Actual HAB Index")

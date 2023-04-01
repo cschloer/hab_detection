@@ -131,13 +131,17 @@ def get_model_performance(
                 preds_flat = preds.flatten()
                 raw_labels_flat = raw_labels.flatten()
                 histogram_input = np.column_stack((preds_flat, raw_labels_flat))
+                """
                 h, _ = np.histogramdd(
                     # np.array([preds, raw_labels]).T,
                     histogram_input,
                     bins=[len(class_designation), 254],
                     density=False,
                 )
-                hist_2d += h
+                """
+                # hist_2d += h
+                for g in histogram_input:
+                    hist_2d[g[0], g[1]] += 1
 
             counter += 1
             if num_batches >= 0 and counter >= num_batches:
