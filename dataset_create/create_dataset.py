@@ -85,6 +85,10 @@ def manage_triggers(api, name):
                     # Break out of loop to sleep
                     # print(f"{log_prefix}Ran out of LTA trigger credits. Sleeping now")
                     break
+                except Exception as e:
+                    print(f"{log_prefix}THERE WAS AN ERROR", e)
+                    with lock_trigger_list:
+                        trigger_list.append(r)
         time.sleep(60)
 
 
