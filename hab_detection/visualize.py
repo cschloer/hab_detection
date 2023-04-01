@@ -445,7 +445,7 @@ def visualize(
                 normalized[0],
                 marker="_",
                 markersize=10 if i != 0 else 20,
-                markeredgewidth=10 if i != 0 else 20,
+                markeredgewidth=1 if i != 0 else 2,
                 markeredgecolor=color,
                 markerfacecolor=color,
             )
