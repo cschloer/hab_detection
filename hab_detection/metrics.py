@@ -111,6 +111,7 @@ def get_model_performance(
                 labels = labels[~(labels == -1)]
 
             tracker.update(preds, labels)
+            tracker2.update(preds[~(labels == -1)], labels[~(labels == -1)])
 
             if class_designation is not None and calculate_2d_hist:
                 # Reverse the 1 hot encoding on preds and bring everything to np
@@ -128,7 +129,6 @@ def get_model_performance(
                     bins=[len(class_designation), 254],
                 )
                 hist_2d += h
-                tracker2.update(preds, labels)
 
             counter += 1
             if num_batches >= 0 and counter >= num_batches:
