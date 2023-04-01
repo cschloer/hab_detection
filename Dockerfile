@@ -29,6 +29,7 @@ RUN pip install -r requirements.txt
 #ARG SAVE_FOLDER
 
 
+ADD ./run.sh .
 CMD ["./run.sh"]
 #CMD ["python3", "/home/conrad/hab_detection/dataset_create/create_dataset.py", ">", "/shared/datasets/hab/new_data/output.txt"]
 
