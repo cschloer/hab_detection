@@ -417,8 +417,8 @@ def visualize(
             color = cyan_colormap[ceil - 1 if floor != 0 else 0] / 255
 
             rectangles[f"{floor} - {ceil -1}" if i != 0 else "0"] = mpatch.Rectangle(
-                (floor, 0.95),
-                ceil - floor + 1,
+                (floor, 1.0),
+                ceil - floor,
                 0.05,
                 color=color,
             )
@@ -445,7 +445,7 @@ def visualize(
                 normalized[0],
                 marker="o",
                 markersize=10 if i != 0 else 20,
-                markeredgecolor=color if i != 0 else "black",
+                markeredgecolor=color,
                 markerfacecolor=color,
             )
             plt.axvline(x=class_designation[i], color="black", alpha=0.5)
@@ -469,9 +469,9 @@ def visualize(
             )
 
         plt.autoscale(enable=True, axis="x", tight=True)
-        axs.set_ylim(0.0, 1.0)
-        axs.set_xlim(-20, 254)
-        plt.xticks([-10, 50, 100, 150, 200, 254], [0, 50, 100, 150, 200, 254])
+        axs.set_ylim(0.0, 1.05)
+        axs.set_xlim(-20, 253)
+        plt.xticks([-10, 1, 99, 149, 199, 253], [0, 1, 99, 149, 199, 253])
 
         axs.set_title("Classification of Pixels vs Actual HAB Index")
         plt.xlabel("Actual HAB Index")
