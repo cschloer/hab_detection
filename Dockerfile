@@ -21,13 +21,13 @@ WORKDIR /repo
 ADD ./requirements.txt .
 RUN pip install -r requirements.txt
 
-ADD ./dataset_create/.env .
-SHELL ["/bin/bash", "-c"]
-RUN set -a
-RUN source .env
+#ARG CYAN_APP_KEY
+#ARG ESA_PASSWORD1
+#ARG ESA_USER1
+#ARG ESA_PASSWORD2
+#ARG ESA_USER2
+#ARG SAVE_FOLDER
 
-ADD ./bin/start.sh .
 
-
-CMD ["sh", "./start.sh"]
+CMD ["python3", "/home/conrad/hab_detection/dataset_create/create_dataset.py", ">", "/shared/datasets/hab/new_data/output.txt"]
 
