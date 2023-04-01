@@ -130,16 +130,10 @@ def get_model_performance(
 
                 preds_flat = preds.flatten()
                 raw_labels_flat = raw_labels.flatten()
-                print(preds_flat.shape, raw_labels_flat.shape)
                 histogram_input = np.column_stack((preds_flat, raw_labels_flat))
-                print(histogram_input.shape)
-                print(histogram_input)
                 h, _ = np.histogramdd(
                     # np.array([preds, raw_labels]).T,
-                    (
-                        preds.flatten(),
-                        raw_labels.flatten(),
-                    ),
+                    histogram_input,
                     bins=[len(class_designation), 254],
                 )
                 hist_2d += h
