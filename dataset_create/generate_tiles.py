@@ -2,6 +2,8 @@ from helpers import get_cyan_url, TEMP_FOLDER, SAVE_FOLDER
 
 import os
 import json
+import random
+import re
 import shutil
 import sys
 from pprint import pprint
@@ -23,6 +25,8 @@ SCENE_SIZE = 50
 NUM_DAYS = 60
 
 region_ids = ["8_3", "6_2", "7_2", "7_5", "6_5"]
+# region_ids = ["6_2", "7_5", "8_3"]
+# region_ids = ["7_5"]
 start_year = 2019
 start_month = 7
 start_day = 1
@@ -128,16 +132,61 @@ for key in scenes.keys():
             # print(f"{key}: {hab_percent}%")
             used_tiles.append(key)
 
-train, test = train_test_split(sorted(used_tiles), test_size=0.3, random_state=42)
-print(f"Train size: {len(train)}")
-print(f"Test size: {len(test)}")
 
-for key in train:
-    scenes[key]["designation"] = "train"
-for key in test:
-    scenes[key]["designation"] = "test"
+def get_metadata(id_):
+    match = re.findall(
+        "(\d_\d)_X(\d\d\d\d)_Y(\d\d\d\d)_S(\d\d\d)",
+        id_,
+        re.IGNORECASE,
+    )
+    if match:
+        region_id, X, Y, S = match[0]
+        return region_id, int(X), int(Y), int(S)
+    return "", "", "", ""
+
+
+# Set train/test, making sure that bordering scenes are in the same set
+random.seed(42)
+num_train = 0
+num_test = 0
+
+
+def find_and_update_bordering(region_id, X, Y, S, designation):
+    count = 0
+    for key2 in used_tiles:
+        if "designation" not in scenes[key2]:
+            region_id2, X2, Y2, _ = get_metadata(scenes[key2]["id"])
+            if region_id2 == region_id and abs(X2 - X) <= S and abs(Y2 - Y) <= S:
+                scenes[key2]["designation"] = designation
+                count += 1 + find_and_update_bordering(
+                    region_id, X2, Y2, S, designation
+                )
+    return count
+
+
+for key in sorted(used_tiles):
+    if "designation" not in scenes[key]:
+        count = 1
+        region_id, X, Y, S = get_metadata(scenes[key]["id"])
+        if not region_id:
+            raise Exception("Badly formatted id", scenes[key]["id"])
+        designation = "train" if random.random() <= 0.7 else "test"
+        scenes[key]["designation"] = designation
+        # Set all bordering tiles to be the same designation
+        count += find_and_update_bordering(region_id, X, Y, S, designation)
+        if designation == "train":
+            num_train += count
+        else:
+            num_test += count
+
+
+# train, test = train_test_split(sorted(used_tiles), test_size=0.3, random_state=42)
+print(f"Train size: {num_train} - {round(num_train / len(used_tiles), 2)}")
+print(f"Test size: {num_test} - {round(num_test / len(used_tiles), 2)}")
+
 
 # Draw the cyan image, visualizing the scenes
+os.makedirs(f"{SAVE_FOLDER}/images", exist_ok=True)
 for region_id in region_ids:
     fig, ax = plt.subplots(1, 1, figsize=(8, 8))
     cyan_image = Image.open(least_clouds[region_id]["download_path"]).convert("RGBA")
@@ -173,6 +222,8 @@ for region_id in region_ids:
     ax.imshow(cyan_image)
     ax.axis("off")
     plt.savefig(f"{SAVE_FOLDER}/images/{region_id}.png")
+    print(f"Saved image {region_id}")
+    # plt.show()
 
 
 with open(f"{SAVE_FOLDER}/data.json", "w") as f:

@@ -4,7 +4,7 @@ import numpy as np
 
 CYAN_APP_KEY = os.environ.get("CYAN_APP_KEY")
 TEMP_FOLDER = "/tmp/hab"
-SAVE_FOLDER = "/home/conrad/Dropbox/Masters/masters_thesis/data"
+SAVE_FOLDER = os.environ.get("SAVE_FOLDER")
 ZIP_FILE_TRAIN = f"{SAVE_FOLDER}/dataset_train.zip"
 ZIP_FILE_TEST = f"{SAVE_FOLDER}/dataset_test.zip"
 os.makedirs(TEMP_FOLDER, exist_ok=True)
