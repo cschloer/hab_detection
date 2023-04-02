@@ -77,7 +77,7 @@ def manage_triggers(api, name):
                     # Succesfully triggered
                     if r["file_prefix"] in waiting:
                         print(
-                            f"{log_prefix}FOUND FILE PREFIX TWICE: {r} ------------- {waiting[r'file_prefix']}"
+                            f"{log_prefix}FOUND FILE PREFIX TWICE: {r} ------------- {waiting[r['file_prefix']]}"
                         )
                     else:
                         waiting[r["file_prefix"]] = r
