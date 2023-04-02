@@ -291,14 +291,14 @@ def generate_all_bands(unprocessedBandPath, granule, outputPathSubdirectory):
         outputFiles.append(band_path)
     my_file = Path(outPutFullVrt)
     if not my_file.is_file():
-        subprocess.call(cmd)
+        subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     cmd = ["gdal_translate", "-of", "GTiff", outPutFullVrt, outPutFullPath]
 
     my_file = Path(outPutTiff)
     if not my_file.is_file():
         # file exists
-        subprocess.call(cmd)
+        subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     return outPutFullPath
 
 
@@ -393,7 +393,7 @@ def warp_and_crop(base, cyan_image_path, sen2_image_path, window):
         cyan_image_path,
         temp_cyan,
     ]
-    subprocess.check_call(cmd)
+    subprocess.check_call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # sen2_gdal = gdal.Open(temp_sen2)
     # print(gdal.Info(sen2_gdal))
@@ -413,7 +413,7 @@ def warp_and_crop(base, cyan_image_path, sen2_image_path, window):
         temp_cyan,
         temp2_cyan,
     ]
-    subprocess.check_call(cmd)
+    subprocess.check_call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # Translate the cyan image
     cmd = [
@@ -430,12 +430,12 @@ def warp_and_crop(base, cyan_image_path, sen2_image_path, window):
         temp2_cyan,
         temp3_cyan,
     ]
-    subprocess.check_call(cmd)
+    subprocess.check_call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # Translate the sen2 image
     cmd[-1] = temp2_sen2
     cmd[-2] = temp_sen2
-    subprocess.check_call(cmd)
+    subprocess.check_call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     return temp3_cyan, temp2_sen2
 

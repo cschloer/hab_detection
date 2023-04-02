@@ -15,6 +15,7 @@ def get_api(user, password):
         user,
         password,
         "https://apihub.copernicus.eu/apihub",
+        show_progressbars=False,
     )
 
 

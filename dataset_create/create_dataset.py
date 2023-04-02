@@ -75,8 +75,12 @@ def manage_triggers(api, name):
                     api.download(r["uuid"])
                 except LTATriggered as e:
                     # Succesfully triggered
-                    assert r["file_prefix"] not in waiting
-                    waiting[r["file_prefix"]] = r
+                    if r["file_prefix"] in waiting:
+                        print(
+                            f"{log_prefix}FOUND FILE PREFIX TWICE: {r} ------------- {waiting[r'file_prefix']}"
+                        )
+                    else:
+                        waiting[r["file_prefix"]] = r
 
                 except LTAError as e:
                     # No more trigger credits, add back to trigger list
