@@ -94,6 +94,7 @@ def manage_triggers(api, name):
                     with lock_trigger_list:
                         trigger_list.append(r)
         time.sleep(60)
+        print(f"{log_prefix}Waking up in LTA thread...")
 
 
 def manage_downloads(api):
@@ -155,6 +156,7 @@ def manage_downloads(api):
                 # Sleep a little
                 break
         time.sleep(30)
+        print(f"{log_prefix}Waking up in download thread...")
 
 
 with open(f"{SAVE_FOLDER}/data.json", "r") as f:
