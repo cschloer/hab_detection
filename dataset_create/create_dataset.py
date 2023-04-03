@@ -71,7 +71,7 @@ def manage_triggers(api, name):
                     with lock_existing_prefixes:
                         if r["file_prefix"] in existing_prefixes:
                             print(
-                                f"{log_prefix}File with prefix {r['file_prefix']} already exists in zip - {counter}"
+                                f"{log_prefix}File with prefix {r['file_prefix']} already exists in zip"
                             )
                             continue
                 else:
