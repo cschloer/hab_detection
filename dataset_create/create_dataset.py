@@ -68,6 +68,12 @@ def manage_triggers(api, name):
             with lock_trigger_list:
                 if len(trigger_list):
                     r = trigger_list.pop()
+                    with lock_existing_prefixes:
+                        if r["file_prefix"] in existing_prefixes:
+                            print(
+                                f"{log_prefix}File with prefix {r['file_prefix']} already exists in zip - {counter}"
+                            )
+                            continue
                 else:
                     break
 
@@ -123,7 +129,7 @@ def manage_downloads(api):
                         if r["file_prefix"] in existing_prefixes:
                             counter += 1
                             print(
-                                f"{log_prefix}File with ID {r['id']} already exists in zip - {counter}"
+                                f"{log_prefix}File with file_prefix {r['file_prefix']} already exists in zip - {counter}"
                             )
                             continue
                         else:
@@ -204,7 +210,7 @@ with lock_existing_prefixes:
         existing_prefixes = set([n[:31] for n in z.namelist()])
     with zipfile.ZipFile(ZIP_FILE_TEST, mode="a", compression=zipfile.ZIP_STORED) as z:
         existing_prefixes.update(set([n[:31] for n in z.namelist()]))
-print(existing_prefixes)
+print(f"# Existing Prefixes: {len(existing_prefixes)}")
 
 # LTA Thread 1
 try:
