@@ -53,8 +53,11 @@ def manage_triggers(api, name):
         # Check if previously triggered items are now online
         delete_waiting = []
         for k in waiting.keys():
-            if handle_online(waiting[k]):
-                delete_waiting.append(k)
+            try:
+                if handle_online(waiting[k]):
+                    delete_waiting.append(k)
+            except:
+                pass
         for k in delete_waiting:
             del waiting[k]
 
