@@ -106,7 +106,13 @@ def get_model_performance(
                     "ratio after mask",
                     round(
                         torch.numel(
-                            inputs[~(torch.broadcast_to(torch.unsqueeze(labels, 1) == -1, inputs.shape))]
+                            inputs[
+                                ~(
+                                    torch.broadcast_to(
+                                        torch.unsqueeze(labels, 1) == -1, inputs.shape
+                                    )
+                                )
+                            ]
                         )
                         / torch.numel(inputs),
                         2,
@@ -115,12 +121,24 @@ def get_model_performance(
                 print("masked values")
                 print(
                     torch.mean(
-                        inputs[~(torch.broadcast_to(torch.unsqueeze(labels, 1) == -1, inputs.shape))]
+                        inputs[
+                            ~(
+                                torch.broadcast_to(
+                                    torch.unsqueeze(labels, 1) == -1, inputs.shape
+                                )
+                            )
+                        ]
                     ),
                 )
                 print(
                     torch.var(
-                        inputs[~(torch.broadcast_to(torch.unsqueeze(labels, 1) == -1, inputs.shape))]
+                        inputs[
+                            ~(
+                                torch.broadcast_to(
+                                    torch.unsqueeze(labels, 1) == -1, inputs.shape
+                                )
+                            )
+                        ]
                     ),
                 )
                 print("pre normalization")

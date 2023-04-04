@@ -72,6 +72,7 @@ def visualize_patch(
         tile_base_name,
         sen2_np,
         cyan_np,
+        is_patch=True,
     )
 
 
@@ -105,11 +106,11 @@ def visualize_image(
     image_name,
     sen2_np,
     cyan_np,
+    is_patch=False,
 ):
     tracker = get_metric_tracker(class_designation)
     with torch.no_grad():
         model.eval()
-        print("MODEL TRAINING", model.training)
         fig, axs = plt.subplots(2, 2, figsize=(20, 16))
         height = sen2_np.shape[1]
         width = sen2_np.shape[2]
@@ -163,7 +164,7 @@ def visualize_image(
             torch.broadcast_to(label, transformed_sen2_batch.shape).shape,
             transformed_sen2.shape,
         )
-        print("MEAN VARIANCE IN FULL IMAGE")
+        print(f"MEAN VARIANCE IN {'FULL' if is_patch else 'PATCH'} IMAGE")
         print(torch.mean(transformed_sen2_batch))
         print(torch.var(transformed_sen2_batch))
         print(
