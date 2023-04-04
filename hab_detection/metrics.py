@@ -127,8 +127,7 @@ def get_model_performance(
                                     torch.unsqueeze(labels, 1) == -1, inputs.shape
                                 )
                             )
-                        ],
-                        (0, 2, 3),
+                        ]
                     ),
                 )
                 print(
@@ -139,13 +138,12 @@ def get_model_performance(
                                     torch.unsqueeze(labels, 1) == -1, inputs.shape
                                 )
                             )
-                        ],
-                        (0, 2, 3),
+                        ]
                     ),
                 )
                 print("pre normalization")
-                print(torch.mean(raw_input_, (1, 2)))
-                print(torch.var(raw_input_, (1, 2)))
+                print(torch.mean(raw_input_))
+                print(torch.var(raw_input_))
                 print("___________________________________")
 
             preds = model.predict(inputs)  # make prediction
