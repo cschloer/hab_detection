@@ -154,7 +154,6 @@ def visualize_image(
 
         # TODO RETURN TWO AFTER IMAGE TESTING
         print("MEAN VARIANCE IN FULL IMAGE")
-        print(transformed_sen2_batch)
         print(torch.mean(transformed_sen2_batch))
         print(torch.var(transformed_sen2_batch))
         print("-----------------------------")

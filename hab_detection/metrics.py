@@ -100,7 +100,6 @@ def get_model_performance(
             # TODO PUT BACK AFTER VUISUALIZATION TESTING
             if batch_idx < 2:
                 print("MEAN VARIANCE IN BATCH")
-                print(inputs)
                 print(torch.mean(inputs))
                 print(torch.var(inputs))
                 print("___________________________________")
