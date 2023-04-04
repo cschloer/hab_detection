@@ -44,7 +44,9 @@ def download_and_process(
     if sen2_uuid == "b767a097-089c-4572-bbf3-8606107015a5":
         log("Skipping weird image from lakemichigan1 2020/11/6")
         return
+    temp_folder = f"{TEMP_FOLDER}/{log_prefix}"
     os.makedirs(image_download_path, exist_ok=True)
+    os.makedirs(temp_folder, exist_ok=True)
 
     year = date.year
     month = date.month
@@ -55,26 +57,26 @@ def download_and_process(
         # download sen2 file
         log("Downloading SEN2 files...")
         exists, sen2_zip_filename = download_sen2(
-            api, TEMP_FOLDER + "/", sen2_uuid, attempt_if_offline=False
+            api, temp_folder + "/", sen2_uuid, attempt_if_offline=False
         )
         if sen2_zip_filename:
-            sen2_zip_path = f"{TEMP_FOLDER}/{sen2_zip_filename}"
+            sen2_zip_path = f"{temp_folder}/{sen2_zip_filename}"
             log("SEN2 download complete")
 
             # download CYAN
             log("Downloading CYAN geotiff...")
             cyan_geotiff_path = download_cyan_geotiff(
-                f"{TEMP_FOLDER}/cyan.tif", date, cyan_region_id
+                f"{temp_folder}/cyan.tif", date, cyan_region_id
             )
             log("CYAN download complete")
 
             # Convert sen2 download to
             log("Converting SEN2 files to geotiff...")
-            sen2_geotiff_path = generate_sen2_geotiff(sen2_zip_path, TEMP_FOLDER + "/")
+            sen2_geotiff_path = generate_sen2_geotiff(sen2_zip_path, temp_folder + "/")
             log("SEN2 conversion complete...")
 
             cyan, sen2 = warp_and_crop(
-                TEMP_FOLDER + "/", cyan_geotiff_path, sen2_geotiff_path, window
+                temp_folder + "/", cyan_geotiff_path, sen2_geotiff_path, window
             )
 
             visualize_overlap(
@@ -179,7 +181,7 @@ def download_and_process(
 
     finally:
         try:
-            shutil.rmtree(TEMP_FOLDER)
+            shutil.rmtree(temp_folder)
             pass
         except:
             pass

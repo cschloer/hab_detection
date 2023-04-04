@@ -106,8 +106,8 @@ def manage_triggers(api, name):
         print(f"{log_prefix}Waking up in LTA thread...")
 
 
-def manage_downloads(api):
-    log_prefix = f"-- Download Thread: "
+def manage_downloads(api, name):
+    log_prefix = f"-- Download Thread {name}: "
     counter = 0
     while True:
         while True:
@@ -236,12 +236,25 @@ try:
 except:
     print("Failed to make thread 1")
 
-# Download thread
-thread_downloads = Thread(
+time.sleep(10)
+# Download threads
+thread_downloads1 = Thread(
     target=manage_downloads,
-    args=(api,),
+    args=(api, "1"),
 )
-thread_downloads.start()
+thread_downloads1.start()
+
+thread_downloads2 = Thread(
+    target=manage_downloads,
+    args=(api, "2"),
+)
+thread_downloads2.start()
+
+thread_downloads3 = Thread(
+    target=manage_downloads,
+    args=(api, "3"),
+)
+thread_downloads3.start()
 """
 uuid = "36cde9b7-0c8d-42f5-96bd-0ab7c4cc4d10"
 date = datetime.datetime(2019, 1, 6, 15, 56, 31, 24000)
