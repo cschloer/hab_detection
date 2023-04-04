@@ -175,7 +175,7 @@ class ImageData(Dataset):
         return (
             image,
             label,
-            raw_image.astype(np.int16),
+            raw_image.astype(np.float32),
             torch.squeeze(torch.from_numpy(raw_label.astype(np.int_))),
         )
 
