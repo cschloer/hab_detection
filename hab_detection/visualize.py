@@ -441,10 +441,11 @@ def visualize(
                     linewidth=2.0,
                 )
             plt.plot(
-                [-10, 1],
+                [-20, 0],
                 [normalized[0], normalized[0]],
                 linewidth=2.0,
                 alpha=0.3 if i != 0 else 1.0,
+                color=color,
             )
             """
             plt.plot(
