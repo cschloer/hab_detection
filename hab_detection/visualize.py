@@ -441,7 +441,14 @@ def visualize(
                     linewidth=2.0,
                 )
             plt.plot(
-                -10,
+                [-10, 1],
+                [normalized[0], normalized[0]],
+                linewidth=2.0,
+                alpha=0.3 if i != 0 else 1.0,
+            )
+            """
+            plt.plot(
+               -10,
                 normalized[0],
                 marker="_",
                 markersize=10 if i != 0 else 20,
@@ -449,6 +456,7 @@ def visualize(
                 markeredgecolor=color,
                 markerfacecolor=color,
             )
+            """
         for i in range(len(class_designation)):
             plt.axvline(x=class_designation[i], color="black", alpha=1.0)
 
