@@ -176,8 +176,20 @@ def visualize_image(
             ),
         )
         print("masked values")
-        print(torch.mean(transformed_sen2[~(label == -1)]))
-        print(torch.var(transformed_sen2[~(label == -1)]))
+        print(
+            torch.mean(
+                transformed_sen2_batch[
+                    ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
+                ]
+            ),
+        )
+        print(
+            torch.var(
+                transformed_sen2_batch[
+                    ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
+                ]
+            ),
+        )
         print("pre normalization")
         print(np.mean(sen2_np.astype(np.float32)))
         print(np.var(sen2_np.astype(np.float32)))
