@@ -435,13 +435,13 @@ def visualize(
             # Plot thicker line inside of range where it is correct
             if i != 0:
                 axs.plot(
-                    range(floor, ceil),
+                    range(floor - 0.5, ceil + 0.5),
                     normalized[floor:ceil],
                     color=color,
                     linewidth=2.0,
                 )
             plt.plot(
-                [-20, 0],
+                [-20, 0.5],
                 [normalized[0], normalized[0]],
                 linewidth=2.0,
                 alpha=0.3 if i != 0 else 1.0,
