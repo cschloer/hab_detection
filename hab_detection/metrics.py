@@ -100,8 +100,8 @@ def get_model_performance(
             # TODO PUT BACK AFTER VUISUALIZATION TESTING
             if batch_idx < 2:
                 print("MEAN VARIANCE IN BATCH")
-                print(torch.mean(inputs, 1))
-                print(torch.var(inputs, 1))
+                print(torch.mean(inputs, (0, 2, 3)))
+                print(torch.var(inputs, (0, 2, 3)))
                 print(
                     "ratio after mask",
                     round(
@@ -128,7 +128,7 @@ def get_model_performance(
                                 )
                             )
                         ],
-                        1,
+                        (0, 2, 3),
                     ),
                 )
                 print(
@@ -140,12 +140,12 @@ def get_model_performance(
                                 )
                             )
                         ],
-                        1,
+                        (0, 2, 3),
                     ),
                 )
                 print("pre normalization")
-                print(torch.mean(raw_input_, 0))
-                print(torch.var(raw_input_, 0))
+                print(torch.mean(raw_input_, (1, 2)))
+                print(torch.var(raw_input_, (1, 2)))
                 print("___________________________________")
 
             preds = model.predict(inputs)  # make prediction
