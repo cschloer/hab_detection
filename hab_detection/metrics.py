@@ -102,6 +102,27 @@ def get_model_performance(
                 print("MEAN VARIANCE IN BATCH")
                 print(torch.mean(inputs))
                 print(torch.var(inputs))
+                print(
+                    "ratio after mask",
+                    round(
+                        torch.numel(
+                            inputs[~(torch.broadcast_to(labels == -1, inputs.shape))]
+                        )
+                        / torch.numel(inputs),
+                        2,
+                    ),
+                )
+                print("masked values")
+                print(
+                    torch.mean(
+                        inputs[~(torch.broadcast_to(labels == -1, inputs.shape))]
+                    ),
+                )
+                print(
+                    torch.var(
+                        inputs[~(torch.broadcast_to(labels == -1, inputs.shape))]
+                    ),
+                )
                 print("pre normalization")
                 print(torch.mean(raw_input_))
                 print(torch.var(raw_input_))

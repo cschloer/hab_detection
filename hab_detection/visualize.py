@@ -166,13 +166,16 @@ def visualize_image(
         print("MEAN VARIANCE IN FULL IMAGE")
         print(torch.mean(transformed_sen2_batch))
         print(torch.var(transformed_sen2_batch))
-        print("numel", torch.numel(transformed_sen2_batch))
         print(
-            "numel after mask",
-            torch.numel(
-                transformed_sen2_batch[
-                    ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
-                ]
+            "ratio after mask",
+            round(
+                torch.numel(
+                    transformed_sen2_batch[
+                        ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
+                    ]
+                )
+                / torch.numel(transformed_sen2_batch),
+                2,
             ),
         )
         print("masked values")
