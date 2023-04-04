@@ -435,8 +435,8 @@ def visualize(
             # Plot thicker line inside of range where it is correct
             if i != 0:
                 X = list(range(floor, ceil))
-                X[0] = floor - 0.5
-                X[-1] = floor + 0.5
+                X[0] = floor + 0.5
+                X[-1] = ceil + 0.5
                 axs.plot(
                     X,
                     normalized[floor:ceil],
