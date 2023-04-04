@@ -160,13 +160,9 @@ def visualize_image(
             dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
         ).to(device)
 
-        print(
-            torch.broadcast_to(label, transformed_sen2_batch.shape).shape,
-            transformed_sen2.shape,
-        )
         print(f"MEAN VARIANCE IN {'FULL' if not is_patch else 'PATCH'} IMAGE")
-        print(torch.mean(transformed_sen2_batch))
-        print(torch.var(transformed_sen2_batch))
+        print(torch.mean(transformed_sen2_batch, 1))
+        print(torch.var(transformed_sen2_batch, 1))
         print(
             "ratio after mask",
             round(
@@ -184,19 +180,21 @@ def visualize_image(
             torch.mean(
                 transformed_sen2_batch[
                     ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
-                ]
+                ],
+                1,
             ),
         )
         print(
             torch.var(
                 transformed_sen2_batch[
                     ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
-                ]
+                ],
+                1,
             ),
         )
         print("pre normalization")
-        print(np.mean(sen2_np.astype(np.float32)))
-        print(np.var(sen2_np.astype(np.float32)))
+        print(np.mean(sen2_np.astype(np.float32), 0))
+        print(np.var(sen2_np.astype(np.float32), 0))
         print("-----------------------------")
 
         tracker.update(
