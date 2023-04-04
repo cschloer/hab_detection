@@ -156,6 +156,9 @@ def visualize_image(
         print("MEAN VARIANCE IN FULL IMAGE")
         print(torch.mean(transformed_sen2_batch))
         print(torch.var(transformed_sen2_batch))
+        print("pre normalization")
+        print(np.mean(sen2_np.astype(np.float32)))
+        print(np.var(sen2_np.astype(np.float32)))
         print("-----------------------------")
 
         pred = model.predict(transformed_sen2_batch)  # make prediction

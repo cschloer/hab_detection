@@ -93,7 +93,7 @@ def get_model_performance(
 
         total_loss = 0
         counter = 0
-        for batch_idx, (inputs, labels, _, raw_labels) in enumerate(loader):
+        for batch_idx, (inputs, labels, raw_input_, raw_labels) in enumerate(loader):
             # print(f"{batch_idx + 1} / {len(loader)}")
             inputs = inputs.to(device, dtype=torch.float)
             labels = labels.to(device)
@@ -102,6 +102,9 @@ def get_model_performance(
                 print("MEAN VARIANCE IN BATCH")
                 print(torch.mean(inputs))
                 print(torch.var(inputs))
+                print("pre normalization")
+                print(np.mean(raw_input_))
+                print(np.var(raw_input_))
                 print("___________________________________")
 
             preds = model.predict(inputs)  # make prediction
