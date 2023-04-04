@@ -159,18 +159,18 @@ def visualize_image(
             dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
         ).to(device)
 
-        print(torch.squeeze(label).shape, transformed_sen2.shape)
+        print(label.shape, transformed_sen2.shape)
         print("MEAN VARIANCE IN FULL IMAGE")
         print(torch.mean(transformed_sen2_batch))
         print(torch.var(transformed_sen2_batch))
         print("numel", torch.numel(transformed_sen2_batch))
         print(
             "numel after mask",
-            torch.numel(transformed_sen2[~(torch.squeeze(label) == -1)]),
+            torch.numel(transformed_sen2[~(label == -1)]),
         )
         print("masked values")
-        print(torch.mean(transformed_sen2_batch[~(label == -1)]))
-        print(torch.var(transformed_sen2_batch[~(label == -1)]))
+        print(torch.mean(transformed_sen2[~(label == -1)]))
+        print(torch.var(transformed_sen2[~(label == -1)]))
         print("pre normalization")
         print(np.mean(sen2_np.astype(np.float32)))
         print(np.var(sen2_np.astype(np.float32)))
