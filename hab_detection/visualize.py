@@ -448,7 +448,7 @@ def visualize(
                 color=color,
             )
         for i in range(len(class_designation)):
-            plt.axvline(x=class_designation[i], color="black", alpha=1.0, linewidth=2.0)
+            plt.axvline(x=class_designation[i], color="black", alpha=1.0)
 
         # Plot rectangles
         for r in rectangles:
