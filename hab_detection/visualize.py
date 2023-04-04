@@ -435,8 +435,8 @@ def visualize(
             # Plot thicker line inside of range where it is correct
             if i != 0:
                 axs.plot(
-                    range(floor, ceil + 1),
-                    normalized[floor : ceil + 1],
+                    range(floor, min(ceil + 1, len(normalized))),
+                    normalized[floor : min(ceil + 1, len(normalized))],
                     color=color,
                     linewidth=2.0,
                 )
@@ -447,19 +447,8 @@ def visualize(
                 alpha=0.3 if i != 0 else 1.0,
                 color=color,
             )
-            """
-            plt.plot(
-               -10,
-                normalized[0],
-                marker="_",
-                markersize=10 if i != 0 else 20,
-                markeredgewidth=1 if i != 0 else 2,
-                markeredgecolor=color,
-                markerfacecolor=color,
-            )
-            """
         for i in range(len(class_designation)):
-            plt.axvline(x=class_designation[i], color="black", alpha=1.0)
+            plt.axvline(x=class_designation[i], color="black", alpha=1.0, linewidth=2.0)
 
         # Plot rectangles
         for r in rectangles:
