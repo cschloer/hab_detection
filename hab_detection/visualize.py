@@ -160,6 +160,18 @@ def visualize_image(
             dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
         ).to(device)
 
+        print(transformed_sen2_batch.shape)
+        print(torch.mean(transformed_sen2_batch, 1).shape)
+        print(
+            torch.mean(
+                transformed_sen2_batch,
+                (
+                    0,
+                    2,
+                    3,
+                ),
+            ).shape
+        )
         print(f"MEAN VARIANCE IN {'FULL' if not is_patch else 'PATCH'} IMAGE")
         print(torch.mean(transformed_sen2_batch, 1))
         print(torch.var(transformed_sen2_batch, 1))
