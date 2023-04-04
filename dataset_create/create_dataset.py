@@ -27,6 +27,10 @@ lock_trigger_list = threading.Lock()
 existing_prefixes = set()
 lock_existing_prefixes = threading.Lock()
 
+total_available = 0
+total_downloaded = 0
+lock_total_downloaded = threading.Lock()
+
 
 complete = []
 
@@ -70,9 +74,11 @@ def manage_triggers(api, name):
                     r = trigger_list.pop()
                     with lock_existing_prefixes:
                         if r["file_prefix"] in existing_prefixes:
-                            print(
-                                f"{log_prefix}File with prefix {r['file_prefix']} already exists in zip"
-                            )
+                            with lock_total_downloaded:
+                                total_downloaded += 1
+                                print(
+                                    f"{log_prefix}File with prefix {r['file_prefix']} already exists in zip - {total_downloaded}"
+                                )
                             continue
                 else:
                     break
@@ -108,7 +114,6 @@ def manage_triggers(api, name):
 
 def manage_downloads(api, name):
     log_prefix = f"-- Download Thread {name}: "
-    counter = 0
     while True:
         while True:
             r = None
@@ -127,18 +132,20 @@ def manage_downloads(api, name):
                 else:
                     with lock_existing_prefixes:
                         if r["file_prefix"] in existing_prefixes:
-                            counter += 1
-                            print(
-                                f"{log_prefix}File with file_prefix {r['file_prefix']} already exists in zip - {counter}"
-                            )
+                            with lock_total_downloaded:
+                                total_downloaded += 1
+                                print(
+                                    f"{log_prefix}File with file_prefix {r['file_prefix']} already exists in zip - {total_downloaded}"
+                                )
                             continue
                         else:
                             existing_prefixes.add(r["file_prefix"])
 
                     try:
-                        print(
-                            f"{log_prefix}Downloading file {r['uuid']} - {counter + 1}"
-                        )
+                        with lock_total_downloaded:
+                            print(
+                                f"{log_prefix}Downloading file {r['uuid']} - {total_downloaded + 1}"
+                            )
                         download_and_process(
                             api,
                             r["uuid"],
@@ -152,7 +159,8 @@ def manage_downloads(api, name):
                             f"{SAVE_FOLDER}/images/scenes/{r['id']}/{r['date'].year}-{r['date'].month}-{r['date'].day}",
                             log_prefix,
                         )
-                        counter += 1
+                        with lock_total_downloaded:
+                            total_downloaded += 1
 
                     except Exception as e:
                         print(f"{log_prefix}GOT AN ERROR: {e}")
@@ -201,6 +209,7 @@ with lock_trigger_list:
                 }
             )
     print(f"Found {len(trigger_list)} total items.")
+total_available = len(trigger_list)
 
 with lock_existing_prefixes:
     with zipfile.ZipFile(ZIP_FILE_TRAIN, mode="a", compression=zipfile.ZIP_STORED) as z:
@@ -222,6 +231,7 @@ try:
 except:
     print("Failed to make thread 1")
 
+"""
 # LTA Thread 2
 try:
     api2 = get_api(
@@ -236,6 +246,7 @@ try:
 except:
     print("Failed to make thread 1")
 
+"""
 time.sleep(10)
 # Download threads
 thread_downloads1 = Thread(
