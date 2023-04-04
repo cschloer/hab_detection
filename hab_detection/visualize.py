@@ -153,19 +153,25 @@ def visualize_image(
         transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
 
         # TODO RETURN TWO AFTER IMAGE TESTING
-        print("MEAN VARIANCE IN FULL IMAGE")
-        print(torch.mean(transformed_sen2_batch))
-        print(torch.var(transformed_sen2_batch))
-        print("pre normalization")
-        print(np.mean(sen2_np.astype(np.float32)))
-        print(np.var(sen2_np.astype(np.float32)))
-        print("-----------------------------")
-
         pred = model.predict(transformed_sen2_batch)  # make prediction
 
         label = torch.unsqueeze(
             dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
         ).to(device)
+
+        print(label.shape, transformed_sen2_batch.shape)
+        print("MEAN VARIANCE IN FULL IMAGE")
+        print(torch.mean(transformed_sen2_batch))
+        print(torch.var(transformed_sen2_batch))
+        print("numel", torch.numel(transformed_sen2_batch))
+        print("numel after mask", torch.numel(transformed_sen2_batch[~(label == -1)]))
+        print("masked values")
+        print(torch.mean(transformed_sen2_batch[~(label == -1)]))
+        print(torch.var(transformed_sen2_batch[~(label == -1)]))
+        print("pre normalization")
+        print(np.mean(sen2_np.astype(np.float32)))
+        print(np.var(sen2_np.astype(np.float32)))
+        print("-----------------------------")
 
         tracker.update(
             pred,
