@@ -13,6 +13,8 @@ from torch.utils.data import Dataset
 import numpy as np
 import time
 
+transform_input = transforms.Compose([transforms.Normalize(dataset_mean, dataset_std)])
+
 
 def get_data(zip_path):
     imgs = []
@@ -61,9 +63,6 @@ class ImageData(Dataset):
         self.do_transform = transform
 
         self.zip = None
-        self.transform_input = transforms.Compose(
-            [transforms.Normalize(dataset_mean, dataset_std)]
-        )
 
     def __len__(self):
         return len(self.imgs)
@@ -165,7 +164,7 @@ class ImageData(Dataset):
         image = raw_image.astype(np.float32) / 10000
         # augmentations
         if self.do_transform:
-            image = self.transform_input(torch.from_numpy(image))
+            image = transform_input(torch.from_numpy(image))
             label = torch.from_numpy(raw_label).int()
             if self.randomize:
                 image, label = self.random_transform(image, label)

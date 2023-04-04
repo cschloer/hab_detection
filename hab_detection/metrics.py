@@ -98,6 +98,13 @@ def get_model_performance(
             inputs = inputs.to(device, dtype=torch.float)
             labels = labels.to(device)
             # TODO PUT BACK AFTER VUISUALIZATION TESTING
+            if batch_idx < 2:
+                print("MEAN VARIANCE IN BATCH")
+                print(inputs)
+                print(torch.mean(inputs))
+                print(torch.var(inputs))
+                print("___________________________________")
+
             preds = model.predict(inputs)  # make prediction
 
             # Only calculate the loss if its regression or class weights is passed in

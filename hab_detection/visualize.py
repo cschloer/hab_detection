@@ -24,7 +24,7 @@ from .constants import (
 
 from .metrics import get_metric_tracker, get_model_performance
 from .helpers import log, set_config
-from .dataset import get_image_dataset
+from .dataset import get_image_dataset, transform_input
 from .model import load_model
 
 
@@ -145,7 +145,7 @@ def visualize_image(
         ax.imshow(cyan_image)
         ax.axis("off")
 
-        transformed_sen2 = dataset.transform_input(
+        transformed_sen2 = transform_input(
             torch.from_numpy(sen2_np.astype(np.float32) / 10000),
         )
 
@@ -153,6 +153,12 @@ def visualize_image(
         transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
 
         # TODO RETURN TWO AFTER IMAGE TESTING
+        print("MEAN VARIANCE IN FULL IMAGE")
+        print(transformed_sen2_batch)
+        print(torch.mean(transformed_sen2_batch))
+        print(torch.var(transformed_sen2_batch))
+        print("-----------------------------")
+
         pred = model.predict(transformed_sen2_batch)  # make prediction
 
         label = torch.unsqueeze(
