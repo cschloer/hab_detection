@@ -180,21 +180,19 @@ def visualize_image(
             torch.mean(
                 transformed_sen2_batch[
                     ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
-                ],
-                (0, 2, 3),
+                ]
             ),
         )
         print(
             torch.var(
                 transformed_sen2_batch[
                     ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
-                ],
-                (0, 2, 3),
+                ]
             ),
         )
         print("pre normalization")
-        print(np.mean(sen2_np.astype(np.float32), (1, 2)))
-        print(np.var(sen2_np.astype(np.float32), (1, 2)))
+        print(np.mean(sen2_np.astype(np.float32)))
+        print(np.var(sen2_np.astype(np.float32)))
         print("-----------------------------")
 
         tracker.update(
