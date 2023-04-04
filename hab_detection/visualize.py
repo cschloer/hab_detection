@@ -435,8 +435,8 @@ def visualize(
             # Plot thicker line inside of range where it is correct
             if i != 0:
                 axs.plot(
-                    range(floor, ceil),
-                    normalized[floor:ceil],
+                    range(floor, ceil + 1),
+                    normalized[floor : ceil + 1],
                     color=color,
                     linewidth=2.0,
                 )
