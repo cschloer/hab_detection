@@ -109,6 +109,7 @@ def visualize_image(
     tracker = get_metric_tracker(class_designation)
     with torch.no_grad():
         model.eval()
+        print("MODEL TRAINING", model.training)
         fig, axs = plt.subplots(2, 2, figsize=(20, 16))
         height = sen2_np.shape[1]
         width = sen2_np.shape[2]
@@ -253,7 +254,6 @@ def visualize(
                 break
     """
 
-    """
     log("Visualizing full images.")
     visualize_full_image(
         model,
@@ -330,7 +330,6 @@ def visualize(
         save_plot(image_save_folder, "loss")
     except FileNotFoundError as e:
         log("Log file not found. Skipping the loss plot.")
-    """
 
     _, metrics, hist_2d = get_model_performance(
         model,
