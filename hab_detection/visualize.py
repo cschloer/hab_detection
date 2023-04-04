@@ -160,8 +160,8 @@ def visualize_image(
         ).to(device)
 
         print(
-            torch.flatten(label).shape,
-            torch.flatten(transformed_sen2, start_dim=1).shape,
+            torch.broadcast_to(label, transformed_sen2_batch).shape,
+            transformed_sen2.shape,
         )
         print("MEAN VARIANCE IN FULL IMAGE")
         print(torch.mean(transformed_sen2_batch))
@@ -169,11 +169,7 @@ def visualize_image(
         print("numel", torch.numel(transformed_sen2_batch))
         print(
             "numel after mask",
-            torch.numel(
-                torch.flatten(transformed_sen2, start_dim=1)[
-                    ~(torch.flatten(label) == -1)
-                ]
-            ),
+            torch.numel(transformed_sen2_batch[~(torch.broadcast_to(label == -1))]),
         )
         print("masked values")
         print(torch.mean(transformed_sen2[~(label == -1)]))
