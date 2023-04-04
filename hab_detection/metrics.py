@@ -103,6 +103,8 @@ def get_model_performance(
                 print(torch.mean(inputs))
                 print(torch.var(inputs))
                 print("pre normalization")
+                print(type(raw_input_))
+                print(raw_input_)
                 print(np.mean(raw_input_))
                 print(np.var(raw_input_))
                 print("___________________________________")
