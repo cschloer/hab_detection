@@ -164,7 +164,7 @@ def visualize_image(
             torch.broadcast_to(label, transformed_sen2_batch.shape).shape,
             transformed_sen2.shape,
         )
-        print(f"MEAN VARIANCE IN {'FULL' if is_patch else 'PATCH'} IMAGE")
+        print(f"MEAN VARIANCE IN {'FULL' if not is_patch else 'PATCH'} IMAGE")
         print(torch.mean(transformed_sen2_batch))
         print(torch.var(transformed_sen2_batch))
         print(
