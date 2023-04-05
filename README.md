@@ -10,5 +10,5 @@
 `scp conrad@portia.cv.tu-berlin.de:/shared/datasets/hab/models/experiment12/visualize:`
 
 
-docker build -t dataset --build-arg EARTHDATA_USER=cschloer --build-arg EARTHDATA_PASSWORD=### .
+docker build -t dataset --build-arg EARTHDATA_USER=cschloer --build-arg EARTHDATA_PASSWORD=$EARTHDATA_PASSWORD .
 docker run -d --env-file ./dataset_create/.env -v /shared/datasets/hab/new_data:/shared/datasets/hab/new_data -v /home/conrad:/home/conrad dataset

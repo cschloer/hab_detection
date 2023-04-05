@@ -40,6 +40,7 @@ def generate_file_prefix(id_, date):
 
 
 def manage_triggers(api, name):
+    global total_downloaded
     log_prefix = f"-- LTA Trigger Thread {name}: "
     waiting = {}
 
@@ -113,6 +114,7 @@ def manage_triggers(api, name):
 
 
 def manage_downloads(api, name):
+    global total_downloaded
     log_prefix = f"-- Download Thread {name}: "
     while True:
         while True:
