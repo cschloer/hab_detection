@@ -28,6 +28,10 @@ RUN pip install -r requirements.txt
 #ARG ESA_USER2
 #ARG SAVE_FOLDER
 
+RUN echo "machine urs.earthdata.nasa.gov login $EARTHDATA_USER password $EARTHDATA_PASSWORD" > ~/.netrc ; > ~/.urs_cookies
+RUN chmod  0600 ~/.netrc
+RUN echo $EARTHDATA_USER
+
 
 #ADD ./run.sh .
 #CMD ["./run.sh"]

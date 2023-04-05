@@ -22,6 +22,7 @@ def get_api(user, password):
 def get_cyan_url(date, region_id):
     day_of_year = date.strftime("%j")
     year = date.strftime("%Y")
+    return f"https://oceandata.sci.gsfc.nasa.gov/ob/getfile/L{year}{day_of_year}.L3m_DAY_CYAN_CI_cyano_CYAN_CONUS_300m_{region_id}.tif"
     return f"https://oceandata.sci.gsfc.nasa.gov/ob/getfile/L{year}{day_of_year}.L3m_DAY_CYAN_CI_cyano_CYAN_CONUS_300m_{region_id}.tif?appkey={CYAN_APP_KEY}"
 
 
