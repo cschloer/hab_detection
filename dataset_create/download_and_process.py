@@ -158,7 +158,6 @@ def download_and_process(
                         ax2.imshow(cyan_image)
                     count += 1
 
-                    print("Before save data")
                     save_data(
                         cyan_subset_filtered,
                         sen2_subset,
