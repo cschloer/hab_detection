@@ -186,6 +186,7 @@ api = get_api(
     os.environ.get("ESA_PASSWORD1").strip('"'),
 )
 
+"""
 print("Creating list of products to download")
 
 with lock_trigger_list:
@@ -233,22 +234,6 @@ try:
 except:
     print("Failed to make thread 1")
 
-"""
-# LTA Thread 2
-try:
-    api2 = get_api(
-        os.environ.get("ESA_USER2").strip('"'),
-        os.environ.get("ESA_PASSWORD2").strip('"'),
-    )
-    thread_triggers2 = Thread(
-        target=manage_triggers,
-        args=(api2, "2"),
-    )
-    thread_triggers2.start()
-except:
-    print("Failed to make thread 1")
-
-"""
 time.sleep(10)
 # Download threads
 thread_downloads1 = Thread(
@@ -269,11 +254,11 @@ thread_downloads3 = Thread(
 )
 thread_downloads3.start()
 """
-uuid = "36cde9b7-0c8d-42f5-96bd-0ab7c4cc4d10"
-date = datetime.datetime(2019, 1, 6, 15, 56, 31, 24000)
-id_ = "8_3_X0000_Y0800_S050"
-cyan_id = "8_3"
-window = [-76.97212808351101, 38.4252545714399, -76.83693062103936, 38.267412116899244]
+uuid = "7a899020-6ed8-413e-b1a1-90fed33b30d0"
+date = datetime.datetime(2019, 8, 16, 16, 29, 1, 24000)
+id_ = "6_5_X1150_Y0200_S050"
+cyan_id = "6_5"
+window = [-87.8558694334589, 30.467249596242237, -87.71357815482499, 30.321040659943314]
 download_and_process(
     api,
     uuid,
@@ -285,7 +270,8 @@ download_and_process(
     f"{SAVE_FOLDER}/images/scenes/{id_}",
     "-- Download Thread: ",
 )
-"""
 
+"""
 while True:
     time.sleep(100)
+"""
