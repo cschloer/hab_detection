@@ -182,6 +182,7 @@ def download_and_process(
     finally:
         try:
             shutil.rmtree(temp_folder)
+            plt.close()
             pass
         except:
             pass
@@ -564,6 +565,7 @@ def visualize_overlap(cyan, sen2, region_key, year, month, day, image_download_p
   """
     fig.suptitle(f"{region_key}: {year}-{month}-{day}")
     plt.savefig(f"{image_download_path}/overlap.png")
+    plt.close()
 
 
 def visualize_subset(
@@ -580,6 +582,7 @@ def visualize_subset(
     cyan_image = cyan_colormap[cyan_reshaped]
     ax2.imshow(cyan_image)
     plt.savefig(f"{image_download_path}/subset.png")
+    plt.close()
 
 
 def get_image_full(cyan_path, sen2_path):
