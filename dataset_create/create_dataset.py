@@ -37,6 +37,10 @@ lock_zip = threading.Lock()
 complete = []
 
 
+def create_logger(log_prefix):
+    return lambda s: print(f"{datetime.datetime.now()}-{log_prefix}: {s}")
+
+
 def generate_file_prefix(id_, date):
     return f"{id_}_{str(date.year).zfill(4)}_{str(date.month).zfill(2)}_{str(date.day).zfill(2)}"
 
@@ -46,15 +50,14 @@ def manage_triggers(api, name):
     global existing_prefixes
     global dl_ready
     global trigger_list
-    log_prefix = f"-- LTA Trigger Thread {name}: "
+    log = create_logger(f"-- LTA Trigger Thread {name}")
     waiting = {}
 
     def handle_online(r):
         is_online = api.is_online(r["uuid"])
         if is_online:
             with lock_dl_ready:
-                print(f"{log_prefix}Adding {r['uuid']} to download queue")
-                print(r)
+                log(f"Adding {r['uuid']} to download queue")
                 dl_ready.append(r)
                 return True
         return False
@@ -82,8 +85,8 @@ def manage_triggers(api, name):
                         if r["file_prefix"] in existing_prefixes:
                             with lock_total_downloaded:
                                 total_downloaded += 1
-                                print(
-                                    f"{log_prefix}File with prefix {r['file_prefix']} already exists in zip - {total_downloaded}"
+                                log(
+                                    f"File with prefix {r['file_prefix']} already exists in zip - {total_downloaded}"
                                 )
                             continue
                 else:
@@ -92,13 +95,13 @@ def manage_triggers(api, name):
             if not handle_online(r):
                 try:
                     # Trigger it!
-                    print(f"{log_prefix}Triggering LTA for {r['uuid']}")
+                    log(f"Triggering LTA for {r['uuid']}")
                     api.download(r["uuid"])
                 except LTATriggered as e:
                     # Succesfully triggered
                     if r["file_prefix"] in waiting:
-                        print(
-                            f"{log_prefix}FOUND FILE PREFIX TWICE: {r} ------------- {waiting[r['file_prefix']]}"
+                        log(
+                            f"FOUND FILE PREFIX TWICE: {r} ------------- {waiting[r['file_prefix']]}"
                         )
                     else:
                         waiting[r["file_prefix"]] = r
@@ -108,14 +111,13 @@ def manage_triggers(api, name):
                     with lock_trigger_list:
                         trigger_list.append(r)
                     # Break out of loop to sleep
-                    # print(f"{log_prefix}Ran out of LTA trigger credits. Sleeping now")
                     break
                 except Exception as e:
-                    print(f"{log_prefix}THERE WAS AN ERROR", e)
+                    log(f"THERE WAS AN ERROR: {e}")
                     with lock_trigger_list:
                         trigger_list.append(r)
         time.sleep(60)
-        print(f"{log_prefix}Waking up in LTA thread...")
+        log(f"Waking up in LTA thread...")
 
 
 def manage_downloads(api, name, lock_zip):
@@ -123,7 +125,7 @@ def manage_downloads(api, name, lock_zip):
     global existing_prefixes
     global dl_ready
     global trigger_list
-    log_prefix = f"-- Download Thread {name}: "
+    log = create_logger(f"-- Download Thread {name}")
     while True:
         while True:
             r = None
@@ -134,8 +136,8 @@ def manage_downloads(api, name, lock_zip):
                 is_online = api.is_online(r["uuid"])
                 # Put it back in the queue
                 if not is_online:
-                    print(
-                        f"{log_prefix}Putting a file back into the LTA trigger queue: {r['file_prefix']}"
+                    log(
+                        f"Putting a file back into the LTA trigger queue: {r['file_prefix']}"
                     )
                     with lock_trigger_list:
                         trigger_list.append(r)
@@ -144,8 +146,8 @@ def manage_downloads(api, name, lock_zip):
                         if r["file_prefix"] in existing_prefixes:
                             with lock_total_downloaded:
                                 total_downloaded += 1
-                                print(
-                                    f"{log_prefix}File with file_prefix {r['file_prefix']} already exists in zip - {total_downloaded}"
+                                log(
+                                    f"File with file_prefix {r['file_prefix']} already exists in zip - {total_downloaded}"
                                 )
                             continue
                         else:
@@ -153,9 +155,10 @@ def manage_downloads(api, name, lock_zip):
 
                     try:
                         with lock_total_downloaded:
-                            print(
-                                f"{log_prefix}Downloading file {r['file_prefix']} - {total_downloaded + 1}"
+                            log(
+                                f"Downloading file {r['file_prefix']} - {total_downloaded + 1}"
                             )
+                            log(r)
                         download_and_process(
                             api,
                             r["uuid"],
@@ -167,14 +170,16 @@ def manage_downloads(api, name, lock_zip):
                             if r["designation"] == "train"
                             else ZIP_FILE_TEST,
                             f"{SAVE_FOLDER}/images/scenes/{r['id']}/{r['date'].year}-{r['date'].month}-{r['date'].day}",
-                            log_prefix,
+                            create_logger(
+                                f"-- Download Thread {name} - {r['file_prefix']}"
+                            ),
                             lock_zip,
                         )
                         with lock_total_downloaded:
                             total_downloaded += 1
 
                     except Exception as e:
-                        print(f"{log_prefix}GOT AN ERROR: {e}")
+                        log(f"GOT AN ERROR: {e}")
                         with lock_trigger_list:
                             with lock_existing_prefixes:
                                 existing_prefixes.remove(r["file_prefix"])
@@ -184,7 +189,7 @@ def manage_downloads(api, name, lock_zip):
                 # Sleep a little
                 break
         time.sleep(30)
-        print(f"{log_prefix}Waking up in download thread...")
+        log(f"Waking up in download thread...")
 
 
 with open(f"{SAVE_FOLDER}/data.json", "r") as f:

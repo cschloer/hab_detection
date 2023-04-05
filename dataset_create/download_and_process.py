@@ -31,17 +31,11 @@ def download_and_process(
     date,
     zip_file_path,
     image_download_path,
-    log_prefix,
+    log,
     lock_zip,
     subset_resolution=64,
     subset_stride=64,
 ):
-    start = time.time()
-
-    def log(str):
-        print(
-            f"{log_prefix}{year}-{month}-{day}__{str} ({round(time.time() - start, 2)} seconds elapsed)"
-        )
 
     if sen2_uuid == "b767a097-089c-4572-bbf3-8606107015a5":
         log("Skipping weird image from lakemichigan1 2020/11/6")
