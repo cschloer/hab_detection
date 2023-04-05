@@ -52,7 +52,7 @@ def download_and_process(
     try:
 
         # download sen2 file
-        log("Downloading SEN2 files...")
+        log(f"Downloading SEN2 files to {temp_folder}...")
         exists, sen2_zip_filename = download_sen2(
             api, temp_folder + "/", sen2_uuid, attempt_if_offline=False
         )
