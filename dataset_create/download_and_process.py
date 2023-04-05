@@ -404,9 +404,7 @@ def warp_and_crop(base, cyan_image_path, sen2_image_path, window):
         cyan_image_path,
         temp_cyan,
     ]
-    subprocess.check_call(
-        cmd
-    )  # , stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.check_call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # sen2_gdal = gdal.Open(temp_sen2)
     # print(gdal.Info(sen2_gdal))
@@ -426,9 +424,7 @@ def warp_and_crop(base, cyan_image_path, sen2_image_path, window):
         temp_cyan,
         temp2_cyan,
     ]
-    subprocess.check_call(
-        cmd
-    )  # , stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.check_call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # Translate the cyan image
     cmd = [
