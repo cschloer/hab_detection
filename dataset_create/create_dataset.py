@@ -163,6 +163,7 @@ def manage_downloads(api, name, lock_zip):
                             api,
                             r["uuid"],
                             r["id"],
+                            r["file_prefix"],
                             r["window"],
                             r["cyan_id"],
                             r["date"],
@@ -196,8 +197,7 @@ with open(f"{SAVE_FOLDER}/data.json", "r") as f:
     scenes = json.load(f)
 
 api = get_api(
-    os.environ.get("ESA_USER1").strip('"'),
-    os.environ.get("ESA_PASSWORD1").strip('"'),
+    os.environ.get("ESA_USER1").strip('"'), os.environ.get("ESA_PASSWORD1").strip('"'),
 )
 
 print("Creating list of products to download")
@@ -239,32 +239,20 @@ print(f"# Existing Prefixes: {len(existing_prefixes)}")
 
 # LTA Thread 1
 try:
-    thread_triggers1 = Thread(
-        target=manage_triggers,
-        args=(api, "1"),
-    )
+    thread_triggers1 = Thread(target=manage_triggers, args=(api, "1"),)
     thread_triggers1.start()
 except:
     print("Failed to make thread 1")
 
 time.sleep(10)
 # Download threads
-thread_downloads1 = Thread(
-    target=manage_downloads,
-    args=(api, "1", lock_zip),
-)
+thread_downloads1 = Thread(target=manage_downloads, args=(api, "1", lock_zip),)
 thread_downloads1.start()
 
-thread_downloads2 = Thread(
-    target=manage_downloads,
-    args=(api, "2", lock_zip),
-)
+thread_downloads2 = Thread(target=manage_downloads, args=(api, "2", lock_zip),)
 thread_downloads2.start()
 
-thread_downloads3 = Thread(
-    target=manage_downloads,
-    args=(api, "3", lock_zip),
-)
+thread_downloads3 = Thread(target=manage_downloads, args=(api, "3", lock_zip),)
 thread_downloads3.start()
 """
 uuid = "b4dbfcda-6a23-4af6-b3cd-cab5a618c781"
@@ -276,6 +264,7 @@ download_and_process(
     api,
     uuid,
     id_,
+    id_ + "TEST",
     window,
     cyan_id,
     date,

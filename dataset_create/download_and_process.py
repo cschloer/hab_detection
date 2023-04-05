@@ -26,6 +26,7 @@ def download_and_process(
     api,
     sen2_uuid,
     region_key,
+    unique_id,
     window,
     cyan_region_id,
     date,
@@ -40,7 +41,7 @@ def download_and_process(
     if sen2_uuid == "b767a097-089c-4572-bbf3-8606107015a5":
         log("Skipping weird image from lakemichigan1 2020/11/6")
         return
-    temp_folder = f"{TEMP_FOLDER}/{region_key}"
+    temp_folder = f"{TEMP_FOLDER}/{unique_id}"
     os.makedirs(image_download_path, exist_ok=True)
     os.makedirs(temp_folder, exist_ok=True)
 
@@ -502,19 +503,11 @@ def visualize_overlap(cyan, sen2, region_key, year, month, day, image_download_p
     black = np.concatenate(
         (
             np.full(
-                (
-                    3,
-                    cyan_filtered_reshaped.shape[0],
-                    cyan_filtered_reshaped.shape[1],
-                ),
+                (3, cyan_filtered_reshaped.shape[0], cyan_filtered_reshaped.shape[1],),
                 0,
             ),
             np.full(
-                (
-                    1,
-                    cyan_filtered_reshaped.shape[0],
-                    cyan_filtered_reshaped.shape[1],
-                ),
+                (1, cyan_filtered_reshaped.shape[0], cyan_filtered_reshaped.shape[1],),
                 255,
             ),
         ),
@@ -523,26 +516,15 @@ def visualize_overlap(cyan, sen2, region_key, year, month, day, image_download_p
 
     # Creating an overlay that has pixel value [0,0,0,0], which makes it entirely opaque
     opaque = np.full(
-        (
-            4,
-            cyan_filtered_reshaped.shape[0],
-            cyan_filtered_reshaped.shape[1],
-        ),
-        0,
+        (4, cyan_filtered_reshaped.shape[0], cyan_filtered_reshaped.shape[1],), 0,
     )
 
-    black_white_filter = np.where(
-        cyan_filtered_reshaped == 255,
-        black,
-        opaque,
-    )
+    black_white_filter = np.where(cyan_filtered_reshaped == 255, black, opaque,)
     black_white_filter_reshaped = np.moveaxis(black_white_filter, 0, -1)
     ax3 = axs[1][0]
     ax3.set_title("Sentinel 2 with filter")
     ax3.imshow(img)
-    ax3.imshow(
-        black_white_filter_reshaped,
-    )
+    ax3.imshow(black_white_filter_reshaped,)
     ax3.axis("off")
 
     ax4 = axs[1][1]
@@ -666,15 +648,9 @@ def get_land_filter(img):
 
 def apply_cloud_and_land_filter(cyan_np, cloud_filter, land_filter):
     # The cyan image after applying the sen2 cloud filter to it
-    cyan_np_land_filtered = np.where(
-        (cyan_np != 255) & (land_filter),
-        255,
-        cyan_np,
-    )
+    cyan_np_land_filtered = np.where((cyan_np != 255) & (land_filter), 255, cyan_np,)
     cyan_np_cloud_land_filtered = np.where(
-        (cyan_np_land_filtered != 254) & (cloud_filter),
-        255,
-        cyan_np_land_filtered,
+        (cyan_np_land_filtered != 254) & (cloud_filter), 255, cyan_np_land_filtered,
     )
 
     return cyan_np_cloud_land_filtered
