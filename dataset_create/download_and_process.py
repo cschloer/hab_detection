@@ -181,7 +181,7 @@ def download_and_process(
 
     finally:
         try:
-            # shutil.rmtree(temp_folder)
+            shutil.rmtree(temp_folder)
             pass
         except:
             pass
