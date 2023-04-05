@@ -32,6 +32,7 @@ def download_and_process(
     zip_file_path,
     image_download_path,
     log_prefix,
+    lock_zip,
     subset_resolution=64,
     subset_stride=64,
 ):
@@ -114,71 +115,75 @@ def download_and_process(
                 # save_only_one = True
                 pass
             fig = plt.figure(figsize=(24, 8))
-            for x in range(0, row_size - subset_resolution, subset_stride):
-                for y in range(0, col_size - subset_resolution, subset_stride):
-                    total_count += 1
+            with lock_zip:
+                with zipfile.ZipFile(
+                    zip_file_path, mode="a", compression=zipfile.ZIP_STORED
+                ) as z:
+                    for x in range(0, row_size - subset_resolution, subset_stride):
+                        for y in range(0, col_size - subset_resolution, subset_stride):
+                            total_count += 1
 
-                    # Create two overlapping subtiles
-                    cyan_subset_filtered = cyan_np_filtered[
-                        :, x : x + subset_resolution, y : y + subset_resolution
-                    ]
-                    sen2_subset = sen2_np[
-                        :, x : x + subset_resolution, y : y + subset_resolution
-                    ]
+                            # Create two overlapping subtiles
+                            cyan_subset_filtered = cyan_np_filtered[
+                                :, x : x + subset_resolution, y : y + subset_resolution
+                            ]
+                            sen2_subset = sen2_np[
+                                :, x : x + subset_resolution, y : y + subset_resolution
+                            ]
 
-                    skip = (
-                        np.count_nonzero(cyan_subset_filtered == 255)
-                        / subset_resolution ** 2
-                        >= 0.95
-                    )
-                    if skip and not (
-                        count == 0
-                        and
-                        # Make sure it isn't the last image
-                        x + subset_stride + subset_resolution > row_size
-                        and y + subset_stride + subset_resolution > col_size
-                    ):
-                        continue
-                    # Visualize selected samples of the subsets
-                    if count <= 500 and count % 100 == 0:
-                        ax1 = fig.add_subplot(
-                            2, 6, 1 + (count // 100) * 2, xticks=[], yticks=[]
-                        )
-                        ax1.set_title(f"sen2 {count}")
-                        ax1.imshow(sen2_subset[1, :, :], cmap="gray")
+                            skip = (
+                                np.count_nonzero(cyan_subset_filtered == 255)
+                                / subset_resolution ** 2
+                                >= 0.95
+                            )
+                            if skip and not (
+                                count == 0
+                                and
+                                # Make sure it isn't the last image
+                                x + subset_stride + subset_resolution > row_size
+                                and y + subset_stride + subset_resolution > col_size
+                            ):
+                                continue
+                            # Visualize selected samples of the subsets
+                            if count <= 500 and count % 100 == 0:
+                                ax1 = fig.add_subplot(
+                                    2, 6, 1 + (count // 100) * 2, xticks=[], yticks=[]
+                                )
+                                ax1.set_title(f"sen2 {count}")
+                                ax1.imshow(sen2_subset[1, :, :], cmap="gray")
 
-                        ax2 = fig.add_subplot(
-                            2, 6, 2 + (count // 100) * 2, xticks=[], yticks=[]
-                        )
-                        ax2.set_title(f"cyan {count}")
-                        cyan_reshaped = cyan_subset_filtered.reshape(
-                            subset_resolution, subset_resolution
-                        )
-                        cyan_image = cyan_colormap[cyan_reshaped]
-                        ax2.imshow(cyan_image)
-                    count += 1
+                                ax2 = fig.add_subplot(
+                                    2, 6, 2 + (count // 100) * 2, xticks=[], yticks=[]
+                                )
+                                ax2.set_title(f"cyan {count}")
+                                cyan_reshaped = cyan_subset_filtered.reshape(
+                                    subset_resolution, subset_resolution
+                                )
+                                cyan_image = cyan_colormap[cyan_reshaped]
+                                ax2.imshow(cyan_image)
+                            count += 1
 
-                    save_data(
-                        cyan_subset_filtered,
-                        sen2_subset,
-                        zip_file_path,
-                        region_key,
-                        sen2_uuid,
-                        year,
-                        month,
-                        day,
-                        x,
-                        y,
-                        subset_resolution,
-                        count,
-                    )
-                    if save_only_one:
-                        save_only_one_complete = True
-                        break
-                if save_only_one and save_only_one_complete:
-                    break
-            plt.savefig(f"{image_download_path}/tiles.png")
-            log(f"Saved {count} of {total_count} possible images.")
+                            save_data(
+                                cyan_subset_filtered,
+                                sen2_subset,
+                                z,
+                                region_key,
+                                sen2_uuid,
+                                year,
+                                month,
+                                day,
+                                x,
+                                y,
+                                subset_resolution,
+                                count,
+                            )
+                            if save_only_one:
+                                save_only_one_complete = True
+                                break
+                        if save_only_one and save_only_one_complete:
+                            break
+                    plt.savefig(f"{image_download_path}/tiles.png")
+                    log(f"Saved {count} of {total_count} possible images.")
 
     finally:
         try:
@@ -599,7 +604,7 @@ def get_image_full(cyan_path, sen2_path):
 def save_data(
     cyan_np,
     sen2_np,
-    zip_file_path,
+    z,
     region_key,
     sen2_uuid,
     year,
@@ -614,15 +619,14 @@ def save_data(
     filename_base = f"{region_key}_{str(year).zfill(4)}_{str(month).zfill(2)}_{str(day).zfill(2)}_x{tile_start_x}_y{tile_start_y}_{tile_size}x{tile_size}_{id_}"
     cyan_filename = filename_base + "_cyan.npy"
     sen2_filename = filename_base + "_sen2.npy"
-    with zipfile.ZipFile(zip_file_path, mode="a", compression=zipfile.ZIP_STORED) as z:
-        with TemporaryFile() as tp:
-            np.save(tp, cyan_np)
-            tp.seek(0)
-            z.writestr(cyan_filename, tp.read())
-        with TemporaryFile() as tp:
-            np.save(tp, sen2_np)
-            tp.seek(0)
-            z.writestr(sen2_filename, tp.read())
+    with TemporaryFile() as tp:
+        np.save(tp, cyan_np)
+        tp.seek(0)
+        z.writestr(cyan_filename, tp.read())
+    with TemporaryFile() as tp:
+        np.save(tp, sen2_np)
+        tp.seek(0)
+        z.writestr(sen2_filename, tp.read())
 
 
 def get_cloud_filter(img):

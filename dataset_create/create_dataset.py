@@ -31,6 +31,8 @@ total_available = 0
 total_downloaded = 0
 lock_total_downloaded = threading.Lock()
 
+lock_zip = threading.Lock()
+
 
 complete = []
 
@@ -41,6 +43,9 @@ def generate_file_prefix(id_, date):
 
 def manage_triggers(api, name):
     global total_downloaded
+    global existing_prefixes
+    global dl_ready
+    global trigger_list
     log_prefix = f"-- LTA Trigger Thread {name}: "
     waiting = {}
 
@@ -113,8 +118,11 @@ def manage_triggers(api, name):
         print(f"{log_prefix}Waking up in LTA thread...")
 
 
-def manage_downloads(api, name):
+def manage_downloads(api, name, lock_zip):
     global total_downloaded
+    global existing_prefixes
+    global dl_ready
+    global trigger_list
     log_prefix = f"-- Download Thread {name}: "
     while True:
         while True:
@@ -127,7 +135,7 @@ def manage_downloads(api, name):
                 # Put it back in the queue
                 if not is_online:
                     print(
-                        f"{log_prefix}Putting a file back into the LTA trigger queue: {r['uuid']}"
+                        f"{log_prefix}Putting a file back into the LTA trigger queue: {r['file_prefix']}"
                     )
                     with lock_trigger_list:
                         trigger_list.append(r)
@@ -146,7 +154,7 @@ def manage_downloads(api, name):
                     try:
                         with lock_total_downloaded:
                             print(
-                                f"{log_prefix}Downloading file {r['uuid']} - {total_downloaded + 1}"
+                                f"{log_prefix}Downloading file {r['file_prefix']} - {total_downloaded + 1}"
                             )
                         download_and_process(
                             api,
@@ -160,6 +168,7 @@ def manage_downloads(api, name):
                             else ZIP_FILE_TEST,
                             f"{SAVE_FOLDER}/images/scenes/{r['id']}/{r['date'].year}-{r['date'].month}-{r['date'].day}",
                             log_prefix,
+                            lock_zip,
                         )
                         with lock_total_downloaded:
                             total_downloaded += 1
@@ -237,19 +246,19 @@ time.sleep(10)
 # Download threads
 thread_downloads1 = Thread(
     target=manage_downloads,
-    args=(api, "1"),
+    args=(api, "1", lock_zip),
 )
 thread_downloads1.start()
 
 thread_downloads2 = Thread(
     target=manage_downloads,
-    args=(api, "2"),
+    args=(api, "2", lock_zip),
 )
 thread_downloads2.start()
 
 thread_downloads3 = Thread(
     target=manage_downloads,
-    args=(api, "3"),
+    args=(api, "3", lock_zip),
 )
 thread_downloads3.start()
 """
@@ -268,6 +277,7 @@ download_and_process(
     ZIP_FILE_TRAIN,
     f"{SAVE_FOLDER}/images/scenes/{id_}",
     "-- Download Thread: ",
+    lock_zip,
 )
 
 """
