@@ -186,7 +186,6 @@ api = get_api(
     os.environ.get("ESA_PASSWORD1").strip('"'),
 )
 
-"""
 print("Creating list of products to download")
 
 with lock_trigger_list:
@@ -274,4 +273,3 @@ download_and_process(
 """
 while True:
     time.sleep(100)
-"""

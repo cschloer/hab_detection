@@ -69,7 +69,6 @@ def download_and_process(
             cyan_geotiff_path = download_cyan_geotiff(
                 f"{temp_folder}/cyan.tif", date, cyan_region_id
             )
-            print(cyan_geotiff_path)
             log("CYAN download complete")
 
             # Convert sen2 download to
