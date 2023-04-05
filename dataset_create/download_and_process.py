@@ -3,6 +3,7 @@ from helpers import (
     TEMP_FOLDER,
     cyan_colormap,
 )
+import requests
 from pathlib import Path
 from PIL import Image
 import shutil
