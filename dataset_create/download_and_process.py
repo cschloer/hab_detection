@@ -44,7 +44,7 @@ def download_and_process(
     if sen2_uuid == "b767a097-089c-4572-bbf3-8606107015a5":
         log("Skipping weird image from lakemichigan1 2020/11/6")
         return
-    temp_folder = f"{TEMP_FOLDER}/{log_prefix}"
+    temp_folder = f"{TEMP_FOLDER}/{region_key}"
     os.makedirs(image_download_path, exist_ok=True)
     os.makedirs(temp_folder, exist_ok=True)
 
@@ -68,6 +68,7 @@ def download_and_process(
             cyan_geotiff_path = download_cyan_geotiff(
                 f"{temp_folder}/cyan.tif", date, cyan_region_id
             )
+            print(cyan_geotiff_path)
             log("CYAN download complete")
 
             # Convert sen2 download to
