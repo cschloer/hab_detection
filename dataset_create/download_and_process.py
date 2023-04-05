@@ -3,12 +3,12 @@ from helpers import (
     TEMP_FOLDER,
     cyan_colormap,
 )
+from pathlib import Path
 from PIL import Image
 import shutil
 from osgeo import ogr, osr, gdal
 import zipfile
 from matplotlib import pyplot as plt
-from pathlib import Path
 from sentinelsat import LTATriggered
 from tempfile import TemporaryFile
 from urllib.request import urlretrieve
@@ -223,7 +223,15 @@ Function for downloading geotiff
 
 def download_cyan_geotiff(download_path, date, region_id):
     download_url = get_cyan_url(date, region_id)
-    urlretrieve(download_url, download_path)
+    # urlretrieve(download_url, download_path)
+    outfile = Path(download_path)
+    R = requests.get(download_url, allow_redirects=True)
+    if R.status_code != 200:
+        raise ConnectionError(
+            "could not download {}\nerror code: {}".format(url, R.status_code)
+        )
+
+    outfile.write_bytes(R.content)
     return download_path
 
 
