@@ -249,11 +249,13 @@ time.sleep(10)
 thread_downloads1 = Thread(target=manage_downloads, args=(api, "1", lock_zip),)
 thread_downloads1.start()
 
+"""
 thread_downloads2 = Thread(target=manage_downloads, args=(api, "2", lock_zip),)
 thread_downloads2.start()
 
 thread_downloads3 = Thread(target=manage_downloads, args=(api, "3", lock_zip),)
 thread_downloads3.start()
+"""
 """
 uuid = "b4dbfcda-6a23-4af6-b3cd-cab5a618c781"
 date = datetime.datetime(2020, 12, 8, 16, 37, 1, 24000)
