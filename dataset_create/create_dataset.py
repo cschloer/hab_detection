@@ -203,7 +203,8 @@ with open(f"{SAVE_FOLDER}/data.json", "r") as f:
     scenes = json.load(f)
 
 api = get_api(
-    os.environ.get("ESA_USER1").strip('"'), os.environ.get("ESA_PASSWORD1").strip('"'),
+    os.environ.get("ESA_USER1").strip('"'),
+    os.environ.get("ESA_PASSWORD1").strip('"'),
 )
 
 print("Creating list of products to download")
@@ -245,14 +246,24 @@ print(f"# Existing Prefixes: {len(existing_prefixes)}")
 
 # LTA Thread 1
 try:
-    thread_triggers1 = Thread(target=manage_triggers, args=(api, "1"),)
+    thread_triggers1 = Thread(
+        target=manage_triggers,
+        args=(api, "1"),
+    )
     thread_triggers1.start()
 except:
     print("Failed to make thread 1")
 
 time.sleep(10)
 # Download threads
-thread_downloads1 = Thread(target=manage_downloads, args=(api, "1", lock_zip),)
+api2 = get_api(
+    os.environ.get("ESA_USER2").strip('"'),
+    os.environ.get("ESA_PASSWORD2").strip('"'),
+)
+thread_downloads1 = Thread(
+    target=manage_downloads,
+    args=(api2, "1", lock_zip),
+)
 thread_downloads1.start()
 
 """
