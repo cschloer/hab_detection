@@ -58,7 +58,7 @@ def manage_triggers(api, name):
         if is_online:
             with lock_dl_ready:
                 log(f"Adding {r['uuid']} to download queue")
-                dl_ready.append(r)
+                dl_ready.insert(0, r)
                 return True
         return False
 
@@ -110,13 +110,13 @@ def manage_triggers(api, name):
                     except LTAError as e:
                         # No more trigger credits, add back to trigger list
                         with lock_trigger_list:
-                            trigger_list.append(r)
+                            trigger_list.insert(0, r)
                         # Break out of loop to sleep
                         break
                     except Exception as e:
                         log(f"THERE WAS AN ERROR: {e}")
                         with lock_trigger_list:
-                            trigger_list.append(r)
+                            trigger_list.insert(0, r)
         except Exception as e:
             log(f"THERE WAS AN ERROR: {e}")
         time.sleep(60)
@@ -144,7 +144,7 @@ def manage_downloads(api, name, lock_zip):
                             f"Putting a file back into the LTA trigger queue: {r['file_prefix']}"
                         )
                         with lock_trigger_list:
-                            trigger_list.append(r)
+                            trigger_list.insert(0, r)
                     else:
                         with lock_existing_prefixes:
                             if r["file_prefix"] in existing_prefixes:
@@ -189,7 +189,7 @@ def manage_downloads(api, name, lock_zip):
                                 with lock_existing_prefixes:
                                     existing_prefixes.remove(r["file_prefix"])
 
-                                trigger_list.append(r)
+                                trigger_list.insert(0, r)
                 else:
                     # Sleep a little
                     break
@@ -203,8 +203,7 @@ with open(f"{SAVE_FOLDER}/data.json", "r") as f:
     scenes = json.load(f)
 
 api = get_api(
-    os.environ.get("ESA_USER1").strip('"'),
-    os.environ.get("ESA_PASSWORD1").strip('"'),
+    os.environ.get("ESA_USER1").strip('"'), os.environ.get("ESA_PASSWORD1").strip('"'),
 )
 
 print("Creating list of products to download")
@@ -246,20 +245,14 @@ print(f"# Existing Prefixes: {len(existing_prefixes)}")
 
 # LTA Thread 1
 try:
-    thread_triggers1 = Thread(
-        target=manage_triggers,
-        args=(api, "1"),
-    )
+    thread_triggers1 = Thread(target=manage_triggers, args=(api, "1"),)
     thread_triggers1.start()
 except:
     print("Failed to make thread 1")
 
 time.sleep(10)
 # Download threads
-thread_downloads1 = Thread(
-    target=manage_downloads,
-    args=(api, "1", lock_zip),
-)
+thread_downloads1 = Thread(target=manage_downloads, args=(api, "1", lock_zip),)
 thread_downloads1.start()
 
 """
