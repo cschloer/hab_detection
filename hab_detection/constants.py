@@ -15,7 +15,9 @@ FULL_IMAGE_BASE_FOLDER = "/shared/datasets/hab/images"
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-# Dataset mean and std calculated in google colab (when values divided by 10,000)
+# Dataset mean and std calculated using run_dataset_staticics.py
+# For old dataset
+"""
 dataset_mean = [
     0.04235201,
     0.04784579,
@@ -44,7 +46,36 @@ dataset_std = [
     0.06592033,
     0.05038361,
 ]
-
+"""
+# For new dataset
+dataset_mean = [
+    0.0367425,
+    0.04384967,
+    0.05643992,
+    0.04752899,
+    0.05311135,
+    0.04531556,
+    0.04827843,
+    0.04772811,
+    0.04578368,
+    0.04437868,
+    0.03240987,
+    0.02406007,
+]
+dataset_std = [
+    0.04898498,
+    0.05039225,
+    0.05055515,
+    0.05064571,
+    0.05497834,
+    0.0692344,
+    0.07566278,
+    0.08037745,
+    0.08150004,
+    0.10058163,
+    0.06478662,
+    0.04916096,
+]
 cyan_colormap = np.array(
     [
         [149, 149, 149, 255],
