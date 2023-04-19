@@ -170,7 +170,7 @@
         "description": "New dataset!",
         "batch_size": 32,
         "class_designation": [1, 100, 150, 200, 254],
-        "class_weights": [1, 12.29839017, 9.75938442, 13.88947011, 178.37577436],
+        "class_weights": [1, 5.30165036, 12.4890355, 36.9074944, 1850.49924],
         "weight_decay": 0,
         "randomize": true,
         "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm",

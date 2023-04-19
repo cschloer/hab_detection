@@ -17,7 +17,7 @@ with open("experiments.json", "r") as f:
 
 if len(sys.argv) < 3:
     print(
-        f"run_experiment.py requires 2 arguments, the dataset type (test or train) and the experiment name."
+        f"run_dataset_statistics.py requires 2 arguments, the dataset type (test or train) and the experiment name."
     )
     exit()
 
