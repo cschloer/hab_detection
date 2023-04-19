@@ -164,6 +164,17 @@
         "randomize": true,
         "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm",
         "learning_rate": 0.000001
+    },
+    "experiment22": {
+        "name": "experiment22",
+        "description": "New dataset!",
+        "batch_size": 32,
+        "class_designation": [1, 100, 150, 200, 254],
+        "class_weights": [1, 12.29839017, 9.75938442, 13.88947011, 178.37577436],
+        "weight_decay": 0,
+        "randomize": true,
+        "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm",
+        "learning_rate": 0.000001
     }
 }
 
