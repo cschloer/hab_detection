@@ -105,7 +105,7 @@ def visualize_full_image(
             if used_y + 64 > y_len:
                 used_y = y_len - 64
 
-            tile = sen2_np[:, used_x : used_x + 64, used_y : used_y + 64], 0
+            tile = sen2_np[:, used_x : used_x + 64, used_y : used_y + 64]
             green = tile[2, :, :]
             band_8a = tile[8, :, :]
             band_11 = tile[11, :, :]
