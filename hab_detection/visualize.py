@@ -213,7 +213,7 @@ def visualize_image(
     ycrop = height % 8
     xcrop = width % 8
     sen2_np = sen2_np[:, 0 : height - ycrop, 0 : width - xcrop]
-    pred_np = pred_np[:, 0 : height - ycrop, 0 : width - xcrop]
+    pred_np = torch.squeeze(pred_np[:, 0 : height - ycrop, 0 : width - xcrop])
     sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
     ax = axs[1, 0]
     ax.set_title("Actual image")
