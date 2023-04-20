@@ -90,6 +90,7 @@ def visualize_full_image(
     pred_np = np.full(cyan_np.shape, 0, dtype=np.int64)
 
     batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
+    prev_batch = None
     target_indices = []
     x_len = sen2_np.shape[1]
     y_len = sen2_np.shape[2]
@@ -131,6 +132,17 @@ def visualize_full_image(
             else:
                 print("SKIPPING", x, y)
             if batch.shape[0] == 32 or (x_len - 64 <= x and y_len - 64 <= y):
+                # Add tiles from previous batch to make it 32
+                for i in range(32 - batch.shape[0]):
+                    batch = np.concatenate(
+                        (
+                            batch,
+                            prev_batch[i, :, :, :],
+                        ),
+                        axis=0,
+                    )
+                print(batch.shape)
+
                 with torch.no_grad():
                     model.eval()
                     transformed_batch = transform_input(
@@ -153,6 +165,7 @@ def visualize_full_image(
                             y_target : y_target + 64 - y_offset,
                         ] = pred[i, x_offset:, y_offset:]
                 target_indices = []
+                prev_batch = batch
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     tracker = get_metric_tracker(class_designation)
     tracker.update(
