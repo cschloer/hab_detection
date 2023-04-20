@@ -129,8 +129,6 @@ def visualize_full_image(
                         "y_offset": y - used_y,
                     }
                 )
-            else:
-                print("SKIPPING", x, y)
             if batch.shape[0] == 32 or (x_len - 64 <= x and y_len - 64 <= y):
                 # Add tiles from previous batch to make it 32
                 for i in range(32 - batch.shape[0]):
@@ -141,7 +139,6 @@ def visualize_full_image(
                         ),
                         axis=0,
                     )
-                print(batch.shape)
 
                 with torch.no_grad():
                     model.eval()
@@ -158,7 +155,6 @@ def visualize_full_image(
                         x_offset = target_index["x_offset"]
                         y_target = target_index["y_target"]
                         y_offset = target_index["y_offset"]
-                        print(pred_np.shape, pred.shape, transformed_batch.shape)
                         pred_np[
                             :,
                             x_target : x_target + 64 - x_offset,
