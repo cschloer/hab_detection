@@ -152,6 +152,16 @@ def visualize_full_image(
                         ] = pred[i, x_offset:, y_offset:]
                 target_indices = []
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
+    tracker = get_metric_tracker(class_designation)
+    print(pred_np.shape)
+    print(cyan_np.shape)
+    tracker.update(
+        pred_np,
+        cyan_np,
+    )
+    log(
+        f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
+    )
 
     return visualize_image(
         class_designation,
@@ -163,9 +173,6 @@ def visualize_full_image(
     )
     return
 
-    tracker = get_metric_tracker(class_designation)
-    print(pred_np.shape)
-    print(cyan_np.shape)
     """
     tracker.update(
         pred_np,
@@ -191,9 +198,6 @@ def visualize_full_image(
     pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
     pred_masked = np.where(
         cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
-    )
-    log(
-        f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
     )
 
     return visualize_image(
