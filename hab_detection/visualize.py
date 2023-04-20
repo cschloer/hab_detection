@@ -90,10 +90,20 @@ def visualize_full_image(
     pred_np = np.empty(cyan_np.shape)
 
     batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
+    target_indices = []
     print(batch.shape)
-    for x in range(0, sen2_np.shape[1], 64):
-        for y in range(0, sen2_np.shape[2], 64):
+    x_len = sen2_np.shape[1]
+    y_len = sen2_np.shape[2]
+    for x in range(0, x_len, 64):
+        for y in range(0, y_len, 64):
             print(x, y)
+            used_x = x
+            used_y = y
+            if used_x + 64 > x_len:
+                used_x = x_len - 64
+            if used_y + 64 > y_len:
+                used_y = y_len - 64
+
             batch = np.concatenate(
                 (
                     batch,
@@ -101,12 +111,50 @@ def visualize_full_image(
                 ),
                 axis=0,
             )
+            target_indices.append(
+                {
+                    "x_target": x,
+                    "x_offset": x - used_x,
+                    "y_target": y,
+                    "y_offset": y - used_y,
+                }
+            )
             print(batch.shape)
-            if batch.shape[0] == 32:
+            if batch.shape[0] == 32 or (x_len - 64 <= x and y_len - 64 <= y):
+                with torch.no_grad():
+                    model.eval()
+                    transformed_batch = transform_input(
+                        torch.from_numpy(batch.astype(np.float32) / 10000),
+                    ).to(device, dtype=torch.float)
+                    pred = model.predict(transformed_batch)  # make prediction
+                    pred = pred.cpu().detach()
+                    pred = np.squeeze(
+                        torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
+                    )
+                    print(pred.shape)
+                    for i, target_index in enumerate(target_indices):
+                        x_target = target_index["x_target"]
+                        x_offset = target_index["x_offset"]
+                        y_target = target_indey["y_target"]
+                        y_offset = target_indey["y_offset"]
+                        print(
+                            "TARGET SHAPE",
+                            pred_np[
+                                :,
+                                x_target : x_target + 64 - x_offset,
+                                y_target : y_target + 64 - x_offset,
+                            ].shape,
+                        )
+                        print("VALUE SHAPE", pred[i, :, x_offset:, y_offset:])
+                        pred_np[
+                            :,
+                            x_target : x_target + 64 - x_offset,
+                            y_target : y_target + 64 - x_offset,
+                        ] = pred[i, :, x_offset:, y_offset:]
+
+                target_indices = []
+                batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
                 return
-            with torch.no_grad():
-                model.eval()
-                pass
     print(sen2_np.shape)
     return
 
