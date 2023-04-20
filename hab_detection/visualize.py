@@ -93,7 +93,7 @@ def visualize_full_image(
     print(batch.shape)
     for x in range(0, sen2_np.shape[1], 64):
         for y in range(0, sen2_np.shape[2], 64):
-            batch.append(sen2_np[:,x:x+64,y:y+64], axis=0)
+            batch = np.append(batch, sen2_np[:, x : x + 64, y : y + 64], axis=0)
             print(batch.shape)
             if batch.shape[0] == 32:
                 return
@@ -125,7 +125,6 @@ def visualize_full_image(
     label = torch.unsqueeze(
         dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
     ).to(device)
-
 
     pred = pred.cpu().detach()
 
