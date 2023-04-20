@@ -137,7 +137,7 @@ def visualize_full_image(
                     batch = np.concatenate(
                         (
                             batch,
-                            prev_batch[i, :, :, :],
+                            np.expand_dims(prev_batch[i, :, :, :], 0),
                         ),
                         axis=0,
                     )
