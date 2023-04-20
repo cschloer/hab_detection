@@ -87,6 +87,9 @@ def visualize_full_image(
     label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
     sen2_np = np.load(input_path).astype(np.float32)
     cyan_np = np.load(label_path)
+    print(sen2_np.shape)
+    return
+
     return visualize_image(
         model,
         dataset,
@@ -256,6 +259,7 @@ def visualize(
         drop_last=False,
     )
 
+    """
     print("Calculating batch vs individual performance")
 
     with torch.no_grad():
@@ -286,6 +290,7 @@ def visualize(
             counter += 1
             if counter >= 2:
                 break
+    """
 
     log("Visualizing full images.")
     visualize_full_image(
@@ -295,6 +300,7 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
+    return
     visualize_full_image(
         model,
         dataset,
@@ -309,6 +315,7 @@ def visualize(
         image_save_folder,
         "erie",
     )
+    """
     visualize_patch(
         model,
         dataset,
@@ -325,6 +332,7 @@ def visualize(
         "winnebago_2019_7_25_x864_y1056_64x64_788",
         ZIP_PATH_TRAIN,
     )
+    """
     log("Done visualizing full images.")
 
     log("Generating loss plot.")
