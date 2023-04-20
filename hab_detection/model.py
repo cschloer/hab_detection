@@ -1,6 +1,7 @@
 from .constants import device, MODEL_SAVE_BASE_FOLDER
 
 from torchvision import models
+from torchvision.models.segmentation import fcn_resnet50
 import segmentation_models_pytorch as smp
 from segmentation_models_pytorch.base.modules import Activation
 import torch
