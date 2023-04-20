@@ -155,7 +155,7 @@ def visualize_full_image(
     tracker = get_metric_tracker(class_designation)
     tracker.update(
         torch.from_numpy(pred_np),
-        torch.from_numpy(cyan_np),
+        torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0),
     )
     log(
         f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
