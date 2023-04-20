@@ -178,8 +178,8 @@
     },
     "experiment23": {
         "name": "experiment23",
-        "description": "Try using non segmentation_models.pytorch model",
-        "batch_size": 32,
+        "description": "Try using non segmentation_models.pytorch model, and increase batch size",
+        "batch_size": 64,
         "class_designation": [1, 100, 150, 200, 254],
         "class_weights": [1, 5.30165036, 12.4890355, 36.9074944, 1850.49924],
         "weight_decay": 0,
