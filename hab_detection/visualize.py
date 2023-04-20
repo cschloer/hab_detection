@@ -133,34 +133,17 @@ def visualize_full_image(
                     pred = np.squeeze(
                         torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
                     )
+                    print(pred.dtype)
                     for i, target_index in enumerate(target_indices):
-                        try:
-                            x_target = target_index["x_target"]
-                            x_offset = target_index["x_offset"]
-                            y_target = target_index["y_target"]
-                            y_offset = target_index["y_offset"]
-                            pred_np[
-                                :,
-                                x_target : x_target + 64 - x_offset,
-                                y_target : y_target + 64 - y_offset,
-                            ] = pred[i, x_offset:, y_offset:]
-                        except Exception as e:
-                            print(i)
-                            print(pred_np.shape)
-                            print(pred.shape)
-                            print(target_index)
-                            print(x_target, " -- ", x_target + 64 - x_offset)
-                            print(y_target, " -- ", y_target + 64 - y_offset)
-                            print(
-                                pred_np[
-                                    :,
-                                    x_target : x_target + 64 - x_offset,
-                                    y_target : y_target + 64 - y_offset,
-                                ].shape
-                            )
-                            print(pred[i, x_offset:, y_offset:].shape)
-                            raise e
-
+                        x_target = target_index["x_target"]
+                        x_offset = target_index["x_offset"]
+                        y_target = target_index["y_target"]
+                        y_offset = target_index["y_offset"]
+                        pred_np[
+                            :,
+                            x_target : x_target + 64 - x_offset,
+                            y_target : y_target + 64 - y_offset,
+                        ] = pred[i, x_offset:, y_offset:]
                 target_indices = []
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
 
