@@ -94,6 +94,7 @@ def visualize_full_image(
     x_len = sen2_np.shape[1]
     y_len = sen2_np.shape[2]
     print(sen2_np.shape)
+    print(cyan_np.shape)
     # TODO use tiles from previous batch if on the last batch there are not 32
     # TODO ignore land
     for x in range(0, x_len, 64):
@@ -106,7 +107,7 @@ def visualize_full_image(
                 used_y = y_len - 64
 
             tile = sen2_np[:, used_x : used_x + 64, used_y : used_y + 64]
-            cyan_tile = cyan_np[:, used_x : used_x + 64, used_y : used_y + 64]
+            cyan_tile = cyan_np[used_x : used_x + 64, used_y : used_y + 64]
             cyan_tile_transformed = dataset.transform_label(
                 torch.from_numpy(cyan_tile).int()
             )
