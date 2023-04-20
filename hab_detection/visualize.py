@@ -105,7 +105,6 @@ def visualize_full_image(
             if used_y + 64 > y_len:
                 used_y = y_len - 64
 
-            print(used_x, used_y)
             batch = np.concatenate(
                 (
                     batch,
@@ -139,6 +138,7 @@ def visualize_full_image(
                         x_offset = target_index["x_offset"]
                         y_target = target_index["y_target"]
                         y_offset = target_index["y_offset"]
+                        print(pred.shape)
                         pred_np[
                             :,
                             x_target : x_target + 64 - x_offset,
