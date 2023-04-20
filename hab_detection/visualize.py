@@ -146,7 +146,7 @@ def visualize_full_image(
                         x_offset = target_index["x_offset"]
                         y_target = target_index["y_target"]
                         y_offset = target_index["y_offset"]
-                        print(pred_np.shape, pred.shape)
+                        print(pred_np.shape, pred.shape, transformed_batch.shape)
                         pred_np[
                             :,
                             x_target : x_target + 64 - x_offset,
