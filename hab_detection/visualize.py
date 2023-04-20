@@ -107,7 +107,9 @@ def visualize_full_image(
             batch = np.concatenate(
                 (
                     batch,
-                    np.expand_dims(sen2_np[:, used_x : used_x + 64, used_y : used_y + 64], 0),
+                    np.expand_dims(
+                        sen2_np[:, used_x : used_x + 64, used_y : used_y + 64], 0
+                    ),
                 ),
                 axis=0,
             )
@@ -134,8 +136,8 @@ def visualize_full_image(
                     for i, target_index in enumerate(target_indices):
                         x_target = target_index["x_target"]
                         x_offset = target_index["x_offset"]
-                        y_target = target_indey["y_target"]
-                        y_offset = target_indey["y_offset"]
+                        y_target = target_index["y_target"]
+                        y_offset = target_index["y_offset"]
                         print(
                             "TARGET SHAPE",
                             pred_np[
