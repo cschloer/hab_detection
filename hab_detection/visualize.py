@@ -261,7 +261,7 @@ def visualize_image(
     ax.axis("off")
 
     pred_masked = np.where(
-        cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
+        cyan_reshaped > 253, 255, np.array(class_designation)[pred_np] - 1
     )
     ax = axs[1, 1]
     ax.set_title("Prediction HAB Class")
