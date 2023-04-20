@@ -107,7 +107,7 @@ def visualize_full_image(
                 used_y = y_len - 64
 
             tile = sen2_np[:, used_x : used_x + 64, used_y : used_y + 64]
-            cyan_tile = cyan_np[used_x : used_x + 64, used_y : used_y + 64]
+            cyan_tile = cyan_np[:, used_x : used_x + 64, used_y : used_y + 64]
             cyan_tile_transformed = dataset.transform_label(
                 torch.from_numpy(cyan_tile).int()
             )
