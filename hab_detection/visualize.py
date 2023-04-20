@@ -127,6 +127,8 @@ def visualize_full_image(
                         "y_offset": y - used_y,
                     }
                 )
+            else:
+                print("SKIPPING", x, y)
             if batch.shape[0] == 32 or (x_len - 64 <= x and y_len - 64 <= y):
                 with torch.no_grad():
                     model.eval()
