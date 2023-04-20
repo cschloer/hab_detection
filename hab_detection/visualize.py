@@ -106,12 +106,10 @@ def visualize_full_image(
                 used_y = y_len - 64
 
             tile = sen2_np[:, used_x : used_x + 64, used_y : used_y + 64]
-            green = tile[2, :, :]
-            band_8a = tile[8, :, :]
-            band_11 = tile[11, :, :]
-            land_filter = (band_8a > green) & (band_11 > green)
+            cyan_tile = cyan_np[:, used_x : used_x + 64, used_y : used_y + 64]
+            cyan_tile_transformed = dataset.transform_label(torch.from_numpy(cyan_tile).int()), 0)
             # If contains non land
-            if np.any(np.invert(land_filter)):
+            if torch.any(cyan_tile_transformed != -1):
                 batch = np.concatenate(
                     (
                         batch,
