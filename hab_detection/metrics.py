@@ -147,7 +147,7 @@ def get_model_performance(
                 print("___________________________________")
 
             preds = model.predict(inputs)  # make prediction
-            if "out" in preds:
+            if isinstance(preds, dict):
                 preds = preds["out"]
 
             # Only calculate the loss if its regression or class weights is passed in

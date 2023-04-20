@@ -82,7 +82,7 @@ def train(
                     optimizer.zero_grad()
 
                     preds = model(inputs)  # make prediction
-                    if "out" in preds:
+                    if isinstance(preds, dict):
                         preds = preds["out"]
                     loss = criterion(preds, labels)  # Calculate cross entropy loss
 
