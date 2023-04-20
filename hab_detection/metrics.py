@@ -146,7 +146,7 @@ def get_model_performance(
                 print(torch.var(raw_input_))
                 print("___________________________________")
 
-            preds = model.predict(inputs)  # make prediction
+            preds = model(inputs)  # make prediction
             if isinstance(preds, dict):
                 preds = preds["out"]
 

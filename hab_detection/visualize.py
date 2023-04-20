@@ -145,7 +145,7 @@ def visualize_full_image(
                     transformed_batch = transform_input(
                         torch.from_numpy(batch.astype(np.float32) / 10000),
                     ).to(device, dtype=torch.float)
-                    pred = model.predict(transformed_batch)  # make prediction
+                    pred = model(transformed_batch)  # make prediction
                     if isinstance(preds, dict):
                         preds = preds["out"]
                     pred = pred.cpu().detach()
@@ -200,7 +200,7 @@ def visualize_full_image(
     transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
 
     # TODO RETURN TWO AFTER IMAGE TESTING
-    pred = model.predict(transformed_sen2_batch)  # make prediction
+    pred = model(transformed_sen2_batch)  # make prediction
     if isinstance(preds, dict):
         preds = preds["out"]
 
@@ -333,7 +333,7 @@ def visualize(
             preds_old = model(inputs)  # make prediction
             if isinstance(preds_old, dict):
                 preds_old = preds_old["out"]
-            preds = model.predict(inputs)  # make prediction
+            preds = model(inputs)  # make prediction
             if isinstance(preds, dict):
                 preds = preds["out"]
 
@@ -345,7 +345,7 @@ def visualize(
                 itracker = get_metric_tracker(class_designation)
                 inp = inputs[image_index, :, :, :]
                 label = labels[image_index, :, :]
-                pred = model.predict(torch.unsqueeze(inp, 0))  # make prediction
+                pred = model(torch.unsqueeze(inp, 0))  # make prediction
                 if isinstance(preds, dict):
                     preds = preds["out"]
 
