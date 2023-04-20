@@ -89,11 +89,17 @@ def visualize_full_image(
     cyan_np = np.load(label_path)
     pred_np = np.empty(cyan_np.shape)
 
-    batch = np.empty((1, 12, 64, 64), dtype=sen2_np.dtype)
+    batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     print(batch.shape)
     for x in range(0, sen2_np.shape[1], 64):
         for y in range(0, sen2_np.shape[2], 64):
-            batch = np.concatenate((batch, np.expand_dims(sen2_np[:, x : x + 64, y : y + 64], 0),), axis=0)
+            batch = np.concatenate(
+                (
+                    batch,
+                    np.expand_dims(sen2_np[:, x : x + 64, y : y + 64], 0),
+                ),
+                axis=0,
+            )
             print(batch.shape)
             if batch.shape[0] == 32:
                 return
