@@ -154,8 +154,8 @@ def visualize_full_image(
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     tracker = get_metric_tracker(class_designation)
     tracker.update(
-        torch.from_numpy(pred_np),
-        torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0),
+        torch.from_numpy(pred_np).to(device),
+        torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0).to(device),
     )
     log(
         f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
