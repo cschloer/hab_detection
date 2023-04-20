@@ -87,72 +87,31 @@ def visualize_full_image(
     label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
     sen2_np = np.load(input_path).astype(np.float32)
     cyan_np = np.load(label_path)
-    for x in range(0, sen2_np.shape[1], 64):
-        for y in range(0, sen2_np.shape[2], 64):
-            pass
-        print(f"{x}, {y}")
-    print(sen2_np.shape)
+    pred_np = np.empty(cyan_np.shape)
+
+        batch = np.empty((1, *sen2_np.shape), dtype=sen2_np.dtype)
+        print(batch.shape)
+        for x in range(0, sen2_np.shape[1], 64):
+            for y in range(0, sen2_np.shape[2], 64):
+                batch.append(sen2_np[:,x:x+64,y:y+64], axis=0)
+                print(batch.shape)
+                if batch.shape[0] == 32:
+                    return
+                with torch.no_grad():
+                    model.eval()
+                    pass
+        print(sen2_np.shape)
     return
 
-    return visualize_image(
-        model,
-        dataset,
-        class_designation,
-        image_save_folder,
-        image_name,
-        sen2_np,
+    tracker = get_metric_tracker(class_designation)
+    print(pred_np.shape)
+    print(cyan_np.shape)
+    """
+    tracker.update(
+        pred_np,
         cyan_np,
     )
-
-
-def visualize_image(
-    model,
-    dataset,
-    class_designation,
-    image_save_folder,
-    image_name,
-    sen2_np,
-    cyan_np,
-    is_patch=False,
-):
-    tracker = get_metric_tracker(class_designation)
-    with torch.no_grad():
-        model.eval()
-        fig, axs = plt.subplots(2, 2, figsize=(20, 16))
-        height = sen2_np.shape[1]
-        width = sen2_np.shape[2]
-        ycrop = height % 8
-        xcrop = width % 8
-        sen2_np = sen2_np[:, 0 : height - ycrop, 0 : width - xcrop]
-        sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
-        ax = axs[1, 0]
-        ax.set_title("Actual image")
-        ax.imshow(sen2_img)
-        ax.axis("off")
-
-        cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])[
-            0 : height - ycrop, 0 : width - xcrop
-        ]
-        ax = axs[0, 0]
-        ax.set_title("Actual HAB Index")
-        ax.imshow(cyan_colormap[cyan_reshaped])
-        ax.axis("off")
-
-        custom_colormap = np.copy(cyan_colormap)
-        prev_val = 0
-        used = list(range(len(cyan_colormap)))
-        for i, c in enumerate(class_designation):
-            cur_color = cyan_colormap[c - 1 if i != 0 else 0]
-            for j in range(c - prev_val):
-                custom_colormap[prev_val + j] = cur_color
-            prev_val = c
-
-        cyan_image = custom_colormap[cyan_reshaped]
-        ax = axs[0, 1]
-        ax.set_title("Actual HAB Class")
-        ax.imshow(cyan_image)
-        ax.axis("off")
-
+    """
         transformed_sen2 = transform_input(
             torch.from_numpy(sen2_np.astype(np.float32) / 10000),
         )
@@ -167,64 +126,79 @@ def visualize_image(
             dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
         ).to(device)
 
-        print(f"MEAN VARIANCE IN {'FULL' if not is_patch else 'PATCH'} IMAGE")
-        print(torch.mean(transformed_sen2_batch, (0, 2, 3)))
-        print(torch.var(transformed_sen2_batch, (0, 2, 3)))
-        print(
-            "ratio after mask",
-            round(
-                torch.numel(
-                    transformed_sen2_batch[
-                        ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
-                    ]
-                )
-                / torch.numel(transformed_sen2_batch),
-                2,
-            ),
-        )
-        print("masked values")
-        print(
-            torch.mean(
-                transformed_sen2_batch[
-                    ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
-                ]
-            ),
-        )
-        print(
-            torch.var(
-                transformed_sen2_batch[
-                    ~(torch.broadcast_to(label == -1, transformed_sen2_batch.shape))
-                ]
-            ),
-        )
-        print("pre normalization")
-        print(np.mean(sen2_np.astype(np.float32)))
-        print(np.var(sen2_np.astype(np.float32)))
-        print("-----------------------------")
 
-        tracker.update(
-            pred,
-            label,
-        )
         pred = pred.cpu().detach()
 
         pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
         pred_masked = np.where(
             cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
         )
-
-        ax = axs[1, 1]
-        ax.set_title("Prediction HAB Class")
-        ax.imshow(custom_colormap[pred_masked])
-        ax.axis("off")
-
-        save_plot(image_save_folder, image_name)
         log(
             f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
         )
-        # log(
-        #    f"MulticlassAccuracy for {image_name}: \n\n{pprint.pformat(tracker.compute_all())}"
-        # )
+
+    return visualize_image(
+        class_designation,
+        image_save_folder,
+        image_name,
+        sen2_np,
+        cyan_np,
+        pred_np,
+    )
+
+
+def visualize_image(
+    class_designation,
+    image_save_folder,
+    image_name,
+    sen2_np,
+    cyan_np,
+    pred_np,
+):
+    fig, axs = plt.subplots(2, 2, figsize=(20, 16))
+    height = sen2_np.shape[1]
+    width = sen2_np.shape[2]
+    ycrop = height % 8
+    xcrop = width % 8
+    sen2_np = sen2_np[:, 0 : height - ycrop, 0 : width - xcrop]
+    sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
+    ax = axs[1, 0]
+    ax.set_title("Actual image")
+    ax.imshow(sen2_img)
+    ax.axis("off")
+
+    cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])[
+        0 : height - ycrop, 0 : width - xcrop
+    ]
+    ax = axs[0, 0]
+    ax.set_title("Actual HAB Index")
+    ax.imshow(cyan_colormap[cyan_reshaped])
+    ax.axis("off")
+
+    custom_colormap = np.copy(cyan_colormap)
+    prev_val = 0
+    used = list(range(len(cyan_colormap)))
+    for i, c in enumerate(class_designation):
+        cur_color = cyan_colormap[c - 1 if i != 0 else 0]
+        for j in range(c - prev_val):
+            custom_colormap[prev_val + j] = cur_color
+        prev_val = c
+
+    cyan_image = custom_colormap[cyan_reshaped]
+    ax = axs[0, 1]
+    ax.set_title("Actual HAB Class")
+    ax.imshow(cyan_image)
+    ax.axis("off")
+
+    ax = axs[1, 1]
+    ax.set_title("Prediction HAB Class")
+    ax.imshow(custom_colormap[pred_np])
+    ax.axis("off")
+
+    save_plot(image_save_folder, image_name)
+    # log(
+    #    f"MulticlassAccuracy for {image_name}: \n\n{pprint.pformat(tracker.compute_all())}"
+    # )
 
 
 def visualize(
