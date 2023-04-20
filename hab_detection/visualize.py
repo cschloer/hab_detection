@@ -107,7 +107,7 @@ def visualize_full_image(
             batch = np.concatenate(
                 (
                     batch,
-                    np.expand_dims(sen2_np[:, x : x + 64, y : y + 64], 0),
+                    np.expand_dims(sen2_np[:, used_x : used_x + 64, used_y : used_y + 64], 0),
                 ),
                 axis=0,
             )
