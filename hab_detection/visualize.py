@@ -87,7 +87,7 @@ def visualize_full_image(
     label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
     sen2_np = np.load(input_path).astype(np.float32)
     cyan_np = np.load(label_path)
-    pred_np = np.empty(cyan_np.shape, dtype=np.int64)
+    pred_np = np.full(cyan_np.shape, -1, dtype=np.int64)
 
     batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     target_indices = []
@@ -105,23 +105,32 @@ def visualize_full_image(
             if used_y + 64 > y_len:
                 used_y = y_len - 64
 
-            batch = np.concatenate(
-                (
-                    batch,
-                    np.expand_dims(
-                        sen2_np[:, used_x : used_x + 64, used_y : used_y + 64], 0
-                    ),
+            tile = (
+                np.expand_dims(
+                    sen2_np[:, used_x : used_x + 64, used_y : used_y + 64], 0
                 ),
-                axis=0,
             )
-            target_indices.append(
-                {
-                    "x_target": x,
-                    "x_offset": x - used_x,
-                    "y_target": y,
-                    "y_offset": y - used_y,
-                }
-            )
+            green = tile[2, :, :]
+            band_8a = tile[8, :, :]
+            band_11 = tile[11, :, :]
+            land_filter = (band_8a > green) & (band_11 > green)
+            # If contains non land
+            if np.any(np.invert(land_filter)):
+                batch = np.concatenate(
+                    (
+                        batch,
+                        tile,
+                    ),
+                    axis=0,
+                )
+                target_indices.append(
+                    {
+                        "x_target": x,
+                        "x_offset": x - used_x,
+                        "y_target": y,
+                        "y_offset": y - used_y,
+                    }
+                )
             if batch.shape[0] == 32 or (x_len - 64 <= x and y_len - 64 <= y):
                 with torch.no_grad():
                     model.eval()
