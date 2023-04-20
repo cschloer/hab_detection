@@ -87,6 +87,10 @@ def visualize_full_image(
     label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
     sen2_np = np.load(input_path).astype(np.float32)
     cyan_np = np.load(label_path)
+    for x in range(0, sen2_np.shape[1], 64):
+        for y in range(0, sen2_np.shape[2], 64):
+            pass
+        print(f"{x}, {y}")
     print(sen2_np.shape)
     return
 
