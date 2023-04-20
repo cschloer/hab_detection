@@ -140,6 +140,14 @@ def load_model(
             raise Exception(
                 "Regression not supported for timm-mobilenetv3_small_minimal_100"
             )
+    elif model_architecture.startswith("fcn_resnet50"):
+        if class_designation is not None:
+            model = fcn_resnet50(num_classes=num_classes)
+            model.backbone.conv1 = torch.nn.Conv2d(
+                12, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
+            )
+        else:
+            raise Exception("Regression not supported for fcn-resnet50")
     else:
         raise Exception(f"Unknown model architecture {model_architecture}")
 
