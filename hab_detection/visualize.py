@@ -152,7 +152,7 @@ def visualize_full_image(
                             :,
                             x_target : x_target + 64 - x_offset,
                             y_target : y_target + 64 - x_offset,
-                        ] = pred[i, :, x_offset:, y_offset:]
+                        ] = pred[i,x_offset:, y_offset:]
 
                 target_indices = []
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
