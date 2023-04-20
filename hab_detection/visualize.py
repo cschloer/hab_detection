@@ -133,7 +133,6 @@ def visualize_full_image(
                     pred = np.squeeze(
                         torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
                     )
-                    print(pred.dtype)
                     for i, target_index in enumerate(target_indices):
                         x_target = target_index["x_target"]
                         x_offset = target_index["x_offset"]
