@@ -107,7 +107,9 @@ def visualize_full_image(
 
             tile = sen2_np[:, used_x : used_x + 64, used_y : used_y + 64]
             cyan_tile = cyan_np[:, used_x : used_x + 64, used_y : used_y + 64]
-            cyan_tile_transformed = dataset.transform_label(torch.from_numpy(cyan_tile).int()), 0)
+            cyan_tile_transformed = dataset.transform_label(
+                torch.from_numpy(cyan_tile).int()
+            )
             # If contains non land
             if torch.any(cyan_tile_transformed != -1):
                 batch = np.concatenate(
