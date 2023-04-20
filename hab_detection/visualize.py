@@ -243,11 +243,9 @@ def visualize_image(
     ax.imshow(cyan_image)
     ax.axis("off")
 
-    print(pred_np.shape, cyan_reshaped.shape)
     pred_masked = np.where(
         cyan_reshaped > 253, 255, np.array(class_designation)[pred_np] - 1
     )
-    print(pred_masked.shape)
     ax = axs[1, 1]
     ax.set_title("Prediction HAB Class")
     ax.imshow(custom_colormap[pred_masked])
@@ -336,7 +334,6 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
-    return
     visualize_full_image(
         model,
         dataset,
@@ -351,6 +348,7 @@ def visualize(
         image_save_folder,
         "erie",
     )
+    return
     """
     visualize_patch(
         model,
