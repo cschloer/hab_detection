@@ -96,7 +96,6 @@ def visualize_full_image(
     y_len = sen2_np.shape[2]
     for x in range(0, x_len, 64):
         for y in range(0, y_len, 64):
-            print(x, y)
             used_x = x
             used_y = y
             if used_x + 64 > x_len:
@@ -119,7 +118,6 @@ def visualize_full_image(
                     "y_offset": y - used_y,
                 }
             )
-            print(batch.shape)
             if batch.shape[0] == 32 or (x_len - 64 <= x and y_len - 64 <= y):
                 with torch.no_grad():
                     model.eval()
