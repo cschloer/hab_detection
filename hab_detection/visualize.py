@@ -281,7 +281,6 @@ def visualize(
                 itracker.update(pred, torch.unsqueeze(label, 0))
                 iacc = itracker.compute_all()["MulticlassAccuracy"][0]
                 acc_total += iacc
-                print("INDIVUDAL ACC: ", iacc)
 
             print(f"Batch: {acc} ---- Avg individual: {acc_total/(image_index + 1)}")
             counter += 1
