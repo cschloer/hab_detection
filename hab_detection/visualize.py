@@ -87,7 +87,7 @@ def visualize_full_image(
     label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
     sen2_np = np.load(input_path).astype(np.float32)
     cyan_np = np.load(label_path)
-    pred_np = np.full(cyan_np.shape, -1, dtype=np.int64)
+    pred_np = np.full(cyan_np.shape, 0, dtype=np.int64)
 
     batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     target_indices = []
@@ -155,7 +155,9 @@ def visualize_full_image(
     tracker = get_metric_tracker(class_designation)
     tracker.update(
         torch.from_numpy(pred_np).to(device),
-        torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0).to(device),
+        torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0).to(
+            device
+        ),
     )
     log(
         f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
