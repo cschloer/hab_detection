@@ -112,30 +112,30 @@ def visualize_full_image(
         cyan_np,
     )
     """
-        transformed_sen2 = transform_input(
-            torch.from_numpy(sen2_np.astype(np.float32) / 10000),
-        )
+    transformed_sen2 = transform_input(
+        torch.from_numpy(sen2_np.astype(np.float32) / 10000),
+    )
 
-        transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
-        transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
+    transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
+    transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
 
-        # TODO RETURN TWO AFTER IMAGE TESTING
-        pred = model.predict(transformed_sen2_batch)  # make prediction
+    # TODO RETURN TWO AFTER IMAGE TESTING
+    pred = model.predict(transformed_sen2_batch)  # make prediction
 
-        label = torch.unsqueeze(
-            dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
-        ).to(device)
+    label = torch.unsqueeze(
+        dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
+    ).to(device)
 
 
-        pred = pred.cpu().detach()
+    pred = pred.cpu().detach()
 
-        pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
-        pred_masked = np.where(
-            cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
-        )
-        log(
-            f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
-        )
+    pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
+    pred_masked = np.where(
+        cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
+    )
+    log(
+        f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
+    )
 
     return visualize_image(
         class_designation,
