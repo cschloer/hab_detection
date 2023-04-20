@@ -87,7 +87,7 @@ def visualize_full_image(
     label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
     sen2_np = np.load(input_path).astype(np.float32)
     cyan_np = np.load(label_path)
-    pred_np = np.empty(cyan_np.shape)
+    pred_np = np.empty(cyan_np.shape, dtype=np.int64)
 
     batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     target_indices = []
