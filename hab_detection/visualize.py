@@ -94,6 +94,8 @@ def visualize_full_image(
     x_len = sen2_np.shape[1]
     y_len = sen2_np.shape[2]
     print(sen2_np.shape)
+    # TODO use tiles from previous batch if on the last batch there are not 32
+    # TODO ignore land
     for x in range(0, x_len, 64):
         for y in range(0, y_len, 64):
             used_x = x
@@ -132,31 +134,28 @@ def visualize_full_image(
                     pred = np.squeeze(
                         torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
                     )
-                    print(pred.shape)
                     for i, target_index in enumerate(target_indices):
                         x_target = target_index["x_target"]
                         x_offset = target_index["x_offset"]
                         y_target = target_index["y_target"]
                         y_offset = target_index["y_offset"]
-                        print("PRED SHAPES", pred_np.shape, pred.shape)
-                        print(
-                            "TARGET SHAPE",
-                            pred_np[
-                                :,
-                                x_target : x_target + 64 - x_offset,
-                                y_target : y_target + 64 - x_offset,
-                            ].shape,
-                        )
-                        print("VALUE SHAPE", pred[i, x_offset:, y_offset:].shape)
                         pred_np[
                             :,
                             x_target : x_target + 64 - x_offset,
                             y_target : y_target + 64 - x_offset,
-                        ] = pred[i,x_offset:, y_offset:]
+                        ] = pred[i, x_offset:, y_offset:]
 
                 target_indices = []
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
-                return
+
+    return visualize_image(
+        class_designation,
+        image_save_folder,
+        image_name,
+        sen2_np,
+        cyan_np,
+        pred_np,
+    )
     return
 
     tracker = get_metric_tracker(class_designation)
@@ -245,9 +244,12 @@ def visualize_image(
     ax.imshow(cyan_image)
     ax.axis("off")
 
+    pred_masked = np.where(
+        cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
+    )
     ax = axs[1, 1]
     ax.set_title("Prediction HAB Class")
-    ax.imshow(custom_colormap[pred_np])
+    ax.imshow(custom_colormap[pred_masked])
     ax.axis("off")
 
     save_plot(image_save_folder, image_name)
