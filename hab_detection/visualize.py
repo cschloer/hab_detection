@@ -93,6 +93,7 @@ def visualize_full_image(
     print(batch.shape)
     for x in range(0, sen2_np.shape[1], 64):
         for y in range(0, sen2_np.shape[2], 64):
+            print(x, y)
             batch = np.concatenate(
                 (
                     batch,
