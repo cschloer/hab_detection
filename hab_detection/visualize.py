@@ -91,9 +91,9 @@ def visualize_full_image(
 
     batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     target_indices = []
-    print(batch.shape)
     x_len = sen2_np.shape[1]
     y_len = sen2_np.shape[2]
+    print(sen2_np.shape)
     for x in range(0, x_len, 64):
         for y in range(0, y_len, 64):
             used_x = x
@@ -103,6 +103,7 @@ def visualize_full_image(
             if used_y + 64 > y_len:
                 used_y = y_len - 64
 
+            print(used_x, used_y)
             batch = np.concatenate(
                 (
                     batch,
@@ -153,7 +154,6 @@ def visualize_full_image(
                 target_indices = []
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
                 return
-    print(sen2_np.shape)
     return
 
     tracker = get_metric_tracker(class_designation)
