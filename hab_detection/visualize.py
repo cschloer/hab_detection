@@ -151,6 +151,14 @@ def visualize_full_image(
                             print(target_index)
                             print(x_target, " -- ", x_target + 64 - x_offset)
                             print(y_target, " -- ", y_target + 64 - y_offset)
+                            print(
+                                pred_np[
+                                    :,
+                                    x_target : x_target + 64 - x_offset,
+                                    y_target : y_target + 64 - x_offset,
+                                ].shape
+                            )
+                            print(pred[i, x_offset:, y_offset:].shape)
                             raise e
 
                 target_indices = []
