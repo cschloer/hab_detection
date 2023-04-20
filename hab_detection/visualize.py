@@ -256,7 +256,6 @@ def visualize(
         drop_last=False,
     )
 
-    """
     print("Calculating batch vs individual performance")
 
     with torch.no_grad():
@@ -288,7 +287,6 @@ def visualize(
             counter += 1
             if counter >= 2:
                 break
-    """
 
     log("Visualizing full images.")
     visualize_full_image(
