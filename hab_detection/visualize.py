@@ -145,6 +145,7 @@ def visualize_full_image(
                                 y_target : y_target + 64 - x_offset,
                             ] = pred[i, x_offset:, y_offset:]
                         except Exception as e:
+                            print(i)
                             print(pred_np.shape)
                             print(pred.shape)
                             print(target_index)
