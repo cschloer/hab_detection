@@ -80,7 +80,7 @@ for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
                     track_statistics=False,
                     log_progress=False,
                     save_progress=False,
-                    epoch_limit=30,
+                    epoch_limit=5,
                 )
                 test_loader = DataLoader(
                     test_dataset,
@@ -92,8 +92,8 @@ for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
                 test_loss, _, _ = get_model_performance(
                     model,
                     test_loader,
-                    class_designation,
-                    class_weights=class_weights,
+                    e["class_designation"],
+                    class_weights=e["class_weights"],
                     calculate_statistics=False,
                 )
                 losses.append(test_loss)
