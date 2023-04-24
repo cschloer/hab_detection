@@ -48,10 +48,9 @@ for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
             losses = []
             for fold in range(int(SUBSET_SIZE / FOLD_SIZE)):
                 log(f"Starting fold {fold + 1}")
-                log(len(imgs[: fold * FOLD_SIZE] + imgs[(fold + 1) * FOLD_SIZE :]))
                 train_dataset = ImageData(
                     imgs[: fold * FOLD_SIZE] + imgs[(fold + 1) * FOLD_SIZE :],
-                    labels[: fold * FOLD_SIZE] + imgs[(fold + 1) * FOLD_SIZE :],
+                    labels[: fold * FOLD_SIZE] + labels[(fold + 1) * FOLD_SIZE :],
                     zip_path,
                     e["class_designation"],
                     randomize=True,
