@@ -23,6 +23,7 @@ experiment_name = "kfold_test"
 model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
 os.makedirs(model_save_folder, exist_ok=True)
 set_config(experiment_name)
+log(f"Starting kfold experiment")
 
 
 random.seed("kfold_test")
@@ -110,5 +111,5 @@ for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
             results[key] = average_loss
             log("---------------\n")
 
-sorted_results = dict(sorted(results.items(), key=lambda item: item[1]))
+sorted_results = dict(sorted(results.items(), key=lambda item: item[1], reverse=True))
 log(f"\n{pprint.pformat(sorted_results)}")
