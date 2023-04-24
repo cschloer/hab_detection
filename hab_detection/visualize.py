@@ -90,7 +90,7 @@ def visualize_full_image_no_patch(
     with torch.no_grad():
         model.eval()
         transformed_batch = transform_input(
-            torch.from_numpy(batch.astype(np.float32) / 10000),
+            torch.from_numpy(sen2_np.astype(np.float32) / 10000),
         ).to(device, dtype=torch.float)
         pred = model(transformed_batch)  # make prediction
         if isinstance(pred, dict):
