@@ -14,6 +14,7 @@ FULL_IMAGE_BASE_FOLDER = "/shared/datasets/hab/images"
 
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+print(device)
 
 # Dataset mean and std calculated using run_dataset_staticics.py
 # For old dataset

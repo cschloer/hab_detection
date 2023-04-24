@@ -74,20 +74,24 @@ def get_model_performance(
     class_weights=None,
     num_batches=-1,
     calculate_2d_hist=False,
+    # If we only want the loss
+    calculate_statistics=True,
 ):
     # model_cpu = model.cpu()
-    tracker = get_metric_tracker(class_designation)
-    tracker2 = get_metric_tracker(class_designation)
-    hist_2d = (
-        np.zeros(
-            (
-                len(class_designation),
-                254,
+    if calculate_statistics:
+        tracker = get_metric_tracker(class_designation)
+        tracker2 = get_metric_tracker(class_designation)
+    if calculate_2d_hist:
+        hist_2d = (
+            np.zeros(
+                (
+                    len(class_designation),
+                    254,
+                )
             )
+            if class_designation is not None
+            else None
         )
-        if class_designation is not None
-        else None
-    )
     with torch.no_grad():
         model.eval()
 
@@ -156,47 +160,45 @@ def get_model_performance(
                 loss = criterion(preds, labels)  # Calculate cross entropy loss
                 total_loss += loss.item()
 
-            if class_designation is None:
-                # Mask the unused values for metrics
-                preds = preds[~(labels == -1)]
-                labels = labels[~(labels == -1)]
+            if calculate_statistics:
+                if class_designation is None:
+                    # Mask the unused values for metrics
+                    preds = preds[~(labels == -1)]
+                    labels = labels[~(labels == -1)]
 
-            tracker.update(preds, labels)
-            tracker2.update(
-                torch.argmax(preds, dim=1, keepdim=False)[~(labels == -1)],
-                labels[~(labels == -1)],
-            )
+                    tracker.update(preds, labels)
+                    tracker2.update(
+                        torch.argmax(preds, dim=1, keepdim=False)[~(labels == -1)],
+                        labels[~(labels == -1)],
+                    )
 
-            if class_designation is not None and calculate_2d_hist:
-                # Reverse the 1 hot encoding on preds and bring everything to np
-                preds = torch.argmax(preds, dim=1, keepdim=False).cpu().numpy()
-                labels = labels.cpu().numpy()
+                if class_designation is not None and calculate_2d_hist:
+                    # Reverse the 1 hot encoding on preds and bring everything to np
+                    preds = torch.argmax(preds, dim=1, keepdim=False).cpu().numpy()
+                    labels = labels.cpu().numpy()
 
-                mask = labels == -1
-                preds = preds[~mask]
-                labels = labels[~mask]
-                raw_labels = np.squeeze(raw_labels.numpy())
-                raw_labels = raw_labels[~mask]
+                    mask = labels == -1
+                    preds = preds[~mask]
+                    labels = labels[~mask]
+                    raw_labels = np.squeeze(raw_labels.numpy())
+                    raw_labels = raw_labels[~mask]
 
-                preds_flat = preds.flatten()
-                raw_labels_flat = raw_labels.flatten()
-                histogram_input = np.column_stack((preds_flat, raw_labels_flat))
-                """
-                h, _ = np.histogramdd(
-                    # np.array([preds, raw_labels]).T,
-                    histogram_input,
-                    bins=[len(class_designation), 254],
-                    density=False,
-                )
-                """
-                # hist_2d += h
-                for g in histogram_input:
-                    hist_2d[g[0], g[1]] += 1
+                    preds_flat = preds.flatten()
+                    raw_labels_flat = raw_labels.flatten()
+                    histogram_input = np.column_stack((preds_flat, raw_labels_flat))
+                    # hist_2d += h
+                    for g in histogram_input:
+                        hist_2d[g[0], g[1]] += 1
 
             counter += 1
             if num_batches >= 0 and counter >= num_batches:
                 break
 
-    log(f"\n{pprint.pformat(tracker2.compute_all())}")
+    if calculate_statistics:
+        log(f"\n{pprint.pformat(tracker2.compute_all())}")
 
-    return total_loss / (batch_idx + 1), tracker.compute_all(), hist_2d
+    return (
+        total_loss / (batch_idx + 1),
+        None if not calculate_statistics else tracker.compute_all(),
+        None if not calculate_2d_hist else hist_2d,
+    )

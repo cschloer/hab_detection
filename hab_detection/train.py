@@ -17,6 +17,38 @@ from .dataset import get_image_dataset
 from .metrics import get_model_performance, get_metric_tracker
 
 
+def train_wrapper(
+    experiment_name,
+    batch_size,
+    # None for regression, a list of integers ending in 254 for class
+    class_designation,
+    class_weights,
+    model_architecture,
+    randomize,
+    learning_rate,
+    epoch_start=0,
+    model_file=None,
+    weight_decay=0,
+    epoch_limit=-1,
+    track_statistics=False,
+):
+    return train(
+        experiment_name,
+        batch_size,
+        # None for regression, a list of integers ending in 254 for class
+        class_designation,
+        class_weights,
+        model_architecture,
+        randomize,
+        learning_rate,
+        epoch_start=epoch_start,
+        model_file=model_file,
+        weight_decay=weight_decay,
+        epoch_limit=epoch_limit,
+        track_statistics=track_statistics,
+    )
+
+
 def train(
     experiment_name,
     batch_size,
@@ -29,6 +61,8 @@ def train(
     epoch_start=0,
     model_file=None,
     weight_decay=0,
+    epoch_limit=-1,
+    track_statistics=False,
 ):
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
     os.makedirs(model_save_folder, exist_ok=True)
@@ -67,7 +101,8 @@ def train(
         optimizer = get_optimizer(model, learning_rate, weight_decay=weight_decay)
         criterion = get_criterion(class_designation, class_weights)
 
-        train_tracker = get_metric_tracker(class_designation)
+        if track_statistics:
+            train_tracker = get_metric_tracker(class_designation)
         for epoch in range(epoch_start, 1000):  # Training loop
 
             log(f"Starting Epoch {epoch + 1}!")
@@ -92,12 +127,13 @@ def train(
                     running_loss += loss.item()
                     total_loss += loss.item()
 
-                    if class_designation is None:
-                        # Mask the unused values for metrics
-                        preds = preds[~labels == -1]
-                        labels = labels[~labels == -1]
+                    if track_statistics:
+                        if class_designation is None:
+                            # Mask the unused values for metrics
+                            preds = preds[~labels == -1]
+                            labels = labels[~labels == -1]
 
-                    train_tracker.update(preds, labels)
+                        train_tracker.update(preds, labels)
 
                     NUM_BATCHES = 100
                     if (
@@ -112,24 +148,29 @@ def train(
                 torch.save(model.state_dict(), f"{model_save_folder}/epoch_recent.pt")
 
                 log(f"Epoch {epoch + 1} train loss: {total_loss / (batch_idx + 1)}")
-                test_loss, test_metrics, _ = get_model_performance(
+                test_loss, _, _ = get_model_performance(
                     model,
                     test_loader,
                     class_designation,
                     class_weights=class_weights,
+                    calculate_statistics=False,
                 )
                 log(f"Epoch {epoch + 1} test loss: {test_loss}")
                 # Print out performance metrics
-                log(f"Train statistics:")
-                log(f"\n{pprint.pformat(train_tracker.compute_all())}")
-                log(f"Test statistics:")
-                log(f"\n{pprint.pformat(test_metrics)}")
+                if track_statistics:
+                    log(f"Train statistics:")
+                    log(f"\n{pprint.pformat(train_tracker.compute_all())}")
+                    log(f"Test statistics:")
+                    log(f"\n{pprint.pformat(test_metrics)}")
 
                 if epoch % 5 == 4 or epoch == 0:
                     torch.save(
                         model.state_dict(), f"{model_save_folder}/epoch_{epoch + 1}.pt"
                     )
-                train_tracker.reset()
+                if track_statistics:
+                    train_tracker.reset()
+                if epoch_limit >= 0 and epoch + 1 > epoch_limit:
+                    return model
 
             finally:
                 try:
