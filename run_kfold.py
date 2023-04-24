@@ -111,5 +111,6 @@ for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
             results[key] = average_loss
             log("---------------\n")
 
-sorted_results = dict(sorted(results.items(), key=lambda item: item[1], reverse=True))
+
+sorted_results = sorted(results.items(), key=lambda item: item[1], reverse=True)
 log(f"\n{pprint.pformat(sorted_results)}")
