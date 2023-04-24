@@ -102,12 +102,6 @@ def visualize_full_image_no_patch(
         pred_np = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
     tracker = get_metric_tracker(class_designation)
 
-    print(torch.from_numpy(np.squeeze(pred_np)).shape)
-    print(
-        torch.unsqueeze(
-            dataset.transform_label(torch.from_numpy(cyan_np).int()), 0
-        ).shape
-    )
     tracker.update(
         torch.from_numpy(np.squeeze(pred_np)).to(device),
         dataset.transform_label(torch.from_numpy(cyan_np).int()).to(device),
@@ -115,6 +109,7 @@ def visualize_full_image_no_patch(
     log(
         f"MulticlassAccuracy for {image_name} no tile: {tracker.compute_all()['MulticlassAccuracy'][0]}"
     )
+    print(pred_np.shape)
 
     return visualize_image(
         class_designation,
@@ -122,7 +117,7 @@ def visualize_full_image_no_patch(
         image_name + "_no_title",
         sen2_np,
         cyan_np,
-        np.squeeze(pred_np),
+        np.expand_dims(pred_np, 0),
     )
 
 
