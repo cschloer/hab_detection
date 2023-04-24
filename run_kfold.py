@@ -2,7 +2,9 @@ from hab_detection.train import train
 from hab_detection.helpers import log, set_config
 from hab_detection.dataset import get_data, ImageData
 from hab_detection.metrics import get_model_performance
+import pprint
 import json
+import os
 import random
 from torch.utils.data import DataLoader
 
@@ -10,7 +12,10 @@ with open("experiments.json", "r") as f:
     experiments = json.load(f)
 e = experiments["experiment25"]
 
-set_config("kfold_test")
+experiment_name = "kfold_test"
+model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
+os.makedirs(model_save_folder, exist_ok=True)
+set_config(experiment_name)
 
 
 random.seed("kfold_test")
