@@ -76,6 +76,48 @@ def visualize_patch(
     )
 
 
+def visualize_full_image_no_patch(
+    model,
+    dataset,
+    class_designation,
+    image_save_folder,
+    image_name,
+):
+    input_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/sen2.npy"
+    label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
+    sen2_np = np.load(input_path).astype(np.float32)
+    cyan_np = np.load(label_path)
+    with torch.no_grad():
+        model.eval()
+        transformed_batch = transform_input(
+            torch.from_numpy(batch.astype(np.float32) / 10000),
+        ).to(device, dtype=torch.float)
+        pred = model(transformed_batch)  # make prediction
+        if isinstance(pred, dict):
+            pred = pred["out"]
+        pred = pred.cpu().detach()
+        pred_np = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
+    tracker = get_metric_tracker(class_designation)
+    tracker.update(
+        torch.from_numpy(pred_np).to(device),
+        torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0).to(
+            device
+        ),
+    )
+    log(
+        f"MulticlassAccuracy for {image_name} no tile: {tracker.compute_all()['MulticlassAccuracy'][0]}"
+    )
+
+    return visualize_image(
+        class_designation,
+        image_save_folder,
+        "no_title_" + image_name,
+        sen2_np,
+        cyan_np,
+        pred_np,
+    )
+
+
 def visualize_full_image(
     model,
     dataset,
@@ -94,10 +136,6 @@ def visualize_full_image(
     target_indices = []
     x_len = sen2_np.shape[1]
     y_len = sen2_np.shape[2]
-    print(sen2_np.shape)
-    print(cyan_np.shape)
-    # TODO use tiles from previous batch if on the last batch there are not 32
-    # TODO ignore land
     for x in range(0, x_len, 64):
         for y in range(0, y_len, 64):
             used_x = x
@@ -174,45 +212,6 @@ def visualize_full_image(
     )
     log(
         f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
-    )
-
-    return visualize_image(
-        class_designation,
-        image_save_folder,
-        image_name,
-        sen2_np,
-        cyan_np,
-        pred_np,
-    )
-    return
-
-    """
-    tracker.update(
-        pred_np,
-        cyan_np,
-    )
-    """
-    transformed_sen2 = transform_input(
-        torch.from_numpy(sen2_np.astype(np.float32) / 10000),
-    )
-
-    transformed_sen2 = transformed_sen2.to(device, dtype=torch.float)
-    transformed_sen2_batch = torch.unsqueeze(transformed_sen2, axis=0)
-
-    # TODO RETURN TWO AFTER IMAGE TESTING
-    pred = model(transformed_sen2_batch)  # make prediction
-    if isinstance(pred, dict):
-        pred = pred["out"]
-
-    label = torch.unsqueeze(
-        dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
-    ).to(device)
-
-    pred = pred.cpu().detach()
-
-    pred = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
-    pred_masked = np.where(
-        cyan_reshaped > 253, 255, np.array(class_designation)[pred] - 1
     )
 
     return visualize_image(
@@ -360,6 +359,14 @@ def visualize(
     """
 
     log("Visualizing full images.")
+    visualize_full_image_no_patch(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "winnebago",
+    )
+    return
     visualize_full_image(
         model,
         dataset,
@@ -507,8 +514,8 @@ def visualize(
     if hist_2d is not None:
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
         sums = hist_2d.astype("float").sum(axis=0) + 1
-        print("SUMS SHAPE", sums.shape)
-        print("SUMS", sums)
+        # print("SUMS SHAPE", sums.shape)
+        # print("SUMS", sums)
         rectangles = {}
         ranges = [
             (
