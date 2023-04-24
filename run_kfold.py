@@ -33,20 +33,15 @@ random.shuffle(combined)
 imgs[:], labels[:] = zip(*combined)
 SUBSET_SIZE = 50000
 FOLD_SIZE = 10000
-SUBSET_SIZE = 500
-FOLD_SIZE = 250
 imgs = imgs[:SUBSET_SIZE]
 label = labels[:SUBSET_SIZE]
 
 results = {}
 
 
-# for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
-#    for learning_rate in [0.000001, 0.00001, 0.0001]:
-#        for batch_size in [16, 32, 64]:
 for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
-    for learning_rate in [0.00001]:
-        for batch_size in [16, 32]:
+    for learning_rate in [0.000001, 0.00001, 0.0001]:
+        for batch_size in [16, 32, 64]:
             log(
                 f"Testing model {model_arc} with learning rate {learning_rate} and batch size {batch_size}"
             )
@@ -85,7 +80,7 @@ for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
                     track_statistics=False,
                     log_progress=False,
                     save_progress=False,
-                    epoch_limit=5,
+                    epoch_limit=20,
                 )
                 test_loader = DataLoader(
                     test_dataset,
