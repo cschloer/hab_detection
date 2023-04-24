@@ -1,6 +1,6 @@
 import sys
 import json
-from hab_detection.train import train
+from hab_detection.train import train_wrapper
 
 
 with open("experiments.json", "r") as f:
@@ -37,7 +37,7 @@ if experiment_name not in experiments:
 e = experiments[experiment_name]
 
 
-train(
+train_wrapper(
     e["name"],
     e["batch_size"],
     e["class_designation"],
