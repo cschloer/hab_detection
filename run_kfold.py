@@ -33,7 +33,7 @@ imgs[:], labels[:] = zip(*combined)
 SUBSET_SIZE = 50000
 FOLD_SIZE = 10000
 SUBSET_SIZE = 500
-FOLD_SIZE = 100
+FOLD_SIZE = 250
 imgs = imgs[:SUBSET_SIZE]
 label = labels[:SUBSET_SIZE]
 
