@@ -2,6 +2,12 @@ from hab_detection.train import train
 from hab_detection.helpers import log, set_config
 from hab_detection.dataset import get_data, ImageData
 from hab_detection.metrics import get_model_performance
+from hab_detection.constants import (
+    device,
+    ZIP_PATH_TRAIN,
+    ZIP_PATH_TEST,
+    MODEL_SAVE_BASE_FOLDER,
+)
 import pprint
 import json
 import os
