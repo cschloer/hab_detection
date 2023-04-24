@@ -122,7 +122,7 @@ def visualize_full_image_no_patch(
         image_name + "_no_title",
         sen2_np,
         cyan_np,
-        pred_np,
+        np.squeeze(pred_np),
     )
 
 
