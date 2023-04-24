@@ -8,6 +8,7 @@ from hab_detection.constants import (
     ZIP_PATH_TEST,
     MODEL_SAVE_BASE_FOLDER,
 )
+import numpy as np
 import pprint
 import json
 import os
@@ -39,7 +40,7 @@ label = labels[:SUBSET_SIZE]
 results = {}
 
 
-#for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
+# for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
 #    for learning_rate in [0.000001, 0.00001, 0.0001]:
 #        for batch_size in [16, 32, 64]:
 for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
