@@ -31,8 +31,16 @@ def train_wrapper(
     weight_decay=0,
     epoch_limit=-1,
     track_statistics=False,
+    log_progress=True,
+    save_progress=True,
 ):
+    train_dataset = get_image_dataset(
+        ZIP_PATH_TRAIN, class_designation, randomize=randomize
+    )
+    test_dataset = get_image_dataset(ZIP_PATH_TEST, class_designation)
     return train(
+        train_dataset,
+        test_dataset,
         experiment_name,
         batch_size,
         # None for regression, a list of integers ending in 254 for class
@@ -46,10 +54,14 @@ def train_wrapper(
         weight_decay=weight_decay,
         epoch_limit=epoch_limit,
         track_statistics=track_statistics,
+        log_progress=log_progress,
+        save_progress=save_progress,
     )
 
 
 def train(
+    train_dataset,
+    test_dataset,
     experiment_name,
     batch_size,
     # None for regression, a list of integers ending in 254 for class
@@ -63,19 +75,20 @@ def train(
     weight_decay=0,
     epoch_limit=-1,
     track_statistics=False,
+    log_progress=True,
+    save_progress=True,
 ):
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
     os.makedirs(model_save_folder, exist_ok=True)
-    set_config(experiment_name)
+    if log_progress:
+        set_config(experiment_name)
     try:
-        log(
-            f'Starting with model save folder "{model_save_folder}", training batch size "{batch_size}"'
-        )
-        log(f"Loading datasets...")
+        if log_progress:
+            log(
+                f'Starting with model save folder "{model_save_folder}", training batch size "{batch_size}"'
+            )
+            log(f"Loading datasets...")
 
-        train_dataset = get_image_dataset(
-            ZIP_PATH_TRAIN, class_designation, randomize=randomize
-        )
         train_loader = DataLoader(
             train_dataset,
             batch_size=batch_size,
@@ -84,7 +97,6 @@ def train(
             drop_last=True,
         )
 
-        test_dataset = get_image_dataset(ZIP_PATH_TEST, class_designation)
         test_loader = DataLoader(
             test_dataset,
             batch_size=batch_size,
@@ -92,7 +104,8 @@ def train(
             num_workers=0,
             drop_last=True,
         )
-        log(f"Done loading datasets. Getting the model.")
+        if log_progress:
+            log(f"Done loading datasets. Getting the model.")
 
         model = load_model(
             model_architecture, model_file, model_save_folder, class_designation
@@ -105,7 +118,10 @@ def train(
             train_tracker = get_metric_tracker(class_designation)
         for epoch in range(epoch_start, 1000):  # Training loop
 
-            log(f"Starting Epoch {epoch + 1}!")
+            if log_progress:
+                log(f"Starting Epoch {epoch + 1}!")
+            else:
+                log(f"Starting Epoch {epoch + 1}!")
             running_loss = 0
             total_loss = 0
             try:
@@ -140,35 +156,41 @@ def train(
                         batch_idx % NUM_BATCHES == NUM_BATCHES - 1
                     ):  # print every 99 mini-batches
                         avg_loss = running_loss / NUM_BATCHES
-                        log(
-                            f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f}"
-                        )
+                        if log_progress:
+                            log(
+                                f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f}"
+                            )
                         running_loss = 0.0
 
-                torch.save(model.state_dict(), f"{model_save_folder}/epoch_recent.pt")
-
-                log(f"Epoch {epoch + 1} train loss: {total_loss / (batch_idx + 1)}")
-                test_loss, _, _ = get_model_performance(
-                    model,
-                    test_loader,
-                    class_designation,
-                    class_weights=class_weights,
-                    calculate_statistics=False,
-                )
-                log(f"Epoch {epoch + 1} test loss: {test_loss}")
-                # Print out performance metrics
-                if track_statistics:
-                    log(f"Train statistics:")
-                    log(f"\n{pprint.pformat(train_tracker.compute_all())}")
-                    log(f"Test statistics:")
-                    log(f"\n{pprint.pformat(test_metrics)}")
-
-                if epoch % 5 == 4 or epoch == 0:
+                if save_progress:
                     torch.save(
-                        model.state_dict(), f"{model_save_folder}/epoch_{epoch + 1}.pt"
+                        model.state_dict(), f"{model_save_folder}/epoch_recent.pt"
                     )
-                if track_statistics:
-                    train_tracker.reset()
+                    if epoch % 5 == 4 or epoch == 0:
+                        torch.save(
+                            model.state_dict(),
+                            f"{model_save_folder}/epoch_{epoch + 1}.pt",
+                        )
+
+                if log_progress:
+                    log(f"Epoch {epoch + 1} train loss: {total_loss / (batch_idx + 1)}")
+                    test_loss, _, _ = get_model_performance(
+                        model,
+                        test_loader,
+                        class_designation,
+                        class_weights=class_weights,
+                        calculate_statistics=False,
+                    )
+                    log(f"Epoch {epoch + 1} test loss: {test_loss}")
+                    # Print out performance metrics
+                    if track_statistics:
+                        log(f"Train statistics:")
+                        log(f"\n{pprint.pformat(train_tracker.compute_all())}")
+                        log(f"Test statistics:")
+                        log(f"\n{pprint.pformat(test_metrics)}")
+                    if track_statistics:
+                        train_tracker.reset()
+
                 if epoch_limit >= 0 and epoch + 1 > epoch_limit:
                     return model
 

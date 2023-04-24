@@ -180,7 +180,12 @@ class ImageData(Dataset):
         )
 
 
-def get_image_dataset(zip_path, class_designation, randomize=False, transform=True):
+def get_image_dataset(
+    zip_path,
+    class_designation,
+    randomize=False,
+    transform=True,
+):
     imgs, labels, zip_path = get_data(zip_path)
     image_dataset = ImageData(
         imgs,
