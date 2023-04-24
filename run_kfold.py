@@ -26,7 +26,7 @@ set_config(experiment_name)
 
 random.seed("kfold_test")
 imgs, labels, zip_path = get_data(ZIP_PATH_TRAIN)
-combined = list(zip(images, labels))
+combined = list(zip(imgs, labels))
 random.shuffle(combined)
 imgs[:], labels[:] = zip(*combined)
 SUBSET_SIZE = 50000
