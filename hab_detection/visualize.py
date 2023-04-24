@@ -102,7 +102,7 @@ def visualize_full_image_no_patch(
         pred_np = np.squeeze(torch.argmax(pred, dim=1, keepdim=False).cpu().numpy())
     tracker = get_metric_tracker(class_designation)
     tracker.update(
-        torch.from_numpy(pred_np).to(device),
+        torch.from_numpy(torch.squeeze(pred_np)).to(device),
         torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0).to(
             device
         ),
