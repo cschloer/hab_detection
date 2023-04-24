@@ -146,8 +146,8 @@ def visualize_full_image(
                         torch.from_numpy(batch.astype(np.float32) / 10000),
                     ).to(device, dtype=torch.float)
                     pred = model(transformed_batch)  # make prediction
-                    if isinstance(preds, dict):
-                        preds = preds["out"]
+                    if isinstance(pred, dict):
+                        pred = pred["out"]
                     pred = pred.cpu().detach()
                     pred = np.squeeze(
                         torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
@@ -201,8 +201,8 @@ def visualize_full_image(
 
     # TODO RETURN TWO AFTER IMAGE TESTING
     pred = model(transformed_sen2_batch)  # make prediction
-    if isinstance(preds, dict):
-        preds = preds["out"]
+    if isinstance(pred, dict):
+        pred = pred["out"]
 
     label = torch.unsqueeze(
         dataset.transform_label(torch.from_numpy(cyan_reshaped).int()), 0
@@ -346,8 +346,8 @@ def visualize(
                 inp = inputs[image_index, :, :, :]
                 label = labels[image_index, :, :]
                 pred = model(torch.unsqueeze(inp, 0))  # make prediction
-                if isinstance(preds, dict):
-                    preds = preds["out"]
+                if isinstance(pred, dict):
+                    pred = pred["out"]
 
                 itracker.update(pred, torch.unsqueeze(label, 0))
                 iacc = itracker.compute_all()["MulticlassAccuracy"][0]
