@@ -381,7 +381,7 @@ def visualize(
         image_save_folder,
         "erie",
     )
-    return
+    # return
     """
     visualize_patch(
         model,
