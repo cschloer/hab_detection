@@ -102,6 +102,7 @@ def get_model_performance(
             inputs = inputs.to(device, dtype=torch.float)
             labels = labels.to(device)
             # TODO PUT BACK AFTER VUISUALIZATION TESTING
+            """
             if batch_idx < 2:
                 print("MEAN VARIANCE IN BATCH")
                 print(torch.mean(inputs, (0, 2, 3)))
@@ -149,6 +150,7 @@ def get_model_performance(
                 print(torch.mean(raw_input_))
                 print(torch.var(raw_input_))
                 print("___________________________________")
+            """
 
             preds = model(inputs)  # make prediction
             if isinstance(preds, dict):
