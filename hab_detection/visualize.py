@@ -103,12 +103,14 @@ def visualize_full_image_no_patch(
     tracker = get_metric_tracker(class_designation)
 
     print(torch.from_numpy(np.squeeze(pred_np)).shape)
-    print(torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0).shape)
+    print(
+        torch.unsqueeze(
+            dataset.transform_label(torch.from_numpy(cyan_np).int()), 0
+        ).shape
+    )
     tracker.update(
         torch.from_numpy(np.squeeze(pred_np)).to(device),
-        torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0).to(
-            device
-        ),
+        dataset.transform_label(torch.from_numpy(cyan_np).int()).to(device),
     )
     log(
         f"MulticlassAccuracy for {image_name} no tile: {tracker.compute_all()['MulticlassAccuracy'][0]}"
