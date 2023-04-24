@@ -109,12 +109,11 @@ def visualize_full_image_no_patch(
     log(
         f"MulticlassAccuracy for {image_name} no tile: {tracker.compute_all()['MulticlassAccuracy'][0]}"
     )
-    print(pred_np.shape)
 
     return visualize_image(
         class_designation,
         image_save_folder,
-        image_name + "_no_title",
+        image_name + "_no_tile",
         sen2_np,
         cyan_np,
         np.expand_dims(pred_np, 0),
@@ -369,7 +368,6 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
-    return
     visualize_full_image(
         model,
         dataset,
@@ -377,12 +375,26 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
+    visualize_full_image_no_patch(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "greenbay",
+    )
     visualize_full_image(
         model,
         dataset,
         class_designation,
         image_save_folder,
         "greenbay",
+    )
+    visualize_full_image_no_patch(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "erie",
     )
     visualize_full_image(
         model,
