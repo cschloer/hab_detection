@@ -121,8 +121,6 @@ def train(
 
             if log_progress:
                 log(f"Starting Epoch {epoch + 1}!")
-            else:
-                log(f"Starting Epoch {epoch + 1}!")
             running_loss = 0
             total_loss = 0
             try:
@@ -192,7 +190,7 @@ def train(
                     if track_statistics:
                         train_tracker.reset()
 
-                if epoch_limit >= 0 and epoch + 1 > epoch_limit:
+                if epoch_limit >= 0 and epoch + 1 >= epoch_limit:
                     return model
 
             finally:

@@ -39,9 +39,12 @@ label = labels[:SUBSET_SIZE]
 results = {}
 
 
+#for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
+#    for learning_rate in [0.000001, 0.00001, 0.0001]:
+#        for batch_size in [16, 32, 64]:
 for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
-    for learning_rate in [0.000001, 0.00001, 0.0001]:
-        for batch_size in [16, 32, 64]:
+    for learning_rate in [0.00001]:
+        for batch_size in [16, 32]:
             log(
                 f"Testing model {model_arc} with learning rate {learning_rate} and batch size {batch_size}"
             )
