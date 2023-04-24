@@ -1,7 +1,7 @@
 from .constants import device, MODEL_SAVE_BASE_FOLDER
 
 from torchvision import models
-from torchvision.models.segmentation import fcn_resnet50
+from torchvision.models.segmentation import fcn_resnet50, deeplabv3_mobilenet_v3_large
 import segmentation_models_pytorch as smp
 from segmentation_models_pytorch.base.modules import Activation
 import torch
@@ -146,6 +146,14 @@ def load_model(
             model = fcn_resnet50(num_classes=num_classes)
             model.backbone.conv1 = torch.nn.Conv2d(
                 12, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
+            )
+        else:
+            raise Exception("Regression not supported for fcn-resnet50")
+    elif model_architecture.startswith("deeplabv3_mobilenet_v3_large"):
+        if class_designation is not None:
+            model = deeplabv3_mobilenet_v3_large(num_classes=num_classes)
+            model.backbone["0"][0] = torch.nn.Conv2d(
+                12, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
             )
         else:
             raise Exception("Regression not supported for fcn-resnet50")
