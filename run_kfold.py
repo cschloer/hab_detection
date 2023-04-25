@@ -67,7 +67,7 @@ for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
                 model = train(
                     train_dataset,
                     test_dataset,
-                    "kfold_testing",
+                    experiment_name,
                     batch_size,
                     e["class_designation"],
                     e["class_weights"],
