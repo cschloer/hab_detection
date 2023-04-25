@@ -40,13 +40,13 @@ results = {}
 
 
 for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm"]:
-    for learning_rate in [0.000001, 0.00001, 0.0001]:
+    for learning_rate in [0.00001, 0.0001, 0.001]:
         for batch_size in [16, 32, 64]:
             log(
                 f"Testing model {model_arc} with learning rate {learning_rate} and batch size {batch_size}"
             )
             losses = []
-            for fold in range(int(SUBSET_SIZE / FOLD_SIZE)):
+            for fold in range(3):
                 log(f"Starting fold {fold + 1}")
                 train_dataset = ImageData(
                     imgs[: fold * FOLD_SIZE] + imgs[(fold + 1) * FOLD_SIZE :],
