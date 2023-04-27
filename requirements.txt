@@ -8,3 +8,4 @@ torchmetrics==0.11.1
 torchvision==0.15.1
 segmentation-models-pytorch @ git+https://github.com/qubvel/segmentation_models.pytorch@8523324c116dcf7be6bddb73bf4eb1779ef6e611
 nfnets-pytorch==0.1.3
+psutil==5.9.5
