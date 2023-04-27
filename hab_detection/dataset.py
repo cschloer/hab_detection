@@ -64,6 +64,7 @@ class ImageData(Dataset):
         self.class_designation = class_designation
         self.randomize = randomize
         self.do_transform = transform
+        self.zip = None
         self.in_memory = in_memory
         if in_memory:
             self.cache = [None] * len(self.imgs)
@@ -75,8 +76,6 @@ class ImageData(Dataset):
                     log(
                         f"Loaded {idx + 1} images of {total_size} -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
                     )
-
-        self.zip = None
 
     def __len__(self):
         return len(self.imgs)
