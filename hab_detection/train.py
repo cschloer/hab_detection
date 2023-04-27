@@ -36,6 +36,10 @@ def train_wrapper(
     subset_train=None,
     subset_test=None,
 ):
+    if log_progress:
+        model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
+        os.makedirs(model_save_folder, exist_ok=True)
+        set_config(experiment_name)
     train_dataset = get_image_dataset(
         ZIP_PATH_TRAIN,
         class_designation,
@@ -90,9 +94,6 @@ def train(
     save_progress=True,
 ):
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
-    os.makedirs(model_save_folder, exist_ok=True)
-    if log_progress:
-        set_config(experiment_name)
     try:
         if log_progress:
             log(
