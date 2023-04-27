@@ -33,11 +33,22 @@ def train_wrapper(
     track_statistics=False,
     log_progress=True,
     save_progress=True,
+    subset_train=None,
+    subset_test=None,
 ):
     train_dataset = get_image_dataset(
-        ZIP_PATH_TRAIN, class_designation, randomize=randomize
+        ZIP_PATH_TRAIN,
+        class_designation,
+        randomize=randomize,
+        subset=subset_train,
+        in_memory=True,
     )
-    test_dataset = get_image_dataset(ZIP_PATH_TEST, class_designation)
+    test_dataset = get_image_dataset(
+        ZIP_PATH_TEST,
+        class_designation,
+        subset=subset_test,
+        in_memory=True,
+    )
     return train(
         train_dataset,
         test_dataset,

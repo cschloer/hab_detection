@@ -53,6 +53,7 @@ class ImageData(Dataset):
         class_designation,
         randomize=False,
         transform=True,
+        in_memory=False,
     ):
         super().__init__()
         self.imgs = imgs
@@ -61,6 +62,9 @@ class ImageData(Dataset):
         self.class_designation = class_designation
         self.randomize = randomize
         self.do_transform = transform
+        self.in_memory = in_memory
+        if in_memory:
+            self.cache = [None] * len(self.imgs)
 
         self.zip = None
 
@@ -68,6 +72,8 @@ class ImageData(Dataset):
         return len(self.imgs)
 
     def _get_image(self, idx):
+        if self.in_memory and self.cache[idx] is not None:
+            return self.cache[idx]
         if self.zip == None:
             self.open_zip()
 
@@ -84,6 +90,11 @@ class ImageData(Dataset):
         label = np.load(self.zip.open(label_filename))
         if label is None:
             raise FileNotFoundError(label_filename)
+        if self.in_memory:
+            self.cache[idx] = (
+                image,
+                label,
+            )
         return image, label
 
     def get_untransformed_image(self, idx):
@@ -185,8 +196,19 @@ def get_image_dataset(
     class_designation,
     randomize=False,
     transform=True,
+    # A fraction of the total dataset to use
+    subset=None,
+    in_memory=False,
 ):
     imgs, labels, zip_path = get_data(zip_path)
+    if subset is not None:
+        random.seed("subset")
+        combined = list(zip(imgs, labels))
+        random.shuffle(combined)
+        imgs[:], labels[:] = zip(*combined)
+        end_index = int(subset * len(imgs))
+        imgs = imgs[:end_index]
+        labels = labels[:end_index]
     image_dataset = ImageData(
         imgs,
         labels,
@@ -194,5 +216,6 @@ def get_image_dataset(
         class_designation,
         randomize=randomize,
         transform=transform,
+        in_memory=in_memory,
     )
     return image_dataset

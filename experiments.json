@@ -208,6 +208,19 @@
         "randomize": true,
         "model_architecture": "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
         "learning_rate": 0.00001
+    },
+    "experiment26": {
+        "name": "experiment26",
+        "description": "New learning rate after kfold, plus dataset in memory!",
+        "batch_size": 32,
+        "class_designation": [1, 100, 150, 200, 254],
+        "class_weights": [1, 5.30165036, 12.4890355, 36.9074944, 1850.49924],
+        "weight_decay": 0,
+        "randomize": true,
+        "model_architecture": "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
+        "learning_rate": 0.0001,
+        "subset_train": 0.5,
+        "subset_test": 0.5
     }
 }
 

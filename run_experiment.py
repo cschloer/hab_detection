@@ -48,4 +48,6 @@ train_wrapper(
     model_file=model_file,
     epoch_start=epoch_start,
     weight_decay=e.get("weight_decay", 0),
+    subset_train=e.get("subset_train", None),
+    subset_test=e.get("subset_test", None),
 )
