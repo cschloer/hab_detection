@@ -1,5 +1,4 @@
 import os
-import psutil
 from torch.utils.data import DataLoader
 import torch
 import numpy as np
@@ -170,7 +169,7 @@ def train(
                         if log_progress:
                             log
                             log(
-                                f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f} -- using {psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2} MiB"
+                                f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f}"
                             )
                         running_loss = 0.0
 

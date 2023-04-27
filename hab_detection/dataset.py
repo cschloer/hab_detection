@@ -1,6 +1,8 @@
 from .constants import dataset_mean, dataset_std
 from .helpers import log
 
+import psutil
+import os
 import torchvision.transforms as transforms
 import math
 import random
@@ -65,6 +67,14 @@ class ImageData(Dataset):
         self.in_memory = in_memory
         if in_memory:
             self.cache = [None] * len(self.imgs)
+            total_size = len(self.imgs)
+            log(f"Loading a dataset with {total_size} images into memory")
+            for idx in range(total_size):
+                self._get_image(idx)
+                if idx % int(total_size / 10) == 0:
+                    log(
+                        f"Loaded {idx + 1} images of {total_size} -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
+                    )
 
         self.zip = None
 
