@@ -71,6 +71,7 @@ train_dataset = ImageData(
     randomize=True,
     transform=True,
     in_memory=True,
+    fold_list=fold_indices,
 )
 test_dataset = ImageData(
     imgs,
@@ -80,6 +81,7 @@ test_dataset = ImageData(
     randomize=False,
     transform=True,
     in_memory=True,
+    fold_list=fold_indices,
 )
 
 
