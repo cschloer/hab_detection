@@ -87,7 +87,7 @@ for model_arc in [
     "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
     "lraspp_mobilenet_v3_large#no_replace_batchnorm",
 ]:
-    for learning_rate in [0.00001, 0.0001, 0.001]:
+    for learning_rate in [0.0001, 0.001, 0.01]:
         for batch_size in [16, 32, 64]:
             for weight_decay in [0.02, 0.002]:
                 log(
