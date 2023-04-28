@@ -18,7 +18,6 @@ from torch.utils.data import DataLoader
 
 NUM_FOLDS = 5
 SUBSET_SIZE = 50000
-SUBSET_SIZE = 500
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
@@ -33,15 +32,11 @@ log(f"Starting kfold experiment")
 
 random.seed("kfold_test")
 imgs, labels, zip_path = get_data(ZIP_PATH_TRAIN)
-print("IMAGES LEN", len(imgs))
-print("LABELS LEN", len(labels))
 combined = list(zip(imgs, labels))
 random.shuffle(combined)
 imgs[:], labels[:] = zip(*combined)
 imgs = imgs[:SUBSET_SIZE]
 labels = labels[:SUBSET_SIZE]
-print("IMAGES LEN", len(imgs))
-print("LABELS LEN", len(labels))
 
 region_folds = {}
 counter = 0
