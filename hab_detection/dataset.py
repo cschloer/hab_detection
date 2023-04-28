@@ -78,6 +78,10 @@ class ImageData(Dataset):
                     log(
                         f"Loaded {idx + 1} images of {total_size} -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
                     )
+            self.close_zip()
+            log(
+                f"After close zip -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
+            )
 
         # Initialize lists for kfold
         self.fold_list = fold_list
