@@ -33,11 +33,15 @@ log(f"Starting kfold experiment")
 
 random.seed("kfold_test")
 imgs, labels, zip_path = get_data(ZIP_PATH_TRAIN)
+print("IMAGES LEN", len(imgs))
+print("LABELS LEN", len(labels))
 combined = list(zip(imgs, labels))
 random.shuffle(combined)
 imgs[:], labels[:] = zip(*combined)
 imgs = imgs[:SUBSET_SIZE]
-label = labels[:SUBSET_SIZE]
+labels = labels[:SUBSET_SIZE]
+print("IMAGES LEN", len(imgs))
+print("LABELS LEN", len(labels))
 
 region_folds = {}
 counter = 0
