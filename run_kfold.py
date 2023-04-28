@@ -18,6 +18,7 @@ from torch.utils.data import DataLoader
 
 NUM_FOLDS = 3
 SUBSET_SIZE = 50000
+SUBSET_SIZE = 50
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
@@ -139,6 +140,7 @@ for model_arc in [
                     )
                     losses.append(test_loss)
                     log(f"Finished fold {fold + 1} with test loss: {test_loss}")
+                    exit()
                 average_loss = np.average(losses)
                 log(
                     f"Finished model {model_arc}, learning rate {learning_rate}, batch size {batch_size}, weight decay {weight_decay}.\nAverage loss: {average_loss}"
