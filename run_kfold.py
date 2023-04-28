@@ -16,9 +16,8 @@ import os
 import random
 from torch.utils.data import DataLoader
 
-NUM_FOLDS = 3
+NUM_FOLDS = 5
 SUBSET_SIZE = 50000
-SUBSET_SIZE = 500
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
@@ -96,7 +95,7 @@ for model_arc in [
                     f"Testing model {model_arc} with learning rate {learning_rate}, batch size {batch_size}, and weight decay {weight_decay}."
                 )
                 losses = []
-                for fold in range(NUM_FOLDS):
+                for fold in range(3):
                     log(f"Starting fold {fold + 1}")
                     # Set images to fold, but keep cache
                     train_dataset.set_fold(fold, True)
@@ -142,7 +141,6 @@ for model_arc in [
                     )
                     losses.append(test_loss)
                     log(f"Finished fold {fold + 1} with test loss: {test_loss}")
-                    exit()
                 average_loss = np.average(losses)
                 log(
                     f"Finished model {model_arc}, learning rate {learning_rate}, batch size {batch_size}, weight decay {weight_decay}.\nAverage loss: {average_loss}"
