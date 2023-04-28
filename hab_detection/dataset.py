@@ -113,9 +113,7 @@ class ImageData(Dataset):
 
     def _get_image(self, idx):
         if self.in_memory and self.cache[idx] is not None:
-            log("Returning from memory")
             return self.cache[idx]
-        log("Returning without memory")
         if self.zip == None:
             self.open_zip()
 
