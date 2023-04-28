@@ -18,7 +18,6 @@ from torch.utils.data import DataLoader
 
 NUM_FOLDS = 3
 SUBSET_SIZE = 50000
-SUBSET_SIZE = 500
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
@@ -84,7 +83,7 @@ test_dataset = ImageData(
 
 
 for model_arc in [
-    "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
+    # "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
     "lraspp_mobilenet_v3_large#no_replace_batchnorm",
 ]:
     for learning_rate in [0.0001, 0.001, 0.01]:
