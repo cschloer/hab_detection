@@ -48,9 +48,8 @@ for i, img in enumerate(imgs):
         img,
         re.IGNORECASE,
     )
-    print(match)
     if match:
-        (region,) = match[0]
+        region = match[0]
         if not printed:
             print(region)
             printed = True
