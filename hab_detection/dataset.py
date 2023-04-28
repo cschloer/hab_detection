@@ -92,24 +92,24 @@ class ImageData(Dataset):
             return len([fold for fold in self.fold_list if fold != self.fold])
         return len(self.imgs)
 
-    def set_fold(self, fold):
+    def set_fold(self, fold, is_train):
         if self.fold_list is not None:
             self.fold = fold
-            self.imgs = [
-                img
-                for i, img in enumerate(self.backup_imgs)
-                if self.fold_list[i] != self.fold
+            bool_list = [
+                (is_train and fold_idx != self.fold)
+                or (not is_train and fold_idx == self.fold)
+                for fold_idx in self.fold_list
             ]
+            self.imgs = [img for i, img in enumerate(self.backup_imgs) if bool_list[i]]
             self.labels = [
-                label
-                for i, label in enumerate(self.backup_labels)
-                if self.fold_list[i] != self.fold
+                label for i, label in enumerate(self.backup_labels) if bool_list[i]
             ]
             self.cache = [
                 cache_item
                 for i, cache_item in enumerate(self.backup_cache)
                 if self.fold_list[i] != self.fold
             ]
+            log(f"Fold set, new size: {len(self.imgs)}")
 
     def _get_image(self, idx):
         if self.in_memory and self.cache[idx] is not None:

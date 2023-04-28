@@ -18,6 +18,7 @@ from torch.utils.data import DataLoader
 
 NUM_FOLDS = 3
 SUBSET_SIZE = 50000
+SUBSET_SIZE = 500
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
@@ -96,7 +97,7 @@ for model_arc in [
                 for fold in range(NUM_FOLDS):
                     log(f"Starting fold {fold + 1}")
                     # Set images to fold, but keep cache
-                    train_dataset.set_fold(fold)
+                    train_dataset.set_fold(fold, True)
                     train_loader = DataLoader(
                         train_dataset,
                         batch_size=batch_size,
@@ -104,7 +105,7 @@ for model_arc in [
                         num_workers=0,
                         drop_last=True,
                     )
-                    test_dataset.set_fold(fold)
+                    test_dataset.set_fold(fold, False)
                     test_loader = DataLoader(
                         test_dataset,
                         batch_size=batch_size,
