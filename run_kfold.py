@@ -60,7 +60,9 @@ for i, img in enumerate(imgs):
         raise Exception("Found a non match", img)
 
 for fold in range(NUM_FOLDS):
-    log(f"Fold {fold + 1}: {len([fold_index in fold_indices if fold_index != fold])} images")
+    log(
+        f"Fold {fold + 1}: {len([fold_index for fold_index in fold_indices if fold_index != fold])} images"
+    )
 
 results = {}
 train_dataset = ImageData(
@@ -83,7 +85,10 @@ test_dataset = ImageData(
 )
 
 
-for model_arc in ["deeplabv3_mobilenet_v3_large#no_replace_batchnorm", "lraspp_mobilenet_v3_large#no_replace_batchnorm"]:
+for model_arc in [
+    "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
+    "lraspp_mobilenet_v3_large#no_replace_batchnorm",
+]:
     for learning_rate in [0.00001, 0.0001, 0.001]:
         for batch_size in [16, 32, 64]:
             for weight_decay in [0.02, 0.002]:
