@@ -40,6 +40,8 @@ def train_wrapper(
         model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
         os.makedirs(model_save_folder, exist_ok=True)
         set_config(experiment_name)
+        log(f"Loading datasets...")
+
     train_dataset = get_image_dataset(
         ZIP_PATH_TRAIN,
         class_designation,
@@ -53,9 +55,28 @@ def train_wrapper(
         subset=subset_test,
         in_memory=True,
     )
-    return train(
+    train_loader = DataLoader(
         train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=0,
+        drop_last=True,
+    )
+
+    test_loader = DataLoader(
         test_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=0,
+        drop_last=True,
+    )
+
+    if log_progress:
+        log(f"Done loading datasets. Getting the model.")
+
+    return train(
+        train_loader,
+        test_loader,
         experiment_name,
         batch_size,
         # None for regression, a list of integers ending in 254 for class
@@ -75,8 +96,8 @@ def train_wrapper(
 
 
 def train(
-    train_dataset,
-    test_dataset,
+    train_loader,
+    test_loader,
     experiment_name,
     batch_size,
     # None for regression, a list of integers ending in 254 for class
@@ -99,25 +120,6 @@ def train(
             log(
                 f'Starting with model save folder "{model_save_folder}", training batch size "{batch_size}"'
             )
-            log(f"Loading datasets...")
-
-        train_loader = DataLoader(
-            train_dataset,
-            batch_size=batch_size,
-            shuffle=True,
-            num_workers=0,
-            drop_last=True,
-        )
-
-        test_loader = DataLoader(
-            test_dataset,
-            batch_size=batch_size,
-            shuffle=True,
-            num_workers=0,
-            drop_last=True,
-        )
-        if log_progress:
-            log(f"Done loading datasets. Getting the model.")
 
         model = load_model(
             model_architecture, model_file, model_save_folder, class_designation
