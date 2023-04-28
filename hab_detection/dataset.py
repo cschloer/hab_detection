@@ -86,6 +86,10 @@ class ImageData(Dataset):
             self.backup_imgs = imgs
             self.backup_labels = labels
             self.backup_cache = self.cache
+            log(
+                f"After backup -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
+            )
+
 
     def __len__(self):
         if self.fold_list is not None:
