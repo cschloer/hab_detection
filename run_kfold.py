@@ -16,7 +16,7 @@ import os
 import random
 from torch.utils.data import DataLoader
 
-NUM_FOLDS = 5
+NUM_FOLDS = 3
 SUBSET_SIZE = 50000
 
 with open("experiments.json", "r") as f:
