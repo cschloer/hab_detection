@@ -90,7 +90,6 @@ class ImageData(Dataset):
                 f"After backup -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
             )
 
-
     def __len__(self):
         if self.fold_list is not None:
             return len([fold for fold in self.fold_list if fold != self.fold])
@@ -113,7 +112,8 @@ class ImageData(Dataset):
                 for i, cache_item in enumerate(self.backup_cache)
                 if self.fold_list[i] != self.fold
             ]
-            log(f"Fold set, new size: {len(self.imgs)}")
+            if is_train:
+                log(f"Fold set, new size: {len(self.imgs)}")
 
     def _get_image(self, idx):
         if self.in_memory and self.cache[idx] is not None:
