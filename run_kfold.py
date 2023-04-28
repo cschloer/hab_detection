@@ -8,6 +8,7 @@ from hab_detection.constants import (
     ZIP_PATH_TEST,
     MODEL_SAVE_BASE_FOLDER,
 )
+import re
 import numpy as np
 import pprint
 import json
