@@ -18,6 +18,7 @@ from torch.utils.data import DataLoader
 
 NUM_FOLDS = 5
 SUBSET_SIZE = 50000
+SUBSET_SIZE = 500
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
@@ -40,7 +41,6 @@ label = labels[:SUBSET_SIZE]
 
 region_folds = {}
 counter = 0
-printed = False
 fold_indices = [None] * len(imgs)
 for i, img in enumerate(imgs):
     match = re.findall(
@@ -50,9 +50,6 @@ for i, img in enumerate(imgs):
     )
     if match:
         region = match[0]
-        if not printed:
-            print(region)
-            printed = True
         if region not in region_folds:
             region_folds[region] = counter
             counter = (counter + 1) % NUM_FOLDS
@@ -100,16 +97,7 @@ for model_arc in [
                 for fold in range(NUM_FOLDS):
                     log(f"Starting fold {fold + 1}")
                     # Set images to fold, but keep cache
-                    train_dataset.imgs = [
-                        imgs[fold_index]
-                        for fold_index in fold_indices
-                        if fold_index != fold
-                    ]
-                    train_dataset.labels = [
-                        labels[fold_index]
-                        for fold_index in fold_indices
-                        if fold_index != fold
-                    ]
+                    train_dataset.set_fold(fold)
                     train_loader = DataLoader(
                         train_dataset,
                         batch_size=batch_size,
@@ -117,16 +105,7 @@ for model_arc in [
                         num_workers=0,
                         drop_last=True,
                     )
-                    test_dataset.imgs = [
-                        imgs[fold_index]
-                        for fold_index in fold_indices
-                        if fold_index == fold
-                    ]
-                    test_dataset.labels = [
-                        labels[fold_index]
-                        for fold_index in fold_indices
-                        if fold_index == fold
-                    ]
+                    test_dataset.set_fold(fold)
                     test_loader = DataLoader(
                         test_dataset,
                         batch_size=batch_size,

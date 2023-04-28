@@ -56,8 +56,10 @@ class ImageData(Dataset):
         randomize=False,
         transform=True,
         in_memory=False,
+        fold_list=None,
     ):
         super().__init__()
+        assert len(imgs) == len(labels)
         self.imgs = imgs
         self.labels = labels
         self.zip_path = zip_path
@@ -72,13 +74,42 @@ class ImageData(Dataset):
             log(f"Loading a dataset with {total_size} images into memory")
             for idx in range(total_size):
                 self._get_image(idx)
-                if idx % int(total_size / 10) == 0:
+                if (idx + 1) % int(total_size / 10) == 0:
                     log(
                         f"Loaded {idx + 1} images of {total_size} -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
                     )
 
+        # Initialize lists for kfold
+        self.fold_list = fold_list
+        if self.fold_list is not None:
+            assert len(self.fold_list) == len(imgs)
+            self.backup_imgs = imgs
+            self.backup_labels = labels
+            self.backup_cache = self.cache
+
     def __len__(self):
+        if self.fold_list is not None:
+            return len([fold for fold in self.fold_list if fold != self.fold])
         return len(self.imgs)
+
+    def set_fold(self, fold):
+        if self.fold_list is not None:
+            self.fold = fold
+            self.imgs = [
+                img
+                for i, img in enumerate(self.backup_imgs)
+                if self.fold_list[i] != self.fold
+            ]
+            self.labels = [
+                label
+                for i, label in enumerate(self.backup_labels)
+                if self.fold_list[i] != self.fold
+            ]
+            self.cache = [
+                cache_item
+                for i, cache_item in enumerate(self.backup_cache)
+                if self.fold_list[i] != self.fold
+            ]
 
     def _get_image(self, idx):
         if self.in_memory and self.cache[idx] is not None:
