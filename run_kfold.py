@@ -18,7 +18,7 @@ from torch.utils.data import DataLoader
 
 NUM_FOLDS = 3
 SUBSET_SIZE = 50000
-SUBSET_SIZE = 50
+SUBSET_SIZE = 500
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
