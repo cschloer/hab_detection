@@ -137,6 +137,7 @@ def train(
                 log(f"Starting Epoch {epoch + 1}!")
             running_loss = 0
             total_loss = 0
+            loss_list = []
             try:
                 for batch_idx, (inputs, labels, _, _) in enumerate(train_loader):
                     model.train()
@@ -155,6 +156,7 @@ def train(
 
                     running_loss += loss.item()
                     total_loss += loss.item()
+                    loss_list += loss.item()
 
                     if track_statistics:
                         if class_designation is None:
@@ -187,7 +189,8 @@ def train(
                         )
 
                 if log_progress:
-                    log(f"Epoch {epoch + 1} train loss: {total_loss / (batch_idx + 1)}")
+                    log(f"Epoch {epoch + 1} train loss: {total_loss / (batch_idx + 1)} ({np.mean(loss_list)}))")
+                    log(f"Epoch {epoch + 1} train loss std: {np.std(loss_list)}")
                     test_loss, _, _ = get_model_performance(
                         model,
                         test_loader,
@@ -207,6 +210,7 @@ def train(
 
                 if epoch_limit >= 0 and epoch + 1 >= epoch_limit:
                     return model
+                loss_list = []
 
             finally:
                 try:
