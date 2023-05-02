@@ -237,8 +237,8 @@
     },
     "experiment28": {
         "name": "experiment28",
-        "description": "Still overfitting, add weight decay.",
-        "batch_size": 32,
+        "description": "Still overfitting, add weight decay. Increase batch size for less noise",
+        "batch_size": 64,
         "class_designation": [1, 100, 150, 200, 254],
         "class_weights": [1, 5.30165036, 12.4890355, 36.9074944, 1850.49924],
         "weight_decay": 0.002,
