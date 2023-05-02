@@ -156,7 +156,7 @@ def train(
 
                     running_loss += loss.item()
                     total_loss += loss.item()
-                    loss_list += loss.item()
+                    loss_list.append(loss.item())
 
                     if track_statistics:
                         if class_designation is None:
