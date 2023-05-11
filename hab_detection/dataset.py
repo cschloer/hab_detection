@@ -18,11 +18,20 @@ import time
 transform_input = transforms.Compose([transforms.Normalize(dataset_mean, dataset_std)])
 
 
-def get_data(zip_path):
+def get_data(zip_path, use_unzipped=False):
     imgs = []
     labels = []
-    zip = zipfile.ZipFile(zip_path, mode="r")
-    namelist = set(zip.namelist())
+    namelist = []
+    if use_unzipped:
+        zip_path = zip_path[:4]
+        log(f"ZIP PATH {zip_path}")
+        namelist = os.listdir(zip_path)
+        log(f"Numfiles: {len(namelist)}")
+    else:
+        zip = zipfile.ZipFile(zip_path, mode="r")
+        namelist = set(zip.namelist())
+        zip.close()
+
 
     for f in namelist:
         match = re.findall(
@@ -42,7 +51,6 @@ def get_data(zip_path):
             imgs.append(f)
             labels.append(label_filename)
 
-    zip.close()
     return imgs, labels, zip_path
 
 
@@ -57,6 +65,7 @@ class ImageData(Dataset):
         transform=True,
         in_memory=False,
         fold_list=None,
+        use_unzipped=False,
     ):
         super().__init__()
         assert len(imgs) == len(labels)
@@ -68,6 +77,7 @@ class ImageData(Dataset):
         self.do_transform = transform
         self.zip = None
         self.in_memory = in_memory
+        self.use_unzipped = use_unzipped
         if in_memory:
             self.cache = [None] * len(self.imgs)
             total_size = len(self.imgs)
@@ -122,20 +132,21 @@ class ImageData(Dataset):
     def _get_image(self, idx):
         if self.in_memory and self.cache[idx] is not None:
             return self.cache[idx]
-        if self.zip == None:
-            self.open_zip()
-
         filename = self.imgs[idx]
-        try:
+        label_filename = self.labels[idx]
+        image = None
+        label = None
+        if self.use_unzipped:
+            image = np.load(f"{self.zip_path}/{filename}")
+            label = np.load(f"{self.zip_path}/{label_filename}")
+
+        else:
+            if self.zip == None:
+                self.open_zip()
             image = np.load(self.zip.open(filename))
-        except Exception as e:
-            log(f"FAILED: {filename}")
-            raise e
+            label = np.load(self.zip.open(label_filename))
         if image is None:
             raise FileNotFoundError(filename)
-
-        label_filename = self.labels[idx]
-        label = np.load(self.zip.open(label_filename))
         if label is None:
             raise FileNotFoundError(label_filename)
         if self.in_memory:
@@ -152,13 +163,14 @@ class ImageData(Dataset):
         return self.imgs[idx]
 
     def close_zip(self):
-        if self.zip:
+        if self.zip and not self.use_unzipped:
             self.zip.close()
             self.zip = None
 
     def open_zip(self):
-        self.close_zip()
-        self.zip = zipfile.ZipFile(self.zip_path, mode="r")
+        if not self.use_unzipped:
+            self.close_zip()
+            self.zip = zipfile.ZipFile(self.zip_path, mode="r")
 
     def mask_label(self, label):
         return torch.where(label >= 254, -1, label)
@@ -247,8 +259,9 @@ def get_image_dataset(
     # A fraction of the total dataset to use
     subset=None,
     in_memory=False,
+    use_unzipped=True
 ):
-    imgs, labels, zip_path = get_data(zip_path)
+    imgs, labels, zip_path = get_data(zip_path, use_unzipped=use_unzipped)
     if subset is not None:
         random.seed("subset")
         combined = list(zip(imgs, labels))
@@ -265,5 +278,6 @@ def get_image_dataset(
         randomize=randomize,
         transform=transform,
         in_memory=in_memory,
+        use_unzipped=use_unzipped,
     )
     return image_dataset
