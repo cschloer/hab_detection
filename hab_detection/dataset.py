@@ -23,7 +23,7 @@ def get_data(zip_path, use_unzipped=False):
     labels = []
     namelist = []
     if use_unzipped:
-        zip_path = zip_path[:4]
+        zip_path = zip_path[:-4]
         log(f"ZIP PATH {zip_path}")
         namelist = os.listdir(zip_path)
         log(f"Numfiles: {len(namelist)}")
