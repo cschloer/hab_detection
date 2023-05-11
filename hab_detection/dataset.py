@@ -25,7 +25,7 @@ def get_data(zip_path, use_unzipped=False):
     if use_unzipped:
         zip_path = zip_path[:-4]
         log(f"ZIP PATH {zip_path}")
-        namelist = os.listdir(zip_path)
+        namelist = set(os.listdir(zip_path))
         log(f"Numfiles: {len(namelist)}")
     else:
         zip = zipfile.ZipFile(zip_path, mode="r")
