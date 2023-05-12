@@ -314,7 +314,7 @@ def visualize(
         raise Exception(f"Unknown dataset type {dataset_type}")
     loader = DataLoader(
         dataset,
-        batch_size=64,
+        batch_size=128,
         shuffle=False,
         num_workers=0,
         drop_last=False,
