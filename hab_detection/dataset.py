@@ -66,6 +66,7 @@ class ImageData(Dataset):
         in_memory=False,
         fold_list=None,
         use_unzipped=False,
+        in_memory_prefill=False,
     ):
         super().__init__()
         assert len(imgs) == len(labels)
@@ -80,18 +81,19 @@ class ImageData(Dataset):
         self.use_unzipped = use_unzipped
         if in_memory:
             self.cache = [None] * len(self.imgs)
-            total_size = len(self.imgs)
-            log(f"Loading a dataset with {total_size} images into memory")
-            for idx in range(total_size):
-                self._get_image(idx)
-                if (idx + 1) % int(total_size / 10) == 0:
-                    log(
-                        f"Loaded {idx + 1} images of {total_size} -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
-                    )
-            self.close_zip()
-            log(
-                f"After close zip -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
-            )
+            if in_memory_prefill:
+                total_size = len(self.imgs)
+                log(f"Loading a dataset with {total_size} images into memory")
+                for idx in range(total_size):
+                    self._get_image(idx)
+                    if (idx + 1) % int(total_size / 10) == 0:
+                        log(
+                            f"Loaded {idx + 1} images of {total_size} -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
+                        )
+                self.close_zip()
+                log(
+                    f"After close zip -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
+                )
 
         # Initialize lists for kfold
         self.fold_list = fold_list

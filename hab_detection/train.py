@@ -48,27 +48,31 @@ def train_wrapper(
         randomize=randomize,
         subset=subset_train,
         in_memory=True,
+        use_unzipped=True,
     )
     test_dataset = get_image_dataset(
         ZIP_PATH_TEST,
         class_designation,
         subset=subset_test,
         in_memory=True,
+        use_unzipped=True,
     )
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=0,
+        num_workers=3,
         drop_last=True,
+        pin_memory=True
     )
 
     test_loader = DataLoader(
         test_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=0,
+        num_workers=3,
         drop_last=True,
+        pin_memory=True,
     )
 
     if log_progress:
@@ -141,16 +145,16 @@ def train(
             try:
                 for batch_idx, (inputs, labels, _, _) in enumerate(train_loader):
                     model.train()
-                    inputs = inputs.to(device, dtype=torch.float)
-                    labels = labels.to(device)
+                    inputs = inputs.to(device, dtype=torch.float, non_blocking=True)
+                    labels = labels.to(device, non_blocking=True)
 
-                    optimizer.zero_grad()
 
                     preds = model(inputs)  # make prediction
                     if isinstance(preds, dict):
                         preds = preds["out"]
                     loss = criterion(preds, labels)  # Calculate cross entropy loss
 
+                    optimizer.zero_grad()
                     loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
 
