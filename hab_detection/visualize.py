@@ -314,7 +314,7 @@ def visualize(
         raise Exception(f"Unknown dataset type {dataset_type}")
     loader = DataLoader(
         dataset,
-        batch_size=32,
+        batch_size=64,
         shuffle=False,
         num_workers=0,
         drop_last=False,
@@ -467,6 +467,7 @@ def visualize(
         class_designation,
         num_batches=-1,
         calculate_2d_hist=True,
+        calculate_statistics=True,
     )
     log(f"\n{pprint.pformat(metrics)}")
 

@@ -173,6 +173,9 @@ def get_model_performance(
                         torch.argmax(preds, dim=1, keepdim=False)[~(labels == -1)],
                         labels[~(labels == -1)],
                     )
+                else:
+                    tracker.update(preds, labels)
+
 
                 if class_designation is not None and calculate_2d_hist:
                     # Reverse the 1 hot encoding on preds and bring everything to np
@@ -197,7 +200,7 @@ def get_model_performance(
                 break
 
     if calculate_statistics:
-        log(f"\n{pprint.pformat(tracker2.compute_all())}")
+        log(f"\n{pprint.pformat(tracker.compute_all())}")
 
     return (
         total_loss / (batch_idx + 1),
