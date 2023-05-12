@@ -259,7 +259,7 @@ def get_image_dataset(
     # A fraction of the total dataset to use
     subset=None,
     in_memory=False,
-    use_unzipped=True
+    use_unzipped=False
 ):
     imgs, labels, zip_path = get_data(zip_path, use_unzipped=use_unzipped)
     if subset is not None:
