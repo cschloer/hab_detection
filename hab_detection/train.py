@@ -4,6 +4,7 @@ import torch
 import numpy as np
 import math
 import pprint
+import psutil
 
 from .constants import (
     device,
@@ -61,7 +62,7 @@ def train_wrapper(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=4,
+        num_workers=0,
         drop_last=True,
         pin_memory=True
     )
@@ -70,7 +71,7 @@ def train_wrapper(
         test_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=4,
+        num_workers=0,
         drop_last=True,
         pin_memory=True,
     )
@@ -178,7 +179,7 @@ def train(
                         if log_progress:
                             log
                             log(
-                                f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f}"
+                                f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f} -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
                             )
                         running_loss = 0.0
 
