@@ -66,7 +66,7 @@ class ImageData(Dataset):
         in_memory=False,
         fold_list=None,
         use_unzipped=False,
-        in_memory_prefill=False,
+        in_memory_prefill=True,
     ):
         super().__init__()
         assert len(imgs) == len(labels)
