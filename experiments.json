@@ -277,7 +277,7 @@
     "experiment31": {
         "name": "experiment31",
         "description": "Experiment for Galilei",
-        "batch_size": 64,
+        "batch_size": 128,
         "class_designation": [1, 100, 150, 200, 254],
         "class_weights": [1, 5.30165036, 12.4890355, 36.9074944, 1850.49924],
         "weight_decay": 0.005,
