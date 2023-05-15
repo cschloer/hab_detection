@@ -49,21 +49,21 @@ def train_wrapper(
         class_designation,
         randomize=randomize,
         subset=subset_train,
-        in_memory=False,
+        in_memory=True,
         use_unzipped=False,
     )
     test_dataset = get_image_dataset(
         ZIP_PATH_TEST,
         class_designation,
         subset=subset_test,
-        in_memory=False,
+        in_memory=True,
         use_unzipped=False,
     )
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=1,
+        num_workers=0,
         drop_last=True,
         pin_memory=True
     )
@@ -72,7 +72,7 @@ def train_wrapper(
         test_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=1,
+        num_workers=0,
         drop_last=True,
         pin_memory=True,
     )
@@ -170,7 +170,7 @@ def train(
                     total_loss += loss.item()
                     loss_list.append(loss.item())
                     elapsed3 = time.time() - start
-                    log(f"Elapsed: {elapsed1} --- {elapsed2} --- {elapsed3}")
+                    #log(f"Elapsed: {elapsed1} --- {elapsed2} --- {elapsed3}")
                     start = time.time()
 
                     if track_statistics:
