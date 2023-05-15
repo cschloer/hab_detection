@@ -1,5 +1,6 @@
 import os
 from torch.utils.data import DataLoader
+import time
 import torch
 import numpy as np
 import math
@@ -144,13 +145,18 @@ def train(
             total_loss = 0
             loss_list = []
             try:
+                start = time.time()
                 for batch_idx, (inputs, labels, _, _) in enumerate(train_loader):
+                    elapsed1 = time.time() - start
+                    start = time.time()
                     model.train()
                     inputs = inputs.to(device, dtype=torch.float, non_blocking=True)
                     labels = labels.to(device, non_blocking=True)
 
 
                     preds = model(inputs)  # make prediction
+                    elapsed2 = time.time() - start
+                    start = time.time()
                     if isinstance(preds, dict):
                         preds = preds["out"]
                     loss = criterion(preds, labels)  # Calculate cross entropy loss
@@ -159,9 +165,13 @@ def train(
                     loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
 
+
                     running_loss += loss.item()
                     total_loss += loss.item()
                     loss_list.append(loss.item())
+                    elapsed3 = time.time() - start
+                    log(f"Elapsed: {elapsed1} --- {elapsed2} --- {elapsed3}")
+                    start = time.time()
 
                     if track_statistics:
                         if class_designation is None:
