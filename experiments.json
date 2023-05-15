@@ -312,6 +312,19 @@
         "learning_rate": 0.00001,
         "subset_train": 0.25,
         "subset_test": 0.2
+    },
+    "experiment34": {
+        "name": "experiment34",
+        "description": "Experiment for Umbriel, new weight decay",
+        "batch_size": 128,
+        "class_designation": [1, 100, 150, 200, 254],
+        "class_weights": [1, 5.30165036, 12.4890355, 36.9074944, 1850.49924],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
+        "learning_rate": 0.00001,
+        "subset_train": 0.25,
+        "subset_test": 0.2
     }
 }
 
