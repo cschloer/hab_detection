@@ -62,7 +62,7 @@ def train_wrapper(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=0,
+        num_workers=4,
         drop_last=True,
         pin_memory=True
     )
@@ -71,7 +71,7 @@ def train_wrapper(
         test_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=0,
+        num_workers=4,
         drop_last=True,
         pin_memory=True,
     )
@@ -171,7 +171,6 @@ def train(
 
                         train_tracker.update(preds, labels)
 
-                    exit()
                     NUM_BATCHES = 100
                     if (
                         batch_idx % NUM_BATCHES == NUM_BATCHES - 1
