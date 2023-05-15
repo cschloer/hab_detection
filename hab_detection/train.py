@@ -63,7 +63,7 @@ def train_wrapper(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=4,
+        num_workers=1,
         drop_last=True,
         pin_memory=True
     )
@@ -72,7 +72,7 @@ def train_wrapper(
         test_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=4,
+        num_workers=1,
         drop_last=True,
         pin_memory=True,
     )
