@@ -249,7 +249,7 @@ class ImageData(Dataset):
         else:
             label = raw_label
         elapsed2 = time.time() - start
-        log(f"Elapsed: {elapsed2} --- {elapsed2}")
+        log(f"Elapsed: {elapsed1} --- {elapsed2}")
 
         return (
             image,
