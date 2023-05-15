@@ -48,14 +48,14 @@ def train_wrapper(
         class_designation,
         randomize=randomize,
         subset=subset_train,
-        in_memory=True,
+        in_memory=False,
         use_unzipped=False,
     )
     test_dataset = get_image_dataset(
         ZIP_PATH_TEST,
         class_designation,
         subset=subset_test,
-        in_memory=True,
+        in_memory=False,
         use_unzipped=False,
     )
     train_loader = DataLoader(
@@ -171,6 +171,7 @@ def train(
 
                         train_tracker.update(preds, labels)
 
+                    exit()
                     NUM_BATCHES = 100
                     if (
                         batch_idx % NUM_BATCHES == NUM_BATCHES - 1

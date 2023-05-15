@@ -1,6 +1,7 @@
 from .constants import dataset_mean, dataset_std
 from .helpers import log
 
+import time
 import psutil
 import os
 import torchvision.transforms as transforms
@@ -230,7 +231,10 @@ class ImageData(Dataset):
         return image, label
 
     def __getitem__(self, idx):
+        start = time.time()
         raw_image, raw_label = self._get_image(idx)
+        elapsed1 = time.time() - start
+        start = time.time()
 
         # We divide to make the numbers manageable for calculating mean and std and thus normalizing
         # 10,000 is the accepted number to get a brightness level
@@ -244,6 +248,8 @@ class ImageData(Dataset):
             label = self.transform_label(label)
         else:
             label = raw_label
+        elapsed2 = time.time() - start
+        log(f"Elapsed: {elapsed2} --- {elapsed2}")
 
         return (
             image,
