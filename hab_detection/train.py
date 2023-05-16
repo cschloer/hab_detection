@@ -50,14 +50,14 @@ def train_wrapper(
         randomize=randomize,
         subset=subset_train,
         in_memory=False,
-        use_unzipped=False,
+        use_unzipped=True,
     )
     test_dataset = get_image_dataset(
         ZIP_PATH_TEST,
         class_designation,
         subset=subset_test,
         in_memory=False,
-        use_unzipped=False,
+        use_unzipped=True,
     )
     train_loader = DataLoader(
         train_dataset,
