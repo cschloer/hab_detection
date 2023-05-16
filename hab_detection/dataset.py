@@ -1,5 +1,5 @@
 from .constants import dataset_mean, dataset_std
-from .helpers import log
+from .helpers import log, load
 
 import time
 import psutil
@@ -14,7 +14,6 @@ import zipfile
 import re
 from torch.utils.data import Dataset
 import numpy as np
-import time
 
 transform_input = transforms.Compose([transforms.Normalize(dataset_mean, dataset_std)])
 
@@ -26,8 +25,9 @@ def get_data(zip_path, use_unzipped=False):
     if use_unzipped:
         zip_path = zip_path[:-4]
         log(f"ZIP PATH {zip_path}")
+        start = time.time()
         namelist = set(os.listdir(zip_path))
-        log(f"Numfiles: {len(namelist)}")
+        log(f"Numfiles: {len(namelist)} -- elapsed: {time.time() - start}")
     else:
         zip = zipfile.ZipFile(zip_path, mode="r")
         namelist = set(zip.namelist())
@@ -140,14 +140,14 @@ class ImageData(Dataset):
         image = None
         label = None
         if self.use_unzipped:
-            image = np.load(f"{self.zip_path}/{filename}")
-            label = np.load(f"{self.zip_path}/{label_filename}")
+            image = load(f"{self.zip_path}/{filename}")
+            label = load(f"{self.zip_path}/{label_filename}")
 
         else:
             if self.zip == None:
                 self.open_zip()
-            image = np.load(self.zip.open(filename))
-            label = np.load(self.zip.open(label_filename))
+            image = load(self.zip.open(filename))
+            label = load(self.zip.open(label_filename))
         if image is None:
             raise FileNotFoundError(filename)
         if label is None:

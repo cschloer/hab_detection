@@ -49,21 +49,21 @@ def train_wrapper(
         class_designation,
         randomize=randomize,
         subset=subset_train,
-        in_memory=True,
+        in_memory=False,
         use_unzipped=False,
     )
     test_dataset = get_image_dataset(
         ZIP_PATH_TEST,
         class_designation,
         subset=subset_test,
-        in_memory=True,
+        in_memory=False,
         use_unzipped=False,
     )
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=0,
+        num_workers=8,
         drop_last=True,
         pin_memory=True
     )
@@ -72,7 +72,7 @@ def train_wrapper(
         test_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=0,
+        num_workers=8,
         drop_last=True,
         pin_memory=True,
     )
