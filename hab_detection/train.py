@@ -170,7 +170,7 @@ def train(
                     total_loss += loss.item()
                     loss_list.append(loss.item())
                     elapsed3 = time.time() - start
-                    #log(f"Elapsed: {elapsed1} --- {elapsed2} --- {elapsed3}")
+                    log(f"Elapsed: {elapsed1} --- {elapsed2} --- {elapsed3}")
                     start = time.time()
 
                     if track_statistics:
