@@ -349,8 +349,8 @@
         "randomize": true,
         "model_architecture": "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
         "learning_rate": 0.00001,
-        "subset_train": 1.0,
-        "subset_test": 1.0
+        "subset_train": 0.25,
+        "subset_test": 0.2
     }
 }
 
