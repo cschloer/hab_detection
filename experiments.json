@@ -377,6 +377,19 @@
         "learning_rate": 0.00001,
         "subset_train": 0.65,
         "subset_test": 0.65
+    },
+    "experiment39": {
+        "name": "experiment39",
+        "description": "New class designation",
+        "batch_size": 256,
+        "class_designation": [1, 95, 140, 180, 254],
+        "class_weights": [1, 5.30165036, 12.4890355, 36.9074944, 1850.49924],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
+        "learning_rate": 0.00001,
+        "subset_train": 0.65,
+        "subset_test": 0.65
     }
 }
 
