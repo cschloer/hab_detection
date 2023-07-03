@@ -116,14 +116,12 @@ class ImageData(Dataset):
 
         # Initialize lists for kfold
         self.fold_list = fold_list
-        if self.fold_list is not None and in_memory:
+        if self.fold_list is not None:
             assert len(self.fold_list) == len(features)
             self.backup_features = features
             self.backup_labels = labels
-            self.backup_cache = self.cache
-            log(
-                f"After backup -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
-            )
+            if in_memory:
+                self.backup_cache = self.cache
 
     def __len__(self):
         if self.fold_list is not None:
@@ -144,11 +142,12 @@ class ImageData(Dataset):
             self.labels = [
                 label for i, label in enumerate(self.backup_labels) if bool_list[i]
             ]
-            self.cache = [
-                cache_item
-                for i, cache_item in enumerate(self.backup_cache)
-                if self.fold_list[i] != self.fold
-            ]
+            if self.cache:
+                self.cache = [
+                    cache_item
+                    for i, cache_item in enumerate(self.backup_cache)
+                    if self.fold_list[i] != self.fold
+                ]
             if is_train:
                 log(f"Fold set, new size: {len(self.features)}")
 
