@@ -46,9 +46,10 @@ def get_data(data_path, use_zip=False):
                     if label_filename:
                         label_path = f"{dirname}/{label_filename}"
                         if not os.path.isfile(label_path):
-                            raise Exception(
+                            print(
                                 f'Corresponding label file doesn\'t exist: "{label_filename}"'
                             )
+                            continue
 
                         features.append(feature_path)
                         labels.append(label_path)
