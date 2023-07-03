@@ -98,6 +98,7 @@ class ImageData(Dataset):
         self.zip = None
         self.in_memory = in_memory
         self.use_unzipped = use_unzipped
+        self.cache = None
         if in_memory:
             self.cache = [None] * len(self.features)
             if in_memory_prefill:
