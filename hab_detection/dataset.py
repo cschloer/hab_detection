@@ -18,60 +18,77 @@ import numpy as np
 transform_input = transforms.Compose([transforms.Normalize(dataset_mean, dataset_std)])
 
 
-def get_data(zip_path, use_unzipped=False):
-    imgs = []
+def get_label_filename(feature_filename):
+    match = re.findall(
+        "([a-z0-9_]*)_(\d\d\d\d)_(\d*)_(\d*)_x(\d*)_y(\d*)_(\d*)x(\d*)_([a-z0-9]*)_sen2.npy",
+        input_filename,
+        re.IGNORECASE,
+    )
+    if match:
+        region, year, month, day, x_start, y_start, tile_size, _, id = match[0]
+
+        label_filename = f"{region}_{year}_{month}_{day}_x{x_start}_y{y_start}_{tile_size}x{tile_size}_{id}_cyan.npy"
+        return label_filename
+
+
+def get_data(data_path, use_zip=False):
+    features = []
     labels = []
     namelist = []
-    if use_unzipped:
-        zip_path = zip_path[:-4]
-        log(f"ZIP PATH {zip_path}")
-        start = time.time()
-        namelist = set(os.listdir(zip_path))
-        log(f"Numfiles: {len(namelist)} -- elapsed: {time.time() - start}")
+    if not use_zip:
+        for root, dirs, files in os.walk(data_path, topdown=False):
+            for name in files:
+                feature_path = os.path.join(root_name)
+                if os.path.isfile(feature_path):
+                    feature_filename = os.path.basename(feature_path)
+                    dirname = os.path.dirname(feature_path)
+                    label_filename = get_label_filename(feature_filename)
+                    if label_filename:
+                        label_path = f"{dirname}/{label_filename}")
+                        if not os.path.isfile(label_path):
+                            raise Exception(
+                                f'Corresponding label file doesn\'t exist: "{label_filename}"'
+                            )
+
+                        features.append(feature_path)
+                        labels.append(label_path)
+
     else:
-        zip = zipfile.ZipFile(zip_path, mode="r")
+        zip = zipfile.ZipFile(data_path, mode="r")
         namelist = set(zip.namelist())
         zip.close()
 
+        for feature_filename in namelist:
+            label_filename = get_label_filename(feature_filename)
+            if label_filename:
+                if not label_filename in namelist:
+                    raise Exception(
+                        f'Corresponding label file doesn\'t exist: "{label_filename}"'
+                    )
 
-    for f in namelist:
-        match = re.findall(
-            "([a-z0-9_]*)_(\d\d\d\d)_(\d*)_(\d*)_x(\d*)_y(\d*)_(\d*)x(\d*)_([a-z0-9]*)_sen2.npy",
-            f,
-            re.IGNORECASE,
-        )
-        if match:
-            region, year, month, day, x_start, y_start, tile_size, _, id = match[0]
+                features.append(feature_filename)
+                labels.append(label_filename)
 
-            label_filename = f"{region}_{year}_{month}_{day}_x{x_start}_y{y_start}_{tile_size}x{tile_size}_{id}_cyan.npy"
-            if not label_filename in namelist:
-                raise Exception(
-                    f'Corresponding label file doesn\'t exist: "{label_filename}"'
-                )
-
-            imgs.append(f)
-            labels.append(label_filename)
-
-    return imgs, labels, zip_path
+    return features, labels, data_path if use_zip else None
 
 
 class ImageData(Dataset):
     def __init__(
         self,
-        imgs,
+        features,
         labels,
-        zip_path,
         class_designation,
         randomize=False,
         transform=True,
         in_memory=False,
         fold_list=None,
+        zip_path=None,
         use_unzipped=False,
         in_memory_prefill=True,
     ):
         super().__init__()
-        assert len(imgs) == len(labels)
-        self.imgs = imgs
+        assert len(features) == len(labels)
+        self.features = features
         self.labels = labels
         self.zip_path = zip_path
         self.class_designation = class_designation
@@ -81,9 +98,9 @@ class ImageData(Dataset):
         self.in_memory = in_memory
         self.use_unzipped = use_unzipped
         if in_memory:
-            self.cache = [None] * len(self.imgs)
+            self.cache = [None] * len(self.features)
             if in_memory_prefill:
-                total_size = len(self.imgs)
+                total_size = len(self.features)
                 log(f"Loading a dataset with {total_size} images into memory")
                 for idx in range(total_size):
                     self._get_image(idx)
@@ -99,8 +116,8 @@ class ImageData(Dataset):
         # Initialize lists for kfold
         self.fold_list = fold_list
         if self.fold_list is not None:
-            assert len(self.fold_list) == len(imgs)
-            self.backup_imgs = imgs
+            assert len(self.fold_list) == len(features)
+            self.backup_features = features
             self.backup_labels = labels
             self.backup_cache = self.cache
             log(
@@ -110,7 +127,7 @@ class ImageData(Dataset):
     def __len__(self):
         if self.fold_list is not None:
             return len([fold for fold in self.fold_list if fold != self.fold])
-        return len(self.imgs)
+        return len(self.features)
 
     def set_fold(self, fold, is_train):
         if self.fold_list is not None:
@@ -120,7 +137,7 @@ class ImageData(Dataset):
                 or (not is_train and fold_idx == self.fold)
                 for fold_idx in self.fold_list
             ]
-            self.imgs = [img for i, img in enumerate(self.backup_imgs) if bool_list[i]]
+            self.features = [img for i, img in enumerate(self.backup_features) if bool_list[i]]
             self.labels = [
                 label for i, label in enumerate(self.backup_labels) if bool_list[i]
             ]
@@ -130,18 +147,19 @@ class ImageData(Dataset):
                 if self.fold_list[i] != self.fold
             ]
             if is_train:
-                log(f"Fold set, new size: {len(self.imgs)}")
+                log(f"Fold set, new size: {len(self.features)}")
 
     def _get_image(self, idx):
         if self.in_memory and self.cache[idx] is not None:
             return self.cache[idx]
-        filename = self.imgs[idx]
+        filename = self.features[idx]
         label_filename = self.labels[idx]
         image = None
         label = None
-        if self.use_unzipped:
-            image = load(f"{self.zip_path}/{filename}")
-            label = load(f"{self.zip_path}/{label_filename}")
+        if not self.zip_path:
+            # No zip path provided, load directly from filesystem
+            image = load(filename)
+            label = load(label_filename)
 
         else:
             if self.zip == None:
@@ -163,15 +181,15 @@ class ImageData(Dataset):
         return self._get_image(idx)
 
     def get_image_filename(self, idx):
-        return self.imgs[idx]
+        return self.features[idx]
 
     def close_zip(self):
-        if self.zip and not self.use_unzipped:
+        if self.zip and self.zip_path:
             self.zip.close()
             self.zip = None
 
     def open_zip(self):
-        if not self.use_unzipped:
+        if self.zip_path:
             self.close_zip()
             self.zip = zipfile.ZipFile(self.zip_path, mode="r")
 
@@ -255,32 +273,31 @@ class ImageData(Dataset):
 
 
 def get_image_dataset(
-    zip_path,
+    data_path,
     class_designation,
     randomize=False,
     transform=True,
     # A fraction of the total dataset to use
     subset=None,
     in_memory=False,
-    use_unzipped=False
+    use_zip=False,
 ):
-    imgs, labels, zip_path = get_data(zip_path, use_unzipped=use_unzipped)
+    features, labels, zip_path = get_data(data_path, use_zip=use_zip)
     if subset is not None:
         random.seed("subset")
-        combined = list(zip(imgs, labels))
+        combined = list(zip(features, labels))
         random.shuffle(combined)
-        imgs[:], labels[:] = zip(*combined)
-        end_index = int(subset * len(imgs))
-        imgs = imgs[:end_index]
+        features[:], labels[:] = zip(*combined)
+        end_index = int(subset * len(features))
+        features = features[:end_index]
         labels = labels[:end_index]
     image_dataset = ImageData(
-        imgs,
+        features,
         labels,
-        zip_path,
         class_designation,
+        zip_path=zip_path,
         randomize=randomize,
         transform=transform,
         in_memory=in_memory,
-        use_unzipped=use_unzipped,
     )
     return image_dataset

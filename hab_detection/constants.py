@@ -7,8 +7,12 @@ ZIP_PATH_TEST = "/shared/datasets/hab/new_data/dataset_test.zip"
 # ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset4_test.zip"
 # ZIP_PATH_TRAIN = "/shared/datasets/hab/data/dataset_dist_train.zip"
 # ZIP_PATH_TEST = "/shared/datasets/hab/data/dataset_dist_test.zip"
-#ZIP_PATH_TRAIN = "/home/conrad/new_data/dataset_train.zip"
-#ZIP_PATH_TEST = "/home/conrad/new_data/dataset_test.zip"
+# ZIP_PATH_TRAIN = "/home/conrad/new_data/dataset_train.zip"
+# ZIP_PATH_TEST = "/home/conrad/new_data/dataset_test.zip"
+
+STRUCTURED_FOLDER_PATH_TRAIN = "/shared/datasets/hab/new_data/dataset_train_structured"
+STRUCTURED_FOLDER_PATH_TEST = "/shared/datasets/hab/new_data/dataset_test_structured"
+
 MODEL_SAVE_BASE_FOLDER = "/shared/datasets/hab/models"
 LOG_NAME = "log.txt"
 

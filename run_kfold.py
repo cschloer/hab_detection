@@ -4,8 +4,8 @@ from hab_detection.dataset import get_data, ImageData
 from hab_detection.metrics import get_model_performance
 from hab_detection.constants import (
     device,
-    ZIP_PATH_TRAIN,
-    ZIP_PATH_TEST,
+    STRUCTURED_FOLDER_PATH_TEST,
+    STRUCTURED_FOLDER_PATH_TRAIN,
     MODEL_SAVE_BASE_FOLDER,
 )
 import re
@@ -16,12 +16,12 @@ import os
 import random
 from torch.utils.data import DataLoader
 
-NUM_FOLDS = 5
+NUM_FOLDS = 3
 SUBSET_SIZE = 50000
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
-e = experiments["experiment25"]
+e = experiments["experiment34"]
 
 experiment_name = "kfold_test"
 model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
@@ -31,17 +31,20 @@ log(f"Starting kfold experiment")
 
 
 random.seed("kfold_test")
-imgs, labels, zip_path = get_data(ZIP_PATH_TRAIN)
-combined = list(zip(imgs, labels))
+features, labels, zip_path = get_data(STRUCTURED_FOLDER_PATH_TRAIN)
+combined = list(zip(features, labels))
 random.shuffle(combined)
-imgs[:], labels[:] = zip(*combined)
-imgs = imgs[:SUBSET_SIZE]
+features[:], labels[:] = zip(*combined)
+features = features[:SUBSET_SIZE]
 labels = labels[:SUBSET_SIZE]
+
+print("FEATURE AND LABEL", features[0], labels[0])
+exit()
 
 region_folds = {}
 counter = 0
-fold_indices = [None] * len(imgs)
-for i, img in enumerate(imgs):
+fold_indices = [None] * len(features)
+for i, img in enumerate(features):
     match = re.findall(
         "([a-z0-9_]*)_\d\d\d\d_.*_sen2.npy",
         img,
@@ -63,7 +66,7 @@ for fold in range(NUM_FOLDS):
 
 results = {}
 train_dataset = ImageData(
-    imgs,
+    features,
     labels,
     zip_path,
     e["class_designation"],
@@ -71,9 +74,10 @@ train_dataset = ImageData(
     transform=True,
     in_memory=True,
     fold_list=fold_indices,
+    use_unzipped=True,
 )
 test_dataset = ImageData(
-    imgs,
+    features,
     labels,
     zip_path,
     e["class_designation"],
@@ -81,21 +85,24 @@ test_dataset = ImageData(
     transform=True,
     in_memory=True,
     fold_list=fold_indices,
+    use_unzipped=True
 )
 
 
 for model_arc in [
     # "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
     "lraspp_mobilenet_v3_large#no_replace_batchnorm",
+    "deeplabv3-resnet18#no_replace_batchnorm",
+    "deeplabv3-resnet50#no_replace_batchnorm",
 ]:
-    for learning_rate in [0.0001, 0.001]:
-        for batch_size in [16, 32, 64, 128]:
-            for weight_decay in [0.01, 0.005]:
+    for learning_rate in [0,00001, 0.0001, 0.001]:
+        for batch_size in [32, 64, 128]:
+            for weight_decay in [0.01, 0.001]:
                 log(
                     f"Testing model {model_arc} with learning rate {learning_rate}, batch size {batch_size}, and weight decay {weight_decay}."
                 )
                 losses = []
-                for fold in range(5):
+                for fold in range(NUM_FOLDS):
                     log(f"Starting fold {fold + 1}")
                     # Set images to fold, but keep cache
                     train_dataset.set_fold(fold, True)

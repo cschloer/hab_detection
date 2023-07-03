@@ -9,8 +9,8 @@ import psutil
 
 from .constants import (
     device,
-    ZIP_PATH_TRAIN,
-    ZIP_PATH_TEST,
+    STRUCTURED_FOLDER_PATH_TEST,
+    STRUCTURED_FOLDER_PATH_TRAIN,
     MODEL_SAVE_BASE_FOLDER,
 )
 from .helpers import log, set_config
@@ -45,19 +45,19 @@ def train_wrapper(
         log(f"Loading datasets...")
 
     train_dataset = get_image_dataset(
-        ZIP_PATH_TRAIN,
+        STRUCTURED_FOLDER_PATH_TRAIN,
         class_designation,
         randomize=randomize,
         subset=subset_train,
         in_memory=True,
-        use_unzipped=False,
+        use_unzipped=True,
     )
     test_dataset = get_image_dataset(
-        ZIP_PATH_TEST,
+        STRUCTURED_FOLDER_PATH_TEST,
         class_designation,
         subset=subset_test,
         in_memory=True,
-        use_unzipped=False,
+        use_unzipped=True,
     )
     train_loader = DataLoader(
         train_dataset,
@@ -65,7 +65,7 @@ def train_wrapper(
         shuffle=True,
         num_workers=0,
         drop_last=True,
-        pin_memory=True
+        pin_memory=True,
     )
 
     test_loader = DataLoader(
@@ -153,7 +153,6 @@ def train(
                     inputs = inputs.to(device, dtype=torch.float, non_blocking=True)
                     labels = labels.to(device, non_blocking=True)
 
-
                     preds = model(inputs)  # make prediction
                     elapsed2 = time.time() - start
                     start = time.time()
@@ -165,12 +164,11 @@ def train(
                     loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
 
-
                     running_loss += loss.item()
                     total_loss += loss.item()
                     loss_list.append(loss.item())
                     elapsed3 = time.time() - start
-                    #log(f"Elapsed: {elapsed1} --- {elapsed2} --- {elapsed3}")
+                    # log(f"Elapsed: {elapsed1} --- {elapsed2} --- {elapsed3}")
                     start = time.time()
 
                     if track_statistics:
@@ -204,7 +202,9 @@ def train(
                         )
 
                 if log_progress:
-                    log(f"Epoch {epoch + 1} train loss: {total_loss / (batch_idx + 1)} ({np.mean(loss_list)}))")
+                    log(
+                        f"Epoch {epoch + 1} train loss: {total_loss / (batch_idx + 1)} ({np.mean(loss_list)}))"
+                    )
                     log(f"Epoch {epoch + 1} train loss std: {np.std(loss_list)}")
                     test_loss, _, _ = get_model_performance(
                         model,
