@@ -149,8 +149,9 @@ class ImageData(Dataset):
                     for i, cache_item in enumerate(self.backup_cache)
                     if self.fold_list[i] != self.fold
                 ]
-            if is_train:
-                log(f"Fold set, new size: {len(self.features)}")
+            log(
+                f"Fold set for {'train' if is_train else 'test'}, new size: {len(self.features)}"
+            )
 
     def _get_image(self, idx):
         if self.in_memory and self.cache[idx] is not None:

@@ -135,7 +135,7 @@ for model_arc in [
                         track_statistics=False,
                         log_progress=False,
                         save_progress=False,
-                        epoch_limit=75,
+                        epoch_limit=1,
                     )
                     test_loss, _, _ = get_model_performance(
                         model,
