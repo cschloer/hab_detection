@@ -95,7 +95,7 @@ for model_arc in [
     "deeplabv3-resnet18#no_replace_batchnorm",
     "deeplabv3-resnet50#no_replace_batchnorm",
 ]:
-    for learning_rate in [0,00001, 0.0001, 0.001]:
+    for learning_rate in [0.00001, 0.0001, 0.001]:
         for batch_size in [32, 64, 128]:
             for weight_decay in [0.01, 0.001]:
                 log(
