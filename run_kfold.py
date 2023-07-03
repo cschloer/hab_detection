@@ -88,13 +88,13 @@ test_dataset = ImageData(
 
 for model_arc in [
     # "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
-    "lraspp_mobilenet_v3_large#no_replace_batchnorm",
+    # "lraspp_mobilenet_v3_large#no_replace_batchnorm",
     "deeplabv3-resnet18#no_replace_batchnorm",
     "deeplabv3-resnet50#no_replace_batchnorm",
 ]:
     for learning_rate in [0.00001, 0.0001, 0.001]:
         for batch_size in [32, 64, 128]:
-            for weight_decay in [0.01, 0.001]:
+            for weight_decay in [0.01]:
                 log(
                     f"Testing model {model_arc} with learning rate {learning_rate}, batch size {batch_size}, and weight decay {weight_decay}."
                 )
