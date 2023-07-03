@@ -33,6 +33,7 @@ log(f"Starting kfold experiment")
 
 random.seed("kfold_test")
 features, labels, _ = get_data(STRUCTURED_FOLDER_PATH_TRAIN, use_zip=False)
+print("Found {len(features)} features")
 combined = list(zip(features, labels))
 random.shuffle(combined)
 features[:], labels[:] = zip(*combined)
