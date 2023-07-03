@@ -116,7 +116,7 @@ class ImageData(Dataset):
 
         # Initialize lists for kfold
         self.fold_list = fold_list
-        if self.fold_list is not None:
+        if self.fold_list is not None and in_memory:
             assert len(self.fold_list) == len(features)
             self.backup_features = features
             self.backup_labels = labels
