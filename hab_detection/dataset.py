@@ -38,7 +38,7 @@ def get_data(data_path, use_zip=False):
     if not use_zip:
         for root, dirs, files in os.walk(data_path, topdown=False):
             for name in files:
-                feature_path = os.path.join(root_name)
+                feature_path = os.path.join(root, name)
                 if os.path.isfile(feature_path):
                     feature_filename = os.path.basename(feature_path)
                     dirname = os.path.dirname(feature_path)
