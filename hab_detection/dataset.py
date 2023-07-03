@@ -125,8 +125,6 @@ class ImageData(Dataset):
                 self.backup_cache = self.cache
 
     def __len__(self):
-        if self.fold_list is not None:
-            return len([fold for fold in self.fold_list if fold != self.fold])
         return len(self.features)
 
     def set_fold(self, fold, is_train):
