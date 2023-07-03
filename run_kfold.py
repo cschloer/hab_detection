@@ -32,7 +32,7 @@ log(f"Starting kfold experiment")
 
 
 random.seed("kfold_test")
-features, labels, zip_path = get_data(STRUCTURED_FOLDER_PATH_TRAIN)
+features, labels, _ = get_data(STRUCTURED_FOLDER_PATH_TRAIN, use_zip=False)
 combined = list(zip(features, labels))
 random.shuffle(combined)
 features[:], labels[:] = zip(*combined)
@@ -66,7 +66,6 @@ results = {}
 train_dataset = ImageData(
     features,
     labels,
-    zip_path,
     e["class_designation"],
     randomize=True,
     transform=True,
@@ -77,7 +76,6 @@ train_dataset = ImageData(
 test_dataset = ImageData(
     features,
     labels,
-    zip_path,
     e["class_designation"],
     randomize=False,
     transform=True,
