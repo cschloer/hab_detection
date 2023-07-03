@@ -85,7 +85,7 @@ test_dataset = ImageData(
     transform=True,
     in_memory=True,
     fold_list=fold_indices,
-    use_unzipped=True
+    use_unzipped=True,
 )
 
 

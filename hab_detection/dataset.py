@@ -44,7 +44,7 @@ def get_data(data_path, use_zip=False):
                     dirname = os.path.dirname(feature_path)
                     label_filename = get_label_filename(feature_filename)
                     if label_filename:
-                        label_path = f"{dirname}/{label_filename}")
+                        label_path = f"{dirname}/{label_filename}"
                         if not os.path.isfile(label_path):
                             raise Exception(
                                 f'Corresponding label file doesn\'t exist: "{label_filename}"'
@@ -137,7 +137,9 @@ class ImageData(Dataset):
                 or (not is_train and fold_idx == self.fold)
                 for fold_idx in self.fold_list
             ]
-            self.features = [img for i, img in enumerate(self.backup_features) if bool_list[i]]
+            self.features = [
+                img for i, img in enumerate(self.backup_features) if bool_list[i]
+            ]
             self.labels = [
                 label for i, label in enumerate(self.backup_labels) if bool_list[i]
             ]
