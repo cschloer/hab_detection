@@ -69,7 +69,7 @@ train_dataset = ImageData(
     e["class_designation"],
     randomize=True,
     transform=True,
-    in_memory=True,
+    in_memory=False,
     fold_list=fold_indices,
     use_unzipped=True,
 )
@@ -79,7 +79,7 @@ test_dataset = ImageData(
     e["class_designation"],
     randomize=False,
     transform=True,
-    in_memory=True,
+    in_memory=False,
     fold_list=fold_indices,
     use_unzipped=True,
 )
