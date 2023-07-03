@@ -9,6 +9,7 @@ from hab_detection.constants import (
     MODEL_SAVE_BASE_FOLDER,
 )
 import re
+import time
 import numpy as np
 import pprint
 import json
@@ -37,9 +38,6 @@ random.shuffle(combined)
 features[:], labels[:] = zip(*combined)
 features = features[:SUBSET_SIZE]
 labels = labels[:SUBSET_SIZE]
-
-print("FEATURE AND LABEL", features[0], labels[0])
-exit()
 
 region_folds = {}
 counter = 0
@@ -103,6 +101,7 @@ for model_arc in [
                 )
                 losses = []
                 for fold in range(NUM_FOLDS):
+                    start = time.time()
                     log(f"Starting fold {fold + 1}")
                     # Set images to fold, but keep cache
                     train_dataset.set_fold(fold, True)
@@ -147,7 +146,9 @@ for model_arc in [
                         calculate_statistics=False,
                     )
                     losses.append(test_loss)
-                    log(f"Finished fold {fold + 1} with test loss: {test_loss}")
+                    log(
+                        f"Finished fold {fold + 1} with test loss: {test_loss}, took {(time.time() - start) / 60} minutes"
+                    )
                 average_loss = np.average(losses)
                 log(
                     f"Finished model {model_arc}, learning rate {learning_rate}, batch size {batch_size}, weight decay {weight_decay}.\nAverage loss: {average_loss}"
