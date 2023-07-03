@@ -21,7 +21,7 @@ transform_input = transforms.Compose([transforms.Normalize(dataset_mean, dataset
 def get_label_filename(feature_filename):
     match = re.findall(
         "([a-z0-9_]*)_(\d\d\d\d)_(\d*)_(\d*)_x(\d*)_y(\d*)_(\d*)x(\d*)_([a-z0-9]*)_sen2.npy",
-        input_filename,
+        feature_filename,
         re.IGNORECASE,
     )
     if match:
