@@ -135,8 +135,12 @@ for model_arc in [
                         track_statistics=False,
                         log_progress=False,
                         save_progress=False,
-                        epoch_limit=1,
+                        epoch_limit=100,
                     )
+                    log(
+                        f"Finished fold {fold + 1} training, took {(time.time() - start) / 60} minutes"
+                    )
+                    start = time.time()
                     test_loss, _, _ = get_model_performance(
                         model,
                         test_loader,
@@ -146,7 +150,7 @@ for model_arc in [
                     )
                     losses.append(test_loss)
                     log(
-                        f"Finished fold {fold + 1} with test loss: {test_loss}, took {(time.time() - start) / 60} minutes"
+                        f"Finished fold {fold + 1} with test loss: {test_loss}, took {(time.time() - start) / 60} additional minutes"
                     )
                 average_loss = np.average(losses)
                 log(

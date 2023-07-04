@@ -83,7 +83,7 @@ def load_model(
     num_classes = 2
     if class_designation is not None:
         num_classes = len(class_designation)
-    if model_architecture == "deeplabv3-resnet50":
+    if model_architecture.startswith("deeplabv3-resnet50"):
         # Load resnet50 segmentation model
         model = smp.DeepLabV3(
             encoder_name="resnet50",
