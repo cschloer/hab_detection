@@ -84,7 +84,6 @@ class ImageData(Dataset):
         in_memory=False,
         fold_list=None,
         zip_path=None,
-        use_unzipped=False,
         in_memory_prefill=True,
     ):
         super().__init__()
@@ -97,7 +96,6 @@ class ImageData(Dataset):
         self.do_transform = transform
         self.zip = None
         self.in_memory = in_memory
-        self.use_unzipped = use_unzipped
         self.cache = None
         if in_memory:
             self.cache = [None] * len(self.features)
