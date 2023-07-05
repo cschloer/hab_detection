@@ -49,14 +49,14 @@ def train_wrapper(
         class_designation,
         randomize=randomize,
         subset=subset_train,
-        in_memory=True,
+        in_memory=False,
         use_unzipped=True,
     )
     test_dataset = get_image_dataset(
         STRUCTURED_FOLDER_PATH_TEST,
         class_designation,
         subset=subset_test,
-        in_memory=True,
+        in_memory=False,
         use_unzipped=True,
     )
     train_loader = DataLoader(
