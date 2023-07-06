@@ -150,6 +150,7 @@ class ImageData(Dataset):
             )
 
     def _get_image(self, idx):
+        start = time.time()
         if self.in_memory and self.cache[idx] is not None:
             return self.cache[idx]
         filename = self.features[idx]
@@ -175,6 +176,7 @@ class ImageData(Dataset):
                 image,
                 label,
             )
+        print(f"TOOK {time.time() - start} seconds")
         return image, label
 
     def get_untransformed_image(self, idx):
