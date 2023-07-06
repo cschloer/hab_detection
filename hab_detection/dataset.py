@@ -159,10 +159,8 @@ class ImageData(Dataset):
         label = None
         if not self.zip_path:
             # No zip path provided, load directly from filesystem
-            start2 = time.time()
             image = load(filename)
             label = load(label_filename)
-            print(f"OTHER TOOK {time.time() - start2} seconds")
 
         else:
             if self.zip == None:
