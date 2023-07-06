@@ -65,7 +65,7 @@ def train_wrapper(
         shuffle=True,
         num_workers=0,
         drop_last=True,
-        pin_memory=True,
+        #pin_memory=True,
     )
 
     test_loader = DataLoader(
@@ -74,7 +74,7 @@ def train_wrapper(
         shuffle=True,
         num_workers=0,
         drop_last=True,
-        pin_memory=True,
+        #pin_memory=True,
     )
 
     if log_progress:
