@@ -15,10 +15,12 @@ ZIP_PATH_TEST = "/shared/datasets/hab/new_data/dataset_test.zip"
 STRUCTURED_FOLDER_PATH_TRAIN = "/ssd/hab/data/dataset_train_structured"
 STRUCTURED_FOLDER_PATH_TEST = "/ssd/hab/data/dataset_test_structured"
 
-MODEL_SAVE_BASE_FOLDER = "/shared/datasets/hab/models"
+# MODEL_SAVE_BASE_FOLDER = "/shared/datasets/hab/models"
+MODEL_SAVE_BASE_FOLDER = "/home/conrad/results/models"
 LOG_NAME = "log.txt"
 
-FULL_IMAGE_BASE_FOLDER = "/shared/datasets/hab/images"
+# FULL_IMAGE_BASE_FOLDER = "/shared/datasets/hab/images"
+FULL_IMAGE_BASE_FOLDER = "/home/conrad/results/images"
 
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
