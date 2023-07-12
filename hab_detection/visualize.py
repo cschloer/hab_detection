@@ -254,7 +254,7 @@ def visualize_full_image_multipatch(
             for c in range(pred_np.shape[2]):
                 pred_np[a, b, c] = []
 
-    STEP_SIZE = 64
+    STEP_SIZE = 32
     batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     prev_batch = None
     target_indices = []
