@@ -249,9 +249,11 @@ def visualize_full_image_multipatch(
     pred_np = np.empty(cyan_np.shape, dtype=object)
     print(pred_np.shape)
     print("PRED NP", pred_np)
-    with np.nditer(pred_np, flags=["multi_index", "refs_ok"], op_flags=["writeonly"]) as it:
+    with np.nditer(
+        pred_np, flags=["multi_index", "refs_ok"], op_flags=["writeonly"]
+    ) as it:
         for x in it:
-            np.put(pred_np, it.multi_index, [])
+            np.put(pred_np, [it.multi_index], [])
     print("PRED NP", pred_np)
 
     exit()
