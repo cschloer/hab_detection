@@ -260,11 +260,9 @@ def visualize_full_image_multipatch(
     target_indices = []
     x_len = sen2_np.shape[1]
     y_len = sen2_np.shape[2]
-    STEP_SIZE = 65
+    STEP_SIZE = 32
     for x in range(0, x_len, STEP_SIZE):
         for y in range(0, y_len, STEP_SIZE):
-            if x == 1103:
-                print("X IS 1103")
             used_x = x
             used_y = y
             if used_x + 64 > x_len:
@@ -324,8 +322,6 @@ def visualize_full_image_multipatch(
                         y_offset = target_index["y_offset"]
                         for image_x in range(x_target, x_target + 64 - x_offset):
                             for image_y in range(y_target, y_target + 64 - y_offset):
-                                if image_x == 1166 and image_y == 1753:
-                                    print(x_target, x_offset, y_target, y_offset)
                                 pred_np[0, image_x, image_y].append(
                                     pred[
                                         i,
