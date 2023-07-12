@@ -123,7 +123,7 @@ def visualize_full_image_no_patch(
         image_name + "_no_tile",
         sen2_np,
         cyan_np,
-        pred_np,
+        np.expand_dims(pred_np, 0),
     )
 
 
@@ -254,6 +254,8 @@ def visualize_image(
     ax.imshow(sen2_img)
     ax.axis("off")
 
+    print("HEIGHT", height, "YCROP", ycrop, "WIDTH", width, "XCROP", xcrop)
+    print("SHAPE", cyan_np.shape)
     cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])[
         0 : height - ycrop, 0 : width - xcrop
     ]
