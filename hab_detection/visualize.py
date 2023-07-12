@@ -123,7 +123,7 @@ def visualize_full_image_no_patch(
         image_name + "_no_tile",
         sen2_np,
         cyan_np,
-        np.expand_dims(pred_np, 0),
+        pred_np,
     )
 
 
