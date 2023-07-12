@@ -512,7 +512,6 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
-    exit()
     visualize_full_image_no_patch(
         model,
         dataset,
@@ -527,6 +526,13 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
+    visualize_full_image_multipatch(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "greenbay",
+    )
     visualize_full_image_no_patch(
         model,
         dataset,
@@ -540,6 +546,13 @@ def visualize(
         class_designation,
         image_save_folder,
         "greenbay",
+    )
+    visualize_full_image_multipatch(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "erie",
     )
     visualize_full_image_no_patch(
         model,
