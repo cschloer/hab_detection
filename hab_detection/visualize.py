@@ -235,6 +235,117 @@ def visualize_full_image(
     )
 
 
+def visualize_full_image_multipatch(
+    model,
+    dataset,
+    class_designation,
+    image_save_folder,
+    image_name,
+):
+    input_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/sen2.npy"
+    label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
+    sen2_np = np.load(input_path).astype(np.float32)
+    cyan_np = np.load(label_path)
+    pred_np = np.empty(cyan_np.shape, dtype=object)
+    print(pred_np.shape)
+    print("PRED NP", pred_np)
+    exit()
+
+    BATCH_SIZE = 128
+    STEP_SIZE = 32
+    batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
+    prev_batch = None
+    target_indices = []
+    x_len = sen2_np.shape[1]
+    y_len = sen2_np.shape[2]
+    for x in range(0, x_len, STEP_SIZE):
+        for y in range(0, y_len, STEP_SIZE):
+            used_x = x
+            used_y = y
+            if used_x + 64 > x_len:
+                used_x = x_len - 64
+            if used_y + 64 > y_len:
+                used_y = y_len - 64
+
+            tile = sen2_np[:, used_x : used_x + 64, used_y : used_y + 64]
+            cyan_tile = cyan_np[:, used_x : used_x + 64, used_y : used_y + 64]
+            cyan_tile_transformed = dataset.transform_label(
+                torch.from_numpy(cyan_tile).int()
+            )
+            # If contains non land
+            if torch.any(cyan_tile_transformed != -1):
+                batch = np.concatenate(
+                    (
+                        batch,
+                        np.expand_dims(tile, 0),
+                    ),
+                    axis=0,
+                )
+                target_indices.append(
+                    {
+                        "x_target": x,
+                        "x_offset": x - used_x,
+                        "y_target": y,
+                        "y_offset": y - used_y,
+                    }
+                )
+            if batch.shape[0] == BATCH_SIZE or (x_len - 64 <= x and y_len - 64 <= y):
+                # Add tiles from previous batch to make it BATCH_SIZE
+                for i in range(BATCH_SIZE - batch.shape[0]):
+                    batch = np.concatenate(
+                        (
+                            batch,
+                            np.expand_dims(prev_batch[i, :, :, :], 0),
+                        ),
+                        axis=0,
+                    )
+
+                with torch.no_grad():
+                    model.eval()
+                    transformed_batch = transform_input(
+                        torch.from_numpy(batch.astype(np.float32) / 10000),
+                    ).to(device, dtype=torch.float)
+                    pred = model(transformed_batch)  # make prediction
+                    if isinstance(pred, dict):
+                        pred = pred["out"]
+                    pred = pred.cpu().detach()
+                    pred = np.squeeze(
+                        torch.argmax(pred, dim=1, keepdim=False).cpu().numpy()
+                    )
+                    for i, target_index in enumerate(target_indices):
+                        x_target = target_index["x_target"]
+                        x_offset = target_index["x_offset"]
+                        y_target = target_index["y_target"]
+                        y_offset = target_index["y_offset"]
+                        pred_np[
+                            :,
+                            x_target : x_target + 64 - x_offset,
+                            y_target : y_target + 64 - y_offset,
+                        ] = pred[i, x_offset:, y_offset:]
+                target_indices = []
+                prev_batch = batch
+                batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
+    tracker = get_metric_tracker(class_designation)
+    tracker.update(
+        torch.from_numpy(pred_np).to(device),
+        torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0).to(
+            device
+        ),
+    )
+    log(
+        f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
+    )
+
+    return visualize_image(
+        class_designation,
+        image_save_folder,
+        image_name,
+        sen2_np,
+        cyan_np,
+        pred_np,
+    )
+
+
 def visualize_image(
     class_designation,
     image_save_folder,
@@ -374,6 +485,14 @@ def visualize(
     """
 
     log("Visualizing full images.")
+    visualize_full_image_multipatch(
+        model,
+        dataset,
+        class_designation,
+        image_save_folder,
+        "winnebago",
+    )
+    exit()
     visualize_full_image_no_patch(
         model,
         dataset,
