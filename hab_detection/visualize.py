@@ -321,6 +321,8 @@ def visualize_full_image_multipatch(
                         y_offset = target_index["y_offset"]
                         for x in range(x_target, x_target + 64 - x_offset):
                             for y in range(y_target, y_target + 64 - y_offset):
+                                if x == 1166 and y == 1753:
+                                    print(x_target, x_offset, y_target, y_offset)
                                 pred_np[0, x, y].append(
                                     pred[
                                         i,
@@ -337,9 +339,8 @@ def visualize_full_image_multipatch(
             for c in range(pred_np.shape[2]):
                 l = pred_np[a, b, c]
                 counters[len(l)] += 1
-                if len(l) == 2:
-
-                    print(f"({a}, {b}, {c}) - {l}")
+                #if len(l) == 2:
+                #    print(f"({a}, {b}, {c}) - {l}")
     print(counters)
     print(pred_np)
     exit()
