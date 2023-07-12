@@ -247,21 +247,10 @@ def visualize_full_image_multipatch(
     sen2_np = np.load(input_path).astype(np.float32)
     cyan_np = np.load(label_path)
     pred_np = np.empty(cyan_np.shape, dtype=object)
-    print(pred_np.shape)
-    print("PRED NP", pred_np)
     for a in range(pred_np.shape[0]):
         for b in range(pred_np.shape[1]):
             for c in range(pred_np.shape[2]):
                 pred_np[a, b, c] = []
-    print("PRED NP", pred_np)
-    with np.nditer(
-        pred_np, flags=["multi_index", "refs_ok"], op_flags=["writeonly"]
-    ) as it:
-        for x in it:
-            np.put(pred_np, [it.multi_index], [])
-    print("PRED NP", pred_np)
-
-    exit()
 
     BATCH_SIZE = 128
     STEP_SIZE = 32
@@ -329,6 +318,11 @@ def visualize_full_image_multipatch(
                         x_offset = target_index["x_offset"]
                         y_target = target_index["y_target"]
                         y_offset = target_index["y_offset"]
+                        for b in range(x_target, x_target+x_offset):
+                            for c in range(y_target, y_target+y_offset):
+                                pred_np[0, b, c].append(pred[i, b - x_offset, c - y_offset])
+                        continue
+                        print(x_target, x_offset, y_target, y_offset)
                         pred_np[
                             :,
                             x_target : x_target + 64 - x_offset,
@@ -337,6 +331,9 @@ def visualize_full_image_multipatch(
                 target_indices = []
                 prev_batch = batch
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
+                break
+    print(pred_np)
+    exit()
     tracker = get_metric_tracker(class_designation)
     tracker.update(
         torch.from_numpy(pred_np).to(device),
