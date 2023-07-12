@@ -259,7 +259,7 @@ def visualize_full_image_multipatch(
     target_indices = []
     x_len = sen2_np.shape[1]
     y_len = sen2_np.shape[2]
-    STEP_SIZE = 64
+    STEP_SIZE = 65
     for x in range(0, x_len, STEP_SIZE):
         for y in range(0, y_len, STEP_SIZE):
             used_x = x
