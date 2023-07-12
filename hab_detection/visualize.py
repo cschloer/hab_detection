@@ -327,17 +327,11 @@ def visualize_full_image_multipatch(
                                         (y - y_target) + y_offset,
                                     ]
                                 )
-                        continue
-                        print(x_target, x_offset, y_target, y_offset)
-                        pred_np[
-                            :,
-                            x_target : x_target + 64 - x_offset,
-                            y_target : y_target + 64 - y_offset,
-                        ] = pred[i, x_offset:, y_offset:]
                 target_indices = []
                 prev_batch = batch
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
                 break
+            break
     for a in range(pred_np.shape[0]):
         for b in range(pred_np.shape[1]):
             for c in range(pred_np.shape[2]):
