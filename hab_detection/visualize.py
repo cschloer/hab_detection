@@ -263,6 +263,8 @@ def visualize_full_image_multipatch(
     STEP_SIZE = 65
     for x in range(0, x_len, STEP_SIZE):
         for y in range(0, y_len, STEP_SIZE):
+            if x == 1103:
+                print("X IS 1103")
             used_x = x
             used_y = y
             if used_x + 64 > x_len:
