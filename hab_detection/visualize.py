@@ -337,7 +337,9 @@ def visualize_full_image_multipatch(
             for c in range(pred_np.shape[2]):
                 l = pred_np[a, b, c]
                 counters[len(l)] += 1
-                # print(f"({a}, {b}, {c}) - {l}")
+                if len(l) == 2:
+
+                    print(f"({a}, {b}, {c}) - {l}")
     print(counters)
     print(pred_np)
     exit()
