@@ -318,7 +318,7 @@ def visualize_full_image_multipatch(
                         x_offset = target_index["x_offset"]
                         y_target = target_index["y_target"]
                         y_offset = target_index["y_offset"]
-                        print(x_target, x_offset)
+                        print(x_target, x_offset, " - ", y_target, y_offset)
                         for b in range(x_target, x_target + x_offset):
                             for c in range(y_target, y_target + y_offset):
                                 print("APPENDING")
