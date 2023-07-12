@@ -316,9 +316,9 @@ def visualize(
 
     log(f"Loading the dataset")
     if dataset_type == "test":
-        dataset = get_image_dataset(ZIP_PATH_TEST, class_designation, randomize=False)
+        dataset = get_image_dataset(STRUCTURED_FOLDER_PATH_TEST, class_designation, randomize=False)
     elif dataset_type == "train":
-        dataset = get_image_dataset(ZIP_PATH_TRAIN, class_designation, randomize=False)
+        dataset = get_image_dataset(STRUCTURED_FOLDER_PATH_TRAIN, class_designation, randomize=False)
     else:
         raise Exception(f"Unknown dataset type {dataset_type}")
     loader = DataLoader(
