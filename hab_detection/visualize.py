@@ -336,9 +336,9 @@ def visualize_full_image_multipatch(
     for a in range(pred_np.shape[0]):
         for b in range(pred_np.shape[1]):
             for c in range(pred_np.shape[2]):
-                val = np.average(pred_np[a, b, c])
-                final_pred_np[a, b, c] = round(val) if val else 0
-                # l = pred_np[a, b, c]
+                l = pred_np[a, b, c]
+                val = round(np.average(l)) if len(l) else 0
+                final_pred_np[a, b, c] = val
                 # counters[len(l)] += 1
                 # if len(l) == 2:
                 #    print(f"({a}, {b}, {c}) - {l}")
