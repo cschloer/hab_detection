@@ -260,7 +260,7 @@ def visualize_full_image_multipatch(
     target_indices = []
     x_len = sen2_np.shape[1]
     y_len = sen2_np.shape[2]
-    STEP_SIZE = 30
+    STEP_SIZE = 32
     for x in range(0, x_len, STEP_SIZE):
         for y in range(0, y_len, STEP_SIZE):
             used_x = x
@@ -333,16 +333,18 @@ def visualize_full_image_multipatch(
                 prev_batch = batch
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     counters = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    final_pred_np = np.full(cyan_np.shape, 0, dtype=np.int64)
     for a in range(pred_np.shape[0]):
         for b in range(pred_np.shape[1]):
             for c in range(pred_np.shape[2]):
-                l = pred_np[a, b, c]
-                counters[len(l)] += 1
+                final_pred_np[a, b, c] = round(np.average(pred_np[a, b, c]))
+                # l = pred_np[a, b, c]
+                # counters[len(l)] += 1
                 # if len(l) == 2:
                 #    print(f"({a}, {b}, {c}) - {l}")
-    print(counters)
-    print(pred_np)
-    exit()
+    # print(counters)
+    # print(pred_np)
+    # exit()
     tracker = get_metric_tracker(class_designation)
     tracker.update(
         torch.from_numpy(pred_np).to(device),
@@ -351,13 +353,13 @@ def visualize_full_image_multipatch(
         ),
     )
     log(
-        f"MulticlassAccuracy for {image_name}: {tracker.compute_all()['MulticlassAccuracy'][0]}"
+        f"MulticlassAccuracy for {image_name} multitile: {tracker.compute_all()['MulticlassAccuracy'][0]}"
     )
 
     return visualize_image(
         class_designation,
         image_save_folder,
-        image_name,
+        image_name + "_multipatch",
         sen2_np,
         cyan_np,
         pred_np,
