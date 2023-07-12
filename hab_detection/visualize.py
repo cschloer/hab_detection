@@ -320,6 +320,7 @@ def visualize_full_image_multipatch(
                         y_offset = target_index["y_offset"]
                         for b in range(x_target, x_target + x_offset):
                             for c in range(y_target, y_target + y_offset):
+                                print("APPENDING")
                                 pred_np[0, b, c].append(
                                     pred[i, b - x_offset, c - y_offset]
                                 )
