@@ -254,12 +254,12 @@ def visualize_full_image_multipatch(
             for c in range(pred_np.shape[2]):
                 pred_np[a, b, c] = []
 
-    STEP_SIZE = 32
     batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     prev_batch = None
     target_indices = []
     x_len = sen2_np.shape[1]
     y_len = sen2_np.shape[2]
+    STEP_SIZE = 32
     for x in range(0, x_len, STEP_SIZE):
         for y in range(0, y_len, STEP_SIZE):
             used_x = x
@@ -331,12 +331,15 @@ def visualize_full_image_multipatch(
                 target_indices = []
                 prev_batch = batch
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
+    counters = [0, 0, 0, 0, 0, 0, 0, 0]
     for a in range(pred_np.shape[0]):
         for b in range(pred_np.shape[1]):
             for c in range(pred_np.shape[2]):
                 l = pred_np[a, b, c]
                 if len(l) != 0:
-                    print(f"({a}, {b}, {c}) - {l}")
+                    counters[len(l)] += 1
+                    #print(f"({a}, {b}, {c}) - {l}")
+    print(counters)
     print(pred_np)
     exit()
     tracker = get_metric_tracker(class_designation)
