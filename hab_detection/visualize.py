@@ -332,7 +332,7 @@ def visualize_full_image_multipatch(
                 target_indices = []
                 prev_batch = batch
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
-    counters = [0, 0, 0, 0, 0, 0, 0, 0]
+    counters = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for a in range(pred_np.shape[0]):
         for b in range(pred_np.shape[1]):
             for c in range(pred_np.shape[2]):
