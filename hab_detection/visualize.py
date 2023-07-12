@@ -87,6 +87,7 @@ def visualize_full_image_no_patch(
     label_path = f"{FULL_IMAGE_BASE_FOLDER}/{image_name}/cyan.npy"
     sen2_np = np.load(input_path).astype(np.float32)
     cyan_np = np.load(label_path)
+    """
     with torch.no_grad():
         model.eval()
         transformed_batch = torch.unsqueeze(
@@ -106,6 +107,7 @@ def visualize_full_image_no_patch(
         torch.from_numpy(np.squeeze(pred_np)).to(device),
         dataset.transform_label(torch.from_numpy(cyan_np).int()).to(device),
     )
+    """
     log(
         f"MulticlassAccuracy for {image_name} no tile: {tracker.compute_all()['MulticlassAccuracy'][0]}"
     )
