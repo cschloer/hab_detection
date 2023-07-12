@@ -318,9 +318,11 @@ def visualize_full_image_multipatch(
                         x_offset = target_index["x_offset"]
                         y_target = target_index["y_target"]
                         y_offset = target_index["y_offset"]
-                        for b in range(x_target, x_target+x_offset):
-                            for c in range(y_target, y_target+y_offset):
-                                pred_np[0, b, c].append(pred[i, b - x_offset, c - y_offset])
+                        for b in range(x_target, x_target + x_offset):
+                            for c in range(y_target, y_target + y_offset):
+                                pred_np[0, b, c].append(
+                                    pred[i, b - x_offset, c - y_offset]
+                                )
                         continue
                         print(x_target, x_offset, y_target, y_offset)
                         pred_np[
@@ -332,7 +334,12 @@ def visualize_full_image_multipatch(
                 prev_batch = batch
                 batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
                 break
-    print(pred_np)
+    for a in range(pred_np.shape[0]):
+        for b in range(pred_np.shape[1]):
+            for c in range(pred_np.shape[2]):
+                l = pred_np[a, b, c]
+                if len(l) != 0:
+                    print(f"({a}, {b}, {c}) - {l}")
     exit()
     tracker = get_metric_tracker(class_designation)
     tracker.update(
