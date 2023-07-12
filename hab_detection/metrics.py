@@ -92,6 +92,7 @@ def get_model_performance(
             if class_designation is not None
             else None
         )
+    batch_idx = -1
     with torch.no_grad():
         model.eval()
 
@@ -175,7 +176,6 @@ def get_model_performance(
                     )
                 else:
                     tracker.update(preds, labels)
-
 
                 if class_designation is not None and calculate_2d_hist:
                     # Reverse the 1 hot encoding on preds and bring everything to np
