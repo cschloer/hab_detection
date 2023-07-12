@@ -322,15 +322,15 @@ def visualize_full_image_multipatch(
                         x_offset = target_index["x_offset"]
                         y_target = target_index["y_target"]
                         y_offset = target_index["y_offset"]
-                        for x in range(x_target, x_target + 64 - x_offset):
-                            for y in range(y_target, y_target + 64 - y_offset):
-                                if x == 1166 and y == 1753:
+                        for image_x in range(x_target, x_target + 64 - x_offset):
+                            for image_y in range(y_target, y_target + 64 - y_offset):
+                                if image_x == 1166 and image_y == 1753:
                                     print(x_target, x_offset, y_target, y_offset)
-                                pred_np[0, x, y].append(
+                                pred_np[0, image_x, image_y].append(
                                     pred[
                                         i,
-                                        (x - x_target) + x_offset,
-                                        (y - y_target) + y_offset,
+                                        (image_x - x_target) + x_offset,
+                                        (image_y - y_target) + y_offset,
                                     ]
                                 )
                 target_indices = []
