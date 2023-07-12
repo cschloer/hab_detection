@@ -249,7 +249,6 @@ def visualize_full_image_multipatch(
     sen2_np = np.load(input_path).astype(np.float32)
     cyan_np = np.load(label_path)
     pred_np = np.empty(cyan_np.shape, dtype=object)
-    print("SHAPE", cyan_np.shape)
     for a in range(pred_np.shape[0]):
         for b in range(pred_np.shape[1]):
             for c in range(pred_np.shape[2]):
@@ -337,7 +336,8 @@ def visualize_full_image_multipatch(
     for a in range(pred_np.shape[0]):
         for b in range(pred_np.shape[1]):
             for c in range(pred_np.shape[2]):
-                final_pred_np[a, b, c] = round(np.average(pred_np[a, b, c]))
+                val = np.average(pred_np[a, b, c])
+                final_pred_np[a, b, c] = round(val) if val else 0
                 # l = pred_np[a, b, c]
                 # counters[len(l)] += 1
                 # if len(l) == 2:
