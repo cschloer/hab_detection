@@ -401,6 +401,17 @@
         "randomize": true,
         "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
         "learning_rate": 0.0001
+    },
+    "experiment40": {
+        "name": "experiment41",
+        "description": "Use all data, resnet50",
+        "batch_size": 128,
+        "class_designation": [1, 100, 150, 200, 254],
+        "class_weights": [1, 5.30165036, 12.4890355, 36.9074944, 1850.49924],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "deeplabv3-resnet50#no_replace_batchnorm",
+        "learning_rate": 0.00001
     }
 }
 
