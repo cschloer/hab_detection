@@ -254,8 +254,6 @@ def visualize_image(
     ax.imshow(sen2_img)
     ax.axis("off")
 
-    print("HEIGHT", height, "YCROP", ycrop, "WIDTH", width, "XCROP", xcrop)
-    print("SHAPE", cyan_np.shape)
     cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])[
         0 : height - ycrop, 0 : width - xcrop
     ]
@@ -316,9 +314,13 @@ def visualize(
 
     log(f"Loading the dataset")
     if dataset_type == "test":
-        dataset = get_image_dataset(STRUCTURED_FOLDER_PATH_TEST, class_designation, randomize=False)
+        dataset = get_image_dataset(
+            STRUCTURED_FOLDER_PATH_TEST, class_designation, randomize=False
+        )
     elif dataset_type == "train":
-        dataset = get_image_dataset(STRUCTURED_FOLDER_PATH_TRAIN, class_designation, randomize=False)
+        dataset = get_image_dataset(
+            STRUCTURED_FOLDER_PATH_TRAIN, class_designation, randomize=False
+        )
     else:
         raise Exception(f"Unknown dataset type {dataset_type}")
     loader = DataLoader(
