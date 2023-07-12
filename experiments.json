@@ -402,7 +402,7 @@
         "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
         "learning_rate": 0.0001
     },
-    "experiment40": {
+    "experiment41": {
         "name": "experiment41",
         "description": "Use all data, resnet50",
         "batch_size": 128,
