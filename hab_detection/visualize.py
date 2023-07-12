@@ -347,7 +347,7 @@ def visualize_full_image_multipatch(
     # exit()
     tracker = get_metric_tracker(class_designation)
     tracker.update(
-        torch.from_numpy(pred_np).to(device),
+        torch.from_numpy(final_pred_np).to(device),
         torch.unsqueeze(dataset.transform_label(torch.from_numpy(cyan_np).int()), 0).to(
             device
         ),
@@ -362,7 +362,7 @@ def visualize_full_image_multipatch(
         image_name + "_multipatch",
         sen2_np,
         cyan_np,
-        pred_np,
+        final_pred_np,
     )
 
 
