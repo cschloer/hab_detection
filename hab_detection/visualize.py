@@ -24,7 +24,7 @@ from .constants import (
     FULL_IMAGE_BASE_FOLDER,
 )
 
-BATCH_SIZE = 128
+BATCH_SIZE = 64
 
 from .metrics import get_metric_tracker, get_model_performance
 from .helpers import log, set_config
