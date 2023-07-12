@@ -24,6 +24,8 @@ from .constants import (
     FULL_IMAGE_BASE_FOLDER,
 )
 
+BATCH_SIZE = 128
+
 from .metrics import get_metric_tracker, get_model_performance
 from .helpers import log, set_config
 from .dataset import get_image_dataset, transform_input
@@ -178,9 +180,9 @@ def visualize_full_image(
                         "y_offset": y - used_y,
                     }
                 )
-            if batch.shape[0] == 32 or (x_len - 64 <= x and y_len - 64 <= y):
-                # Add tiles from previous batch to make it 32
-                for i in range(32 - batch.shape[0]):
+            if batch.shape[0] == BATCH_SIZE or (x_len - 64 <= x and y_len - 64 <= y):
+                # Add tiles from previous batch to make it BATCH_SIZE
+                for i in range(BATCH_SIZE - batch.shape[0]):
                     batch = np.concatenate(
                         (
                             batch,
@@ -252,8 +254,7 @@ def visualize_full_image_multipatch(
             for c in range(pred_np.shape[2]):
                 pred_np[a, b, c] = []
 
-    BATCH_SIZE = 128
-    STEP_SIZE = 32
+    STEP_SIZE = 64
     batch = np.empty((0, 12, 64, 64), dtype=sen2_np.dtype)
     prev_batch = None
     target_indices = []
