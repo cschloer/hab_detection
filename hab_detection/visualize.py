@@ -467,7 +467,7 @@ def visualize(
         ax.plot(test_loss, color="b", label="Test", alpha=0.25)
 
         X = np.arange(0, len(test_loss))
-        coeff = np.polyfit(X, test_loss, 4)
+        coeff = np.polyfit(X, test_loss, 2)
         Y_fitted = np.polyval(coeff, X)
         ax.plot(Y_fitted, color="b", label="Test Smooth")
 
