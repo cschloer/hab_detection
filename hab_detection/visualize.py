@@ -464,12 +464,19 @@ def visualize(
 
         fig = plt.figure()
         ax = fig.add_subplot()
-        ax.plot(test_loss, color="b", label="Test", alpha=0.5)
-        ax.plot(train_loss, color="r", label="Train")
+        ax.plot(test_loss, color="b", label="Test", alpha=0.25)
+
         X = np.arange(0, len(test_loss))
         coeff = np.polyfit(X, test_loss, 4)
         Y_fitted = np.polyval(coeff, X)
         ax.plot(Y_fitted, color="b", label="Test Smooth")
+
+
+        ax.plot(train_loss, color="r", label="Train", alpha=0.25)
+        X = np.arange(0, len(train_loss))
+        coeff = np.polyfit(X, train_loss, 4)
+        Y_fitted = np.polyval(coeff, X)
+        ax.plot(Y_fitted, color="r", label="Train Smooth")
 
         ax.set(xlabel="Epoch", ylabel="Loss")
 
