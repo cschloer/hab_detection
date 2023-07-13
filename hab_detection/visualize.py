@@ -437,8 +437,50 @@ def visualize(
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
     image_save_folder = f"{model_save_folder}/visualize/{dataset_type}"
     log_file = f"{model_save_folder}/{LOG_NAME}"
-
     os.makedirs(image_save_folder, exist_ok=True)
+
+    log("Generating loss plot.")
+    try:
+        test_loss = []
+        train_loss = []
+        cur_epoch = None
+        with open(log_file, "r") as f:
+            for line in f.readlines():
+                result = re.search(r"^.*Epoch (\d*) ([a-z]*) loss: (\d*[.]?\d*)", line)
+                if result is not None:
+                    epoch, t, loss = result.groups()
+                    if cur_epoch is None:
+                        cur_epoch = epoch
+                    else:
+                        # Assert that train and test don't get misaligned
+                        assert cur_epoch == epoch
+                        cur_epoch = None
+                    if t == "test":
+                        test_loss.append(float(loss))
+                    elif t == "train":
+                        train_loss.append(float(loss))
+                    else:
+                        raise Exception(f"Found unknown type {t} in log")
+
+        fig = plt.figure()
+        ax = fig.add_subplot()
+        ax.plot(test_loss, color="b", label="Test", alpha=0.5)
+        ax.plot(train_loss, color="r", label="Train")
+        X = np.arange(0, len(test_loss))
+        coeff = np.polyfit(X, test_loss, 4)
+        Y_fitted = np.polyval(coeff, X)
+        ax.plot(Y_fitted, color="b", label="Test Smooth")
+
+        ax.set(xlabel="Epoch", ylabel="Loss")
+
+        plt.legend()
+        plt.title("Loss across training epochs")
+
+        # plt.show()
+        save_plot(image_save_folder, "loss")
+    except FileNotFoundError as e:
+        log("Log file not found. Skipping the loss plot.")
+
     log(f"Loading the model")
 
     model = load_model(
@@ -588,43 +630,6 @@ def visualize(
     )
     """
     log("Done visualizing full images.")
-
-    log("Generating loss plot.")
-    try:
-        test_loss = []
-        train_loss = []
-        cur_epoch = None
-        with open(log_file, "r") as f:
-            for line in f.readlines():
-                result = re.search(r"^.*Epoch (\d*) ([a-z]*) loss: (\d*[.]?\d*)", line)
-                if result is not None:
-                    epoch, t, loss = result.groups()
-                    if cur_epoch is None:
-                        cur_epoch = epoch
-                    else:
-                        # Assert that train and test don't get misaligned
-                        assert cur_epoch == epoch
-                        cur_epoch = None
-                    if t == "test":
-                        test_loss.append(float(loss))
-                    elif t == "train":
-                        train_loss.append(float(loss))
-                    else:
-                        raise Exception(f"Found unknown type {t} in log")
-
-        fig = plt.figure()
-        ax = fig.add_subplot()
-        ax.plot(test_loss, color="b", label="Test")
-        ax.plot(train_loss, color="r", label="Train")
-        ax.set(xlabel="Epoch", ylabel="Loss")
-
-        plt.legend()
-        plt.title("Loss across training epochs")
-
-        # plt.show()
-        save_plot(image_save_folder, "loss")
-    except FileNotFoundError as e:
-        log("Log file not found. Skipping the loss plot.")
 
     _, metrics, hist_2d = get_model_performance(
         model,
