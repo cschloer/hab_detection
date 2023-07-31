@@ -396,8 +396,21 @@ def visualize_image(
     cyan_classed = np.copy(cyan_reshaped)
     for i, c in enumerate(class_designation):
         cyan_classed = np.where(cyan_classed < c, i, cyan_classed)
-
+    cyan_classed = np.where(cyan_classed == 255, len(class_designation), cyan_classed)
     print(cyan_classed)
+    classed_colormap = np.array(
+        [
+            [46, 127, 24, 255],
+            [69, 115, 30, 255],
+            [141, 71, 43, 255],
+            [177, 52, 51, 255],
+            [200, 37, 56, 255],
+            [0, 0, 0, 255],
+        ]
+    )
+
+    ax.imshow(classed_colormap[cyan_classed])
+    ax.axis("off")
 
     # ---------------------------
 
