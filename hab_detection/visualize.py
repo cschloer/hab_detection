@@ -6,6 +6,7 @@ import seaborn as sns
 from torch.utils.data import DataLoader
 from PIL import Image
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+import matplotlib.cm as cm
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatch
@@ -428,7 +429,7 @@ def visualize_image(
     cax = divider.append_axes("right", size="5%", pad=0.05)
     mappable = cm.ScalarMappable(cmap=cmap)
     mappable.set_array([])
-    mappable.set_clim(-0.5, 5+0.5)
+    mappable.set_clim(-0.5, 5 + 0.5)
     colorbar = fig.colorbar(
         mappable, cax=cax, orientation="vertical"
     )  # , ticks=[0, 1, 2, 3, 4])
