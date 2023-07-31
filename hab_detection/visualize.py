@@ -421,6 +421,8 @@ def visualize_image(
             "#DA2C43",
         ]
     )
+    cmap.set_over("crimson")
+    cmap.set_under("w")
     norm = matplotlib.colors.Normalize(vmin=0, vmax=5)
 
     im = ax.imshow(classed_colormap[cyan_classed], cmap=cmap, norm=norm)
