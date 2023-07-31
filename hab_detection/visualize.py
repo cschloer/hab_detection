@@ -404,7 +404,7 @@ def visualize_image(
     cyan_classed = np.where(cyan_reshaped == 255, len(class_designation), cyan_classed)
     print(cyan_classed)
     classed_colormap = np.array(
-        [`
+        [
             [255, 250, 240, 255],
             [248, 209, 205, 255],
             [240, 168, 171, 255],
