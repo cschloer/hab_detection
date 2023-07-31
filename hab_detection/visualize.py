@@ -413,11 +413,6 @@ def visualize_image(
             [0, 0, 0, 255],
         ]
     )
-    # [158, 194, 255, 255],
-    # [123, 159, 242, 255],
-    # [66, 89, 195, 255],
-    # [33, 42, 165, 255],
-    # [3, 1, 140, 255],
 
     ax.imshow(classed_colormap[cyan_classed])
     ax.axis("off")
@@ -594,7 +589,6 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
-    exit()
     visualize_full_image_no_patch(
         model,
         dataset,
