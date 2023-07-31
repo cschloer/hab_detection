@@ -600,7 +600,6 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
-    exit()
     visualize_full_image_no_patch(
         model,
         dataset,
