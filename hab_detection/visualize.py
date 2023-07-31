@@ -421,7 +421,7 @@ def visualize_image(
             "#DA2C43",
         ]
     )
-    norm = matplotlib.colors.Normalize(vmin=0, vmax=4)
+    norm = matplotlib.colors.Normalize(vmin=0, vmax=5)
 
     im = ax.imshow(classed_colormap[cyan_classed], cmap=cmap, norm=norm)
     divider = make_axes_locatable(ax)
