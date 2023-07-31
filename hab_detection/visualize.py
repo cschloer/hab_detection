@@ -393,7 +393,7 @@ def visualize_image(
         0 : height - ycrop, 0 : width - xcrop
     ]
 
-    ax.set_title("Difference Map")
+    ax.set_title("Difference Between Prediction and Actual")
     cyan_classed = np.copy(cyan_reshaped)
     pred_classed = np.copy(pred_np)
     for i in range(len(class_designation)):
