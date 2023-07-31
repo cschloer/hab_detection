@@ -405,7 +405,6 @@ def visualize_image(
         [
             [255, 250, 240, 255],
             [248, 209, 205, 255],
-            [240, 168, 171, 255],
             [225, 85, 102, 255],
             [218, 44, 67, 255],
             [0, 0, 0, 255],
@@ -416,12 +415,11 @@ def visualize_image(
         [
             "#FFFAF0",
             "#F8D1CD",
-            "#F0A8AB",
             "#E15566",
             "#DA2C43",
         ]
     )
-    norm = matplotlib.colors.Normalize(vmin=0, vmax=5)
+    norm = matplotlib.colors.Normalize(vmin=0, vmax=4)
 
     im = ax.imshow(classed_colormap[cyan_classed], cmap=cmap, norm=norm)
     divider = make_axes_locatable(ax)
