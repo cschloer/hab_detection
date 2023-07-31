@@ -405,7 +405,7 @@ def visualize_image(
     print(cyan_classed)
     classed_colormap = np.array(
         [
-            [200, 37, 56, 255],
+            [158, 194, 255, 255],
             [123, 159, 242, 255],
             [66, 89, 195, 255],
             [33, 42, 165, 255],
