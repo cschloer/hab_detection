@@ -421,11 +421,9 @@ def visualize_image(
             "#DA2C43",
         ]
     )
-    cmap.set_over("crimson")
-    cmap.set_under("w")
     norm = matplotlib.colors.Normalize(vmin=0, vmax=5)
 
-    im = ax.imshow(classed_colormap[cyan_classed], cmap=cmap, norm=norm, extend="both")
+    im = ax.imshow(classed_colormap[cyan_classed], cmap=cmap, norm=norm)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     fig.colorbar(im, cax=cax, orientation="vertical")
