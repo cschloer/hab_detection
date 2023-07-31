@@ -416,7 +416,7 @@ def visualize_image(
         [
             "#FFFAF0",
             "#F8D1CD",
-            "F0A8AB",
+            "#F0A8AB",
             "#E15566",
             "#DA2C43",
         ]
