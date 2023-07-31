@@ -383,13 +383,24 @@ def visualize_image(
     pred_np = np.squeeze(pred_np[:, 0 : height - ycrop, 0 : width - xcrop])
     sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
     ax = axs[1, 0]
+    """
     ax.set_title("Actual image")
     ax.imshow(sen2_img)
     ax.axis("off")
-
+    """
     cyan_reshaped = cyan_np.reshape(cyan_np.shape[1], cyan_np.shape[2])[
         0 : height - ycrop, 0 : width - xcrop
     ]
+
+    ax.set_title("Difference Map")
+    cyan_classed = np.copy(cyan_reshaped)
+    for i, c in enumerate(class_designation):
+        cyan_classed = np.where(cyan_classed < c, i, cyan_classed)
+
+    print(cyan_classed)
+
+    # ---------------------------
+
     ax = axs[0, 0]
     ax.set_title("Actual HAB Index")
     ax.imshow(cyan_colormap[cyan_reshaped])
@@ -560,6 +571,7 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
+    exit()
     visualize_full_image_no_patch(
         model,
         dataset,
