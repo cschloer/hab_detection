@@ -414,16 +414,16 @@ def visualize_image(
 
     cmap = matplotlib.colors.ListedColormap(
         [
-            [255, 250, 240, 255],
-            [248, 209, 205, 255],
-            [240, 168, 171, 255],
-            [225, 85, 102, 255],
-            [218, 44, 67, 255],
+            "#FFFAF0",
+            "#F8D1CD",
+            "#F0A8AB",
+            "#E15566",
+            "#DA2C43",
         ]
     )
     norm = matplotlib.colors.Normalize(vmin=0, vmax=5)
 
-    im = ax.imshow(classed_colormap[cyan_classed], cmap = cmap, norm = norm)
+    im = ax.imshow(classed_colormap[cyan_classed], cmap=cmap, norm=norm)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     fig.colorbar(im, cax=cax, orientation="vertical")
