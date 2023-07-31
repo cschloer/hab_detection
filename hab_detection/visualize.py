@@ -397,7 +397,7 @@ def visualize_image(
     for i in range(len(class_designation)):
         c_val = class_designation[i - 1] if i != 0 else 0
         cyan_classed = np.where(cyan_reshaped >= c_val, i, cyan_classed)
-    cyan_classed = np.where(cyan_classed == 255, len(class_designation), cyan_classed)
+    cyan_classed = np.where(cyan_reshaped == 255, len(class_designation), cyan_classed)
     print(cyan_classed)
     classed_colormap = np.array(
         [
