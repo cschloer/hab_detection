@@ -5,6 +5,7 @@ import zipfile
 import seaborn as sns
 from torch.utils.data import DataLoader
 from PIL import Image
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatch
@@ -375,7 +376,6 @@ def visualize_image(
     pred_np,
 ):
     fig, axs = plt.subplots(2, 2, figsize=(20, 16))
-    print(fig)
     height = sen2_np.shape[1]
     width = sen2_np.shape[2]
     ycrop = height % 8
@@ -412,7 +412,11 @@ def visualize_image(
         ]
     )
 
-    ax.imshow(classed_colormap[cyan_classed])
+    im = ax.imshow(classed_colormap[cyan_classed])
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    fig.colorbar(im, cax=cax, orientation="vertical")
+
     ax.axis("off")
 
     # ---------------------------
@@ -587,6 +591,7 @@ def visualize(
         image_save_folder,
         "winnebago",
     )
+    exit()
     visualize_full_image_no_patch(
         model,
         dataset,
