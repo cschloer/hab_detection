@@ -400,7 +400,7 @@ def visualize_image(
         cyan_classed = np.where(cyan_reshaped >= c_val, i, cyan_classed)
     print(cyan_classed.shape)
     print(pred_np.shape)
-    cyan_classed = np.absolute(cyan_classed - pred_np.shape)
+    cyan_classed = np.absolute(cyan_classed - pred_np)
     cyan_classed = np.where(cyan_reshaped == 255, len(class_designation), cyan_classed)
     print(cyan_classed)
     classed_colormap = np.array(
