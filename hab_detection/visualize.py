@@ -426,8 +426,11 @@ def visualize_image(
     im = ax.imshow(classed_colormap[cyan_classed], cmap=cmap, norm=norm)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
+     mappable = cm.ScalarMappable(cmap=cmap)
+    mappable.set_array([])
+    mappable.set_clim(-0.5, 5+0.5)
     colorbar = fig.colorbar(
-        im, cax=cax, orientation="vertical"
+        mappable, cax=cax, orientation="vertical"
     )  # , ticks=[0, 1, 2, 3, 4])
     colorbar.set_ticks(np.linspace(0, 5, 5))
     colorbar.set_ticklabels(range(5))
