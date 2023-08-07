@@ -229,6 +229,7 @@ def visualize_full_image(
     log(f"MulticlassAccuracy for {image_name}: {metrics['MulticlassAccuracy'][0]}")
     cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
     cmn = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+    cmn = np.around(2)
     log(f"MulticlassConfusionMatrix for {image_name}: \n{cmn}")
 
     return visualize_image(
