@@ -750,8 +750,9 @@ def visualize(
         rectangles = {}
         ranges = [
             (
-                # -20 if i == 0 else class_designation[i - 1],
-                0 if i == 0 else class_designation[i - 1],
+                (-20 if class_designation[0] == 1 else 0)
+                if i == 0
+                else class_designation[i - 1],
                 class_designation[i],
             )
             for i in range(len(class_designation))
@@ -774,7 +775,7 @@ def visualize(
             normalized = hist_2d[i] / sums
             axs.plot(
                 range(1, 254),
-                normalized[1:],
+                normalized[1 if class_designation[0] == 1 else 0 :],
                 label=f"Class {i + 1}",
                 color=color,
                 alpha=0.3,
