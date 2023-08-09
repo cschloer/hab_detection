@@ -493,6 +493,7 @@ def visualize(
     os.makedirs(image_save_folder, exist_ok=True)
 
     log("Generating loss plot.")
+    """
     try:
         test_loss = []
         train_loss = []
@@ -565,6 +566,7 @@ def visualize(
         drop_last=False,
     )
 
+    """
     """
     print("Calculating batch vs individual performance")
 
