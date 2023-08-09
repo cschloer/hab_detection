@@ -821,7 +821,10 @@ def visualize(
         plt.autoscale(enable=True, axis="x", tight=True)
         axs.set_ylim(0.0, 1.07)
         axs.set_xlim(-20 if class_designation[0] == 1 else 0, 253)
-        plt.xticks([-10, 1, 100, 150, 200, 253], [0, 1, 100, 150, 200, 253])
+        if class_designation[0] == 1:
+            plt.xticks([-10, 1, 100, 150, 200, 253], [0, 1, 100, 150, 200, 253])
+        else:
+            plt.xticks([0, 50, 100, 150, 200, 253], [0, 50, 100, 150, 200, 253])
         plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.2, 0.4, 0.6, 0.8, 1.0])
 
         axs.set_title("Classification of Pixels vs Actual HAB Index")
