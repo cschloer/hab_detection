@@ -409,7 +409,7 @@ def visualize_image(
         [
             [255, 250, 240, 255],
             [248, 209, 205, 255],
-            [240, 168, 171, 255],
+            #        [240, 168, 171, 255],
             [225, 85, 102, 255],
             [218, 44, 67, 255],
             [0, 0, 0, 255],
@@ -420,24 +420,24 @@ def visualize_image(
         [
             "#FFFAF0",
             "#F8D1CD",
-            "#F0A8AB",
+            #        "#F0A8AB",
             "#E15566",
             "#DA2C43",
         ]
     )
-    norm = matplotlib.colors.Normalize(vmin=0, vmax=5)
+    norm = matplotlib.colors.Normalize(vmin=0, vmax=len(class_designation))
 
     im = ax.imshow(classed_colormap[cyan_classed], cmap=cmap, norm=norm)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     mappable = cm.ScalarMappable(cmap=cmap)
     mappable.set_array([])
-    mappable.set_clim(-0.5, 5 + 0.5)
+    mappable.set_clim(-0.5, len(class_designation) + 0.5)
     colorbar = fig.colorbar(
         mappable, cax=cax, orientation="vertical"
     )  # , ticks=[0, 1, 2, 3, 4])
-    colorbar.set_ticks(np.linspace(0, 5, 5))
-    colorbar.set_ticklabels(range(5))
+    colorbar.set_ticks(np.linspace(0, len(class_designation), len(class_designation)))
+    colorbar.set_ticklabels(range(len(class_designation)))
 
     ax.axis("off")
 
