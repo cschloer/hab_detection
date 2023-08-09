@@ -541,6 +541,7 @@ def visualize(
     except FileNotFoundError as e:
         log("Log file not found. Skipping the loss plot.")
 
+    """
     log(f"Loading the model")
 
     model = load_model(
@@ -566,7 +567,6 @@ def visualize(
         drop_last=False,
     )
 
-    """
     """
     print("Calculating batch vs individual performance")
 
