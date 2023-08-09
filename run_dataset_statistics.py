@@ -5,6 +5,8 @@ import numpy as np
 
 from hab_detection.constants import (
     device,
+    STRUCTURED_FOLDER_PATH_TRAIN,
+    STRUCTURED_FOLDER_PATH_TEST,
     ZIP_PATH_TRAIN,
     ZIP_PATH_TEST,
     MODEL_SAVE_BASE_FOLDER,
@@ -33,7 +35,7 @@ cd = e["class_designation"]
 
 print("Getting dataset.")
 dataset = get_image_dataset(
-    ZIP_PATH_TRAIN if t == "train" else ZIP_PATH_TEST,
+    STRUCTURED_FOLDER_PATH_TRAIN if t == "train" else STRUCTURED_FOLDER_PATH_TEST,
     cd,
 )
 
