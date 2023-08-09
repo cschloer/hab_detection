@@ -493,7 +493,6 @@ def visualize(
     os.makedirs(image_save_folder, exist_ok=True)
 
     log("Generating loss plot.")
-    """
     try:
         test_loss = []
         train_loss = []
@@ -541,7 +540,6 @@ def visualize(
     except FileNotFoundError as e:
         log("Log file not found. Skipping the loss plot.")
 
-    """
     log(f"Loading the model")
 
     model = load_model(
@@ -608,7 +606,6 @@ def visualize(
     """
 
     log("Visualizing full images.")
-    """
     visualize_full_image_multipatch(
         model,
         dataset,
@@ -673,14 +670,13 @@ def visualize(
         "erie",
     )
     # return
-    """
     log("Done visualizing full images.")
 
     _, metrics, hist_2d = get_model_performance(
         model,
         loader,
         class_designation,
-        num_batches=10,
+        num_batches=-1,
         calculate_2d_hist=True,
         calculate_statistics=True,
     )
