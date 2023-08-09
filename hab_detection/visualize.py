@@ -774,7 +774,7 @@ def visualize(
 
             normalized = hist_2d[i] / sums
             axs.plot(
-                range(1, 254),
+                range(1 if class_designation[0] == 1 else 0, 254),
                 normalized[1 if class_designation[0] == 1 else 0 :],
                 label=f"Class {i + 1}",
                 color=color,
