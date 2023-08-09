@@ -762,7 +762,9 @@ def visualize(
             ceil = ranges[i][1]
             color = cyan_colormap[ceil - 1 if floor != 0 else 0] / 255
 
-            rectangles[f"{floor} - {ceil -1}" if i != 0 else "0"] = mpatch.Rectangle(
+            rectangles[
+                f"{floor} - {ceil -1}" if (i != 0 or class_designation[0] != 1) else "0"
+            ] = mpatch.Rectangle(
                 (floor, 1.02),
                 ceil - floor,
                 0.05,
@@ -786,13 +788,14 @@ def visualize(
                     color=color,
                     linewidth=2.0,
                 )
-            plt.plot(
-                [-20, 0.5],
-                [normalized[0], normalized[0]],
-                linewidth=2.0,
-                alpha=0.3 if i != 0 else 1.0,
-                color=color,
-            )
+            if class_designation[0] == 1:
+                plt.plot(
+                    [-20, 0.5],
+                    [normalized[0], normalized[0]],
+                    linewidth=2.0,
+                    alpha=0.3 if i != 0 else 1.0,
+                    color=color,
+                )
         for i in range(len(class_designation)):
             plt.axvline(x=class_designation[i], color="black", alpha=1.0)
 
@@ -816,7 +819,7 @@ def visualize(
 
         plt.autoscale(enable=True, axis="x", tight=True)
         axs.set_ylim(0.0, 1.07)
-        axs.set_xlim(-20, 253)
+        axs.set_xlim(-20 if class_designation[0] == 1 else 0, 253)
         plt.xticks([-10, 1, 100, 150, 200, 253], [0, 1, 100, 150, 200, 253])
         plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.2, 0.4, 0.6, 0.8, 1.0])
 
