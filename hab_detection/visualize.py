@@ -606,6 +606,7 @@ def visualize(
     """
 
     log("Visualizing full images.")
+    """
     visualize_full_image_multipatch(
         model,
         dataset,
@@ -671,30 +672,13 @@ def visualize(
     )
     # return
     """
-    visualize_patch(
-        model,
-        dataset,
-        class_designation,
-        image_save_folder,
-        "winnebago_2019_7_25_x32_y1600_64x64_28",
-        ZIP_PATH_TRAIN,
-    )
-    visualize_patch(
-        model,
-        dataset,
-        class_designation,
-        image_save_folder,
-        "winnebago_2019_7_25_x864_y1056_64x64_788",
-        ZIP_PATH_TRAIN,
-    )
-    """
     log("Done visualizing full images.")
 
     _, metrics, hist_2d = get_model_performance(
         model,
         loader,
         class_designation,
-        num_batches=-1,
+        num_batches=10,
         calculate_2d_hist=True,
         calculate_statistics=True,
     )
@@ -764,7 +748,8 @@ def visualize(
         rectangles = {}
         ranges = [
             (
-                -20 if i == 0 else class_designation[i - 1],
+                # -20 if i == 0 else class_designation[i - 1],
+                0 if i == 0 else class_designation[i - 1],
                 class_designation[i],
             )
             for i in range(len(class_designation))
