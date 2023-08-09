@@ -423,6 +423,17 @@
         "randomize": true,
         "model_architecture": "deeplabv3_resnet50#no_replace_batchnorm",
         "learning_rate": 0.00001
+    },
+    "experiment43": {
+        "name": "experiment43",
+        "description": "Change class designation",
+        "batch_size": 128,
+        "class_designation": [100, 200, 254],
+        "class_weights": [1, 5.30165036, 12.4890355],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
+        "learning_rate": 0.0001
     }
 }
 
