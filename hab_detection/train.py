@@ -162,6 +162,7 @@ def train(
                     if isinstance(preds, dict):
                         preds = preds["out"]
                     loss = criterion(preds, labels)  # Calculate cross entropy loss
+                    print("LOSS", loss)
                     print("LOSS", loss.size())
                     raw_labels_flat = raw_labels.flatten()
                     print("RAW LABELS", raw_labels_flat.size())
@@ -172,6 +173,7 @@ def train(
                     print("PIXEL WEIGHTS BEFORE FILTER", pixel_weights.shape)
                     pixel_weights = pixel_weights[pixel_weights != 0]
                     print("PIXEL WEIGHTS AFTER FILTER", pixel_weights.shape)
+                    pixel_weights = pixel_weights.to(device)
 
                     loss = loss * pixel_weights
                     exit()
