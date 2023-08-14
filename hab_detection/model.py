@@ -222,7 +222,8 @@ def get_criterion(class_designation, class_weights):
     else:
         lf = torch.nn.CrossEntropyLoss(
             ignore_index=-1,
-            weight=torch.FloatTensor(class_weights).to(device),
+            # We remove weights for now, since we will do pixel specific weights
+            # weight=torch.FloatTensor(class_weights).to(device),
         )
         return lf
 

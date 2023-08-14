@@ -146,7 +146,9 @@ def train(
             loss_list = []
             try:
                 start = time.time()
-                for batch_idx, (inputs, labels, _, _) in enumerate(train_loader):
+                for batch_idx, (inputs, labels, _, raw_labels) in enumerate(
+                    train_loader
+                ):
                     elapsed1 = time.time() - start
                     start = time.time()
                     model.train()
@@ -159,6 +161,19 @@ def train(
                     if isinstance(preds, dict):
                         preds = preds["out"]
                     loss = criterion(preds, labels)  # Calculate cross entropy loss
+                    print("LOSS", loss.size)
+                    raw_labels_flat = raw_labels.flatten()
+                    print("RAW LABELS", raw_labels_flat.size())
+                    print("ALL DIST", all_dist.shape)
+                    pixel_weights = np.where(
+                        raw_labels < 254, all_dist[raw_labels_flat], 0)
+                    )
+                    print("PIXEL WEIGHTS BEFORE FILTER", pixel_weights.shape)
+                    pixel_weights = pixel_weights[pixel_weights != 0]
+                    print("PIXEL WEIGHTS AFTER FILTER", pixel_weights.shape)
+
+                    loss = loss * pixel_weights
+                    exit()
 
                     optimizer.zero_grad()
                     loss.backward()  # Backpropogate loss

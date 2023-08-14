@@ -434,6 +434,17 @@
         "randomize": true,
         "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
         "learning_rate": 0.0001
+    },
+    "experiment44": {
+        "name": "experiment44",
+        "description": "Testing new pixel wise weights",
+        "batch_size": 128,
+        "class_designation": [100, 200, 254],
+        "class_weights": [1, 11.0914990, 2199.54135],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
+        "learning_rate": 0.0001
     }
 }
 
