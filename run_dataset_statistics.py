@@ -50,13 +50,17 @@ print("Dataset loaded. Calculating labels distribution.")
 
 num_classes = len(cd) if cd is not None else 254
 labels_dist = np.zeros(num_classes)
-for batch_idx, (_, labels, _, _) in enumerate(loader):
+for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
+    print(raw_labels.shape())
+    print(raw_labels.max())
+    print(raw_labels)
     mask = labels == -1
 
     labels_dist_temp = np.bincount(
         labels[~mask].flatten(),
         minlength=num_classes,
     )
+    exit()
 
     labels_dist = labels_dist + labels_dist_temp
     if batch_idx % 100 == 0:
