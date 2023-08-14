@@ -73,6 +73,7 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
 print("Labels Distribution:")
 print(labels_dist)
 print("Weights:")
+labels_dist = np.where(labels_dist == 0, 1, labels_dist)
 print(1 / (labels_dist / np.max(labels_dist)))
 print("All Weights:")
 print(1 / (all_dist / np.max(all_dist)))
