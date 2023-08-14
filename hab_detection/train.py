@@ -163,10 +163,10 @@ def train(
                         preds = preds["out"]
                     raw_loss = criterion(preds, labels)  # Calculate cross entropy loss
                     print("LOSS", raw_loss)
-                    print("LOSS", raw_loss.size())
-                    print("RAW LABELS", raw_labels.size())
-                    print("ALL DIST", all_dist.shape)
                     pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
+                    print(
+                        "PIXEL WEIGHTS",
+                    )
                     print("PIXEL WEIGHTS", pixel_weights.size())
 
                     weighted_loss = raw_loss * pixel_weights
