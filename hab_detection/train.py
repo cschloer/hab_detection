@@ -166,7 +166,7 @@ def train(
                     print("RAW LABELS", raw_labels_flat.size())
                     print("ALL DIST", all_dist.shape)
                     pixel_weights = np.where(
-                        raw_labels < 254, all_dist[raw_labels_flat], 0)
+                        raw_labels < 254, all_dist[raw_labels_flat], 0
                     )
                     print("PIXEL WEIGHTS BEFORE FILTER", pixel_weights.shape)
                     pixel_weights = pixel_weights[pixel_weights != 0]
