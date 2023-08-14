@@ -221,6 +221,7 @@ def get_criterion(class_designation, class_weights):
         return mse_loss_with_nans
     else:
         lf = torch.nn.CrossEntropyLoss(
+            reduction="none",
             ignore_index=-1,
             # We remove weights for now, since we will do pixel specific weights
             # weight=torch.FloatTensor(class_weights).to(device),
