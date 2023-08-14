@@ -12,6 +12,7 @@ from hab_detection.constants import (
     MODEL_SAVE_BASE_FOLDER,
 )
 from torch.utils.data import DataLoader
+import torch
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
@@ -51,8 +52,8 @@ print("Dataset loaded. Calculating labels distribution.")
 num_classes = len(cd) if cd is not None else 254
 labels_dist = np.zeros(num_classes)
 for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
-    print(raw_labels.shape())
-    print(raw_labels.max())
+    print(raw_labels.size())
+    print(torch.max(raw_labels))
     print(raw_labels)
     mask = labels == -1
 
