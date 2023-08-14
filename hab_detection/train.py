@@ -164,16 +164,13 @@ def train(
                     raw_loss = criterion(preds, labels)  # Calculate cross entropy loss
                     print("LOSS", raw_loss)
                     print("LOSS", raw_loss.size())
-                    raw_labels_flat = raw_labels.flatten()
-                    print("RAW LABELS", raw_labels_flat.size())
+                    print("RAW LABELS", raw_labels.size())
                     print("ALL DIST", all_dist.shape)
                     pixel_weights = np.where(
                         raw_labels_flat < 254, all_dist[raw_labels_flat], 0
                     )
-                    print("PIXEL WEIGHTS BEFORE FILTER", pixel_weights.shape)
-                    pixel_weights = pixel_weights[pixel_weights != 0]
-                    print("PIXEL WEIGHTS AFTER FILTER", pixel_weights.shape)
-                    pixel_weights = torch.from_numpy(pixel_weights).to(device)
+                    pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
+                    print("PIXEL WEIGHTS", pixel_weights.size())
 
                     weighted_loss = raw_loss * pixel_weights
                     loss = torch.sum(weighted_loss.flatten(start_dim=1), axis=0)
