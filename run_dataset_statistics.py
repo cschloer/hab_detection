@@ -51,26 +51,32 @@ print("Dataset loaded. Calculating labels distribution.")
 
 num_classes = len(cd) if cd is not None else 254
 labels_dist = np.zeros(num_classes)
+all_dist = np.zeros(256)
 for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
-    print(raw_labels.size())
-    print(torch.max(raw_labels))
-    print(raw_labels)
     mask = labels == -1
 
     labels_dist_temp = np.bincount(
         labels[~mask].flatten(),
         minlength=num_classes,
     )
-    exit()
+    all_dist_temp = np.bincount(
+        raw_labels.flatten(),
+        minlength=256,
+    )
 
     labels_dist = labels_dist + labels_dist_temp
+    all_dist = all_dist + all_dist_temp
     if batch_idx % 100 == 0:
         print(f"Batch {batch_idx}")
+        break
 
 print("Labels Distribution:")
 print(labels_dist)
 print("Weights:")
 print(1 / (labels_dist / np.max(labels_dist)))
+print("All Weights:")
+print(1 / (all_dist / np.max(all_dist)))
+exit()
 
 print("Calculating mean and std now.")
 
