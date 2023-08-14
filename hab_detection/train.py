@@ -166,9 +166,6 @@ def train(
                     print("LOSS", raw_loss.size())
                     print("RAW LABELS", raw_labels.size())
                     print("ALL DIST", all_dist.shape)
-                    pixel_weights = np.where(
-                        raw_labels_flat < 254, all_dist[raw_labels_flat], 0
-                    )
                     pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
                     print("PIXEL WEIGHTS", pixel_weights.size())
 
