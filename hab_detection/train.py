@@ -173,7 +173,7 @@ def train(
                     print("PIXEL WEIGHTS BEFORE FILTER", pixel_weights.shape)
                     pixel_weights = pixel_weights[pixel_weights != 0]
                     print("PIXEL WEIGHTS AFTER FILTER", pixel_weights.shape)
-                    pixel_weights = pixel_weights.to(device)
+                    pixel_weights = torch.from_numpy(pixel_weights).to(device)
 
                     loss = loss * pixel_weights
                     exit()
