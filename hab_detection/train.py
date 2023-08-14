@@ -162,7 +162,7 @@ def train(
                     if isinstance(preds, dict):
                         preds = preds["out"]
                     loss = criterion(preds, labels)  # Calculate cross entropy loss
-                    print("LOSS", loss.size)
+                    print("LOSS", loss.size())
                     raw_labels_flat = raw_labels.flatten()
                     print("RAW LABELS", raw_labels_flat.size())
                     print("ALL DIST", all_dist.shape)
