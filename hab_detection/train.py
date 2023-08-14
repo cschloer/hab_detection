@@ -161,9 +161,9 @@ def train(
                     start = time.time()
                     if isinstance(preds, dict):
                         preds = preds["out"]
-                    loss = criterion(preds, labels)  # Calculate cross entropy loss
-                    print("LOSS", loss)
-                    print("LOSS", loss.size())
+                    raw_loss = criterion(preds, labels)  # Calculate cross entropy loss
+                    print("LOSS", raw_loss)
+                    print("LOSS", raw_loss.size())
                     raw_labels_flat = raw_labels.flatten()
                     print("RAW LABELS", raw_labels_flat.size())
                     print("ALL DIST", all_dist.shape)
@@ -175,7 +175,9 @@ def train(
                     print("PIXEL WEIGHTS AFTER FILTER", pixel_weights.shape)
                     pixel_weights = torch.from_numpy(pixel_weights).to(device)
 
-                    loss = loss * pixel_weights
+                    weighted_loss = raw_loss * pixel_weights
+                    loss = torch.sum(weighted_loss.flatten(start_dim=1), axis=0)
+                    loss = torch.mean(loss)
                     exit()
 
                     optimizer.zero_grad()
