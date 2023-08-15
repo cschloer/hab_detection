@@ -14,7 +14,7 @@ from torchmetrics import (
     Specificity,
 )
 from .helpers import log
-from .constants import device
+from .constants import device, all_dist
 from .model import get_criterion
 
 
@@ -160,7 +160,12 @@ def get_model_performance(
             # Only calculate the loss if its regression or class weights is passed in
             if class_designation is None or class_weights is not None:
                 criterion = get_criterion(class_designation, class_weights)
-                loss = criterion(preds, labels)  # Calculate cross entropy loss
+                raw_loss = criterion(preds, labels)  # Calculate cross entropy loss
+                pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
+
+                weighted_loss = raw_loss * pixel_weights
+                loss = torch.mean(torch.sum(weighted_loss.flatten(start_dim=1), axis=0))
+
                 total_loss += loss.item()
 
             if calculate_statistics:

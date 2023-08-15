@@ -165,8 +165,9 @@ def train(
                     pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
 
                     weighted_loss = raw_loss * pixel_weights
-                    loss = torch.sum(weighted_loss.flatten(start_dim=1), axis=0)
-                    loss = torch.mean(loss)
+                    loss = torch.mean(
+                        torch.sum(weighted_loss.flatten(start_dim=1), axis=0)
+                    )
 
                     optimizer.zero_grad()
                     loss.backward()  # Backpropogate loss
