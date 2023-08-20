@@ -456,6 +456,17 @@
         "randomize": true,
         "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
         "learning_rate": 0.0001
+    },
+    "experiment46": {
+        "name": "experiment46",
+        "description": "Testing LOTS of classes",
+        "batch_size": 128,
+        "class_designation": [1, 25, 50, 75, 125, 150, 175, 200, 225, 254],
+        "class_weights": [],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
+        "learning_rate": 0.0001
     }
 }
 
