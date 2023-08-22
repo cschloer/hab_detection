@@ -39,12 +39,16 @@ class DeepLabV3_TwoHead(torch.nn.Module):
         result = OrderedDict()
         x = features["out"]
         x = self.classifier(x)
-        x = F.interpolate(x, size=input_shape, mode="bilinear", align_corners=False)
+        x = torch.nn.functional.interpolate(
+            x, size=input_shape, mode="bilinear", align_corners=False
+        )
         result["out"] = x
 
         x2 = features["out"]
         x2 = self.second_classifier(x)
-        x2 = F.interpolate(x2, size=input_shape, mode="bilinear", align_corners=False)
+        x2 = torch.nn.functional.interpolate(
+            x2, size=input_shape, mode="bilinear", align_corners=False
+        )
         result["out2"] = x2
 
         return result
