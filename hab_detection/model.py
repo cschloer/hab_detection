@@ -1,4 +1,5 @@
 from .constants import device, MODEL_SAVE_BASE_FOLDER
+from .two_head_model import create_twohead_model
 
 from torchvision import models
 from torchvision.models.segmentation import (
@@ -176,6 +177,11 @@ def load_model(
             model.backbone["0"][0] = torch.nn.Conv2d(
                 12, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
             )
+        else:
+            raise Exception("Regression not supported for lraspp_mobilenet_v3_large")
+    elif model_architecture.startswith("deeplabv3_resnet50_two_head"):
+        if class_designation is not None:
+            create_twohead_model(num_classes)
         else:
             raise Exception("Regression not supported for lraspp_mobilenet_v3_large")
     else:

@@ -160,7 +160,9 @@ def train(
                     elapsed2 = time.time() - start
                     start = time.time()
                     if isinstance(preds, dict):
+                        print("KEYS", preds.keys())
                         preds = preds["out"]
+                    exit()
                     raw_loss = criterion(preds, labels)  # Calculate cross entropy loss
                     pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
 
