@@ -183,7 +183,7 @@ def load_model(
         if class_designation is not None:
             model = create_twohead_model(num_classes)
             model.backbone.conv1 = torch.nn.Conv2d(
-                12, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+                12, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
             )
         else:
             raise Exception("Regression not supported for lraspp_mobilenet_v3_large")
