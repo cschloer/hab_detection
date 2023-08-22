@@ -182,6 +182,9 @@ def load_model(
     elif model_architecture.startswith("two_head_deeplabv3_resnet50"):
         if class_designation is not None:
             model = create_twohead_model(num_classes)
+            model.backbone["0"][0] = torch.nn.Conv2d(
+                12, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False
+            )
         else:
             raise Exception("Regression not supported for lraspp_mobilenet_v3_large")
     else:
