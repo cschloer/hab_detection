@@ -135,6 +135,7 @@ def train(
             print(model)
         optimizer = get_optimizer(model, learning_rate, weight_decay=weight_decay)
         criterion = get_criterion(class_designation, class_weights)
+        criterion2 = get_criterion(None, class_weights)
 
         if track_statistics:
             train_tracker = get_metric_tracker(class_designation)
@@ -156,20 +157,27 @@ def train(
                     inputs = inputs.to(device, dtype=torch.float, non_blocking=True)
                     labels = labels.to(device, non_blocking=True)
 
-                    preds = model(inputs)  # make prediction
+                    preds_dict = model(inputs)  # make prediction
                     elapsed2 = time.time() - start
                     start = time.time()
-                    if isinstance(preds, dict):
-                        print("KEYS", preds.keys())
-                        preds = preds["out"]
-                    exit()
-                    raw_loss = criterion(preds, labels)  # Calculate cross entropy loss
+                    # Class based preds
+                    preds1 = preds_dict["out"]
+                    # Regression preds (for training
+                    preds2 = preds_dict["out2"]
+                    # if isinstance(preds, dict):
+                    #    preds = preds["out"]
+                    raw_loss1 = criterion(
+                        preds1, labels
+                    )  # Calculate cross entropy loss
                     pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
 
-                    weighted_loss = raw_loss * pixel_weights
-                    loss = torch.mean(
+                    weighted_loss1 = raw_loss1 * pixel_weights
+                    loss1 = torch.mean(
                         torch.sum(weighted_loss.flatten(start_dim=1), axis=0)
                     )
+                    loss2 = criterion2(preds2, raw_labels)
+                    print(loss1, loss2)
+                    exit()
 
                     optimizer.zero_grad()
                     loss.backward()  # Backpropogate loss
