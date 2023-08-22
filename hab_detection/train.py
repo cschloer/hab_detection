@@ -161,22 +161,22 @@ def train(
                     elapsed2 = time.time() - start
                     start = time.time()
                     # Class based preds
-                    preds1 = preds_dict["out"]
-                    # Regression preds (for training
-                    preds2 = preds_dict["out2"]
+                    preds = preds_dict["out"]
                     # if isinstance(preds, dict):
                     #    preds = preds["out"]
-                    raw_loss1 = criterion(
-                        preds1, labels
-                    )  # Calculate cross entropy loss
+                    raw_loss = criterion(preds, labels)  # Calculate cross entropy loss
                     pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
 
-                    weighted_loss1 = raw_loss1 * pixel_weights
-                    loss1 = torch.mean(
+                    weighted_loss = raw_loss * pixel_weights
+                    loss = torch.mean(
                         torch.sum(weighted_loss.flatten(start_dim=1), axis=0)
                     )
-                    loss2 = criterion2(preds2, raw_labels)
-                    print(loss1, loss2)
+                    if "out2" in preds_dict:
+                        # Regression preds (for training
+                        preds2 = preds_dict["out2"]
+                        loss2 = criterion2(preds2, raw_labels)
+                        print(loss, loss2)
+
                     exit()
 
                     optimizer.zero_grad()
