@@ -476,7 +476,7 @@
         "class_weights": [],
         "weight_decay": 0.01,
         "randomize": true,
-        "model_architecture": "deeplabv3_resnet50_two_head#no_replace_batchnorm",
+        "model_architecture": "two_head_deeplabv3_resnet50#no_replace_batchnorm",
         "learning_rate": 0.0001
     }
 }
