@@ -211,6 +211,7 @@ def train(
                                 f"[{epoch + 1}, {batch_idx + 1:5d}] average loss: {avg_loss :.3f} -- using {round(psutil.Process(os.getpid()).memory_info().rss / (1<<30), 2)} GB"
                             )
                         running_loss = 0.0
+                    exit()
 
                 if save_progress:
                     torch.save(
