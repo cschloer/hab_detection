@@ -171,6 +171,7 @@ def train(
                     loss = torch.mean(
                         torch.sum(weighted_loss.flatten(start_dim=1), axis=0)
                     )
+                    used_loss = loss
                     if "out2" in preds_dict:
                         # Regression preds (for training) from second head
                         preds2 = preds_dict["out2"]
@@ -178,12 +179,10 @@ def train(
                         loss2 = criterion2(
                             torch.squeeze(preds2), torch.squeeze(raw_labels)
                         )
-                        print(loss, loss2)
-
-                    exit()
+                        used_loss = used_loss + loss2
 
                     optimizer.zero_grad()
-                    loss.backward()  # Backpropogate loss
+                    used_loss.backward()  # Backpropogate loss
                     optimizer.step()  # Apply gradient descent change to weight
 
                     running_loss += loss.item()
