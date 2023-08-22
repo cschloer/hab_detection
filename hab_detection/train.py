@@ -174,7 +174,7 @@ def train(
                     if "out2" in preds_dict:
                         # Regression preds (for training) from second head
                         preds2 = preds_dict["out2"]
-                        loss2 = criterion2(preds2, torch.squeeze(raw_labels))
+                        loss2 = criterion2(torch.squeeze(preds2), torch.squeeze(raw_labels))
                         print(loss, loss2)
 
                     exit()
