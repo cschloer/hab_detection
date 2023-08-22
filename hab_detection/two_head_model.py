@@ -65,10 +65,12 @@ def _deeplabv3_resnet(
 
     classifier = DeepLabHead(2048, num_classes)
     second_classifier = DeepLabHead(2048, num_classes)
+    """
     second_classifier[4] = torch.nn.Sequential(
         torch.nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1)),
         torch.nn.Sigmoid(),
     )
+    """
     return DeepLabV3_TwoHead(backbone, classifier, second_classifier)
 
 
