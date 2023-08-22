@@ -37,17 +37,15 @@ class DeepLabV3_TwoHead(torch.nn.Module):
         features = self.backbone(x)
 
         result = OrderedDict()
-        """
         x = features["out"]
         x = self.classifier(x)
         x = torch.nn.functional.interpolate(
             x, size=input_shape, mode="bilinear", align_corners=False
         )
         result["out"] = x
-        """
 
         x2 = features["out"]
-        x2 = self.second_classifier(x)
+        x2 = self.second_classifier(x2)
         x2 = torch.nn.functional.interpolate(
             x2, size=input_shape, mode="bilinear", align_corners=False
         )
@@ -65,12 +63,10 @@ def _deeplabv3_resnet(
 
     classifier = DeepLabHead(2048, num_classes)
     second_classifier = DeepLabHead(2048, num_classes)
-    """
     second_classifier[4] = torch.nn.Sequential(
         torch.nn.Conv2d(256, 1, kernel_size=(1, 1), stride=(1, 1)),
         torch.nn.Sigmoid(),
     )
-    """
     return DeepLabV3_TwoHead(backbone, classifier, second_classifier)
 
 
