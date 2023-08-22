@@ -181,7 +181,7 @@ def load_model(
             raise Exception("Regression not supported for lraspp_mobilenet_v3_large")
     elif model_architecture.startswith("two_head_deeplabv3_resnet50"):
         if class_designation is not None:
-            create_twohead_model(num_classes)
+            model = create_twohead_model(num_classes)
         else:
             raise Exception("Regression not supported for lraspp_mobilenet_v3_large")
     else:
