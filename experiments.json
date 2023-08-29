@@ -478,6 +478,17 @@
         "randomize": true,
         "model_architecture": "two_head_deeplabv3_resnet50#no_replace_batchnorm",
         "learning_rate": 0.0001
+    },
+    "experiment48": {
+        "name": "experiment48",
+        "description": "Testing two head, new class designation",
+        "batch_size": 128,
+        "class_designation": [1, 100, 150, 200, 254],
+        "class_weights": [],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "two_head_deeplabv3_resnet50#no_replace_batchnorm",
+        "learning_rate": 0.0001
     }
 }
 
