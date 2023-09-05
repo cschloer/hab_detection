@@ -500,6 +500,6 @@
         "randomize": true,
         "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
         "learning_rate": 0.0001
-    },
+    }
 }
 
