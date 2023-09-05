@@ -176,9 +176,8 @@ def train(
                         )
                     )
 
-                    weighted_loss = raw_loss * (
-                        pixel_weights ** additional_class_weights
-                    )
+                    weighted_loss = raw_loss * pixel_weights * additional_class_weights
+
                     loss = torch.mean(
                         torch.sum(weighted_loss.flatten(start_dim=1), axis=0)
                     )
