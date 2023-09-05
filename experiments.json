@@ -440,7 +440,7 @@
         "description": "Testing new pixel wise weights",
         "batch_size": 128,
         "class_designation": [100, 200, 254],
-        "class_weights": [1, 11.0914990, 2199.54135],
+        "class_weights": [],
         "weight_decay": 0.01,
         "randomize": true,
         "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
@@ -451,7 +451,7 @@
         "description": "Testing new pixel wise weights, with different class designation",
         "batch_size": 128,
         "class_designation": [1, 150, 200, 254],
-        "class_weights": [1, 12.4890355, 36.9074944, 1850.49924],
+        "class_weights": [],
         "weight_decay": 0.01,
         "randomize": true,
         "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
@@ -489,6 +489,17 @@
         "randomize": true,
         "model_architecture": "two_head_deeplabv3_resnet50#no_replace_batchnorm",
         "learning_rate": 0.0001
-    }
+    },
+    "experiment49": {
+        "name": "experiment49",
+        "description": "Experiment 45, but bumped the weight of class 0",
+        "batch_size": 128,
+        "class_designation": [1, 150, 200, 254],
+        "class_weights": [],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
+        "learning_rate": 0.0001
+    },
 }
 
