@@ -168,7 +168,7 @@ def train(
                     pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
                     # Weight pixels that are predicted farther away higher (ie: actual class 1, predicted class 4 is weighted higher than
                     # actual class 1, predicted class 2.
-                    preds_class = np.argmax(preds.detach().numpy(), axis=1)
+                    preds_class = np.argmax(preds.detach().cpu().numpy(), axis=1)
                     additional_class_weights = np.abs(labels - preds_class)
                     additional_class_weights = torch.from_numpy(
                         np.where(
