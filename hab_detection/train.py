@@ -176,7 +176,7 @@ def train(
                         np.where(
                             additional_class_weights == 0, 1, additional_class_weights
                         )
-                    )
+                    ).to(device, non_blocking=True)
 
                     weighted_loss = raw_loss * pixel_weights * additional_class_weights
 
