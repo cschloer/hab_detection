@@ -63,9 +63,8 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
     )
 
     # all_mask = np.logical_or(raw_labels == 254, raw_labels == 255)
-    print(raw_labels.numpy())
-    premax = max(premax, np.max(raw_labels.numpy()))
-    postmax = max(postmax, np.max(raw_labels[~mask].numpy()))
+    premax = max(premax, torch.max(raw_labels))
+    postmax = max(postmax, torch.max(raw_labels[~mask]))
     all_dist_temp = np.bincount(
         raw_labels[~mask].flatten(),
         minlength=254,
