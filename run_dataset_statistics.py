@@ -59,9 +59,12 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
         labels[~mask].flatten(),
         minlength=num_classes,
     )
+
+    # all_mask = np.logical_or(raw_labels == 254, raw_labels == 255)
+    print("PRE MAX", np.max(raw_labels), "POST MAX", np.max(raw_labels[~mask]))
     all_dist_temp = np.bincount(
-        raw_labels.flatten(),
-        minlength=256,
+        raw_labels[~mask].flatten(),
+        minlength=254,
     )
 
     labels_dist = labels_dist + labels_dist_temp
