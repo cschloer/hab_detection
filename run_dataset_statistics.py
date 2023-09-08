@@ -63,6 +63,7 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
     )
 
     # all_mask = np.logical_or(raw_labels == 254, raw_labels == 255)
+    print(raw_labels)
     premax = max(premax, np.max(raw_labels))
     postmax = max(postmax, np.max(raw_labels[~mask]))
     print("PRE MAX", np.max(raw_labels), "POST MAX", np.max(raw_labels[~mask]))
