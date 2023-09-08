@@ -511,6 +511,17 @@
         "randomize": true,
         "model_architecture": "deeplabv3_resnet50#no_replace_batchnorm",
         "learning_rate": 0.001
+    },
+    "experiment51": {
+        "name": "experiment51",
+        "description": "Experiment 50, with deeplabv3 mobilenet",
+        "batch_size": 256,
+        "class_designation": [],
+        "class_weights": [],
+        "weight_decay": 0.1,
+        "randomize": true,
+        "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm",
+        "learning_rate": 0.00001
     }
 }
 
