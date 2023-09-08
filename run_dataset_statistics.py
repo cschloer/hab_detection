@@ -51,7 +51,7 @@ print("Dataset loaded. Calculating labels distribution.")
 
 num_classes = len(cd) if cd is not None else 254
 labels_dist = np.zeros(num_classes)
-all_dist = np.zeros(256)
+all_dist = np.zeros(254)
 premax = 0
 postmax = 0
 for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
