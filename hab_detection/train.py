@@ -12,7 +12,6 @@ from .constants import (
     STRUCTURED_FOLDER_PATH_TEST,
     STRUCTURED_FOLDER_PATH_TRAIN,
     MODEL_SAVE_BASE_FOLDER,
-    all_dist,
 )
 from .helpers import log, set_config
 from .model import load_model, get_criterion, get_optimizer
@@ -122,12 +121,7 @@ def train(
     save_progress=True,
 ):
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
-    weighted_all_dist = np.ones(len(all_dist))
-    for i in range(len(class_designation)):
-        start = class_designation[i - 1] if i > 0 else 0
-        end = class_designation[i]
-        for j in range(start, end):
-            weighted_all_dist[j] = all_dist[j] / (end - start)
+    weighted_all_dist = get_weighted_all_dist(class_designation)
 
     try:
         if log_progress:

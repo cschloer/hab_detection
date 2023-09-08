@@ -1,4 +1,4 @@
-from .constants import dataset_mean, dataset_std
+from .constants import dataset_mean, dataset_std, all_dist
 from .helpers import log, load
 
 import time
@@ -303,3 +303,13 @@ def get_image_dataset(
         in_memory=in_memory,
     )
     return image_dataset
+
+
+def get_weighted_all_dist(class_designation):
+    weighted_all_dist = np.ones(len(all_dist))
+    for i in range(len(class_designation)):
+        start = class_designation[i - 1] if i > 0 else 0
+        end = class_designation[i]
+        for j in range(start, end):
+            weighted_all_dist[j] = all_dist[j] / (end - start)
+    return weighted_all_dist
