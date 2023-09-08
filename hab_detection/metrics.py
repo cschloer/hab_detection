@@ -16,6 +16,7 @@ from torchmetrics import (
 from .helpers import log
 from .constants import device
 from .model import get_criterion
+from .dataset import get_weighted_all_dist
 
 
 def get_metric_tracker(class_designation):

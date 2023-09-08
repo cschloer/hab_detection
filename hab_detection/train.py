@@ -15,7 +15,7 @@ from .constants import (
 )
 from .helpers import log, set_config
 from .model import load_model, get_criterion, get_optimizer
-from .dataset import get_image_dataset
+from .dataset import get_image_dataset, get_weighted_all_dist
 from .metrics import get_model_performance, get_metric_tracker
 
 
