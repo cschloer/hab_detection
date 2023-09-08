@@ -122,6 +122,14 @@ def train(
     save_progress=True,
 ):
     model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
+    weighted_all_dist = np.ones(len(all_dist))
+    for i in range(len(class_designation)):
+        start = class_designation[i - 1] if i > 0 else 0
+        end = class_designation[i]
+        for j in range(start, end):
+            weighted_all_dist[j] = all_dist[j] / (end - start)
+    print(weighted_all_dist)
+
     try:
         if log_progress:
             log(

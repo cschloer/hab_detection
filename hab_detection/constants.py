@@ -351,7 +351,7 @@ cyan_colormap = np.array(
 all_dist = np.array(
     # Artifically increase weight of 0 (it's actually 1.00000000e00)
     [
-        1.00000000e02,
+        1.00000000e00,
         2.16892474e02,
         2.81664363e02,
         3.26735423e02,
