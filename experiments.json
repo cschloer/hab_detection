@@ -522,6 +522,17 @@
         "randomize": true,
         "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm",
         "learning_rate": 0.00001
+    },
+    "experiment52": {
+        "name": "experiment52",
+        "description": "Experiment 52, dividing each pixel by the class occurance",
+        "batch_size": 256,
+        "class_designation": [1, 100, 150, 200, 254],
+        "class_weights": [],
+        "weight_decay": 0.1,
+        "randomize": true,
+        "model_architecture": "deeplabv3-mobilenet_v2#no_replace_batchnorm",
+        "learning_rate": 0.00001
     }
 }
 
