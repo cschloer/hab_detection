@@ -52,6 +52,8 @@ print("Dataset loaded. Calculating labels distribution.")
 num_classes = len(cd) if cd is not None else 254
 labels_dist = np.zeros(num_classes)
 all_dist = np.zeros(256)
+premax = 0
+postmax = 0
 for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
     mask = labels == -1
 
@@ -61,6 +63,8 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
     )
 
     # all_mask = np.logical_or(raw_labels == 254, raw_labels == 255)
+    premax = max(premax, np.max(raw_labels))
+    postmax = max(postmax, np.max(raw_labels[~mask]))
     print("PRE MAX", np.max(raw_labels), "POST MAX", np.max(raw_labels[~mask]))
     all_dist_temp = np.bincount(
         raw_labels[~mask].flatten(),
@@ -70,7 +74,7 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
     labels_dist = labels_dist + labels_dist_temp
     all_dist = all_dist + all_dist_temp
     if batch_idx % 100 == 0:
-        print(f"Batch {batch_idx}")
+        print(f"Batch {batch_idx} - premax {premax}, postmax {postmax}")
 
 print("Labels Distribution:")
 print(labels_dist)
