@@ -128,7 +128,6 @@ def train(
         end = class_designation[i]
         for j in range(start, end):
             weighted_all_dist[j] = all_dist[j] / (end - start)
-    print(weighted_all_dist)
 
     try:
         if log_progress:
@@ -173,7 +172,9 @@ def train(
                     if isinstance(preds_dict, dict):
                         preds = preds_dict["out"]
                     raw_loss = criterion(preds, labels)  # Calculate cross entropy loss
-                    pixel_weights = torch.from_numpy(all_dist[raw_labels]).to(device)
+                    pixel_weights = torch.from_numpy(weighted_all_dist[raw_labels]).to(
+                        device
+                    )
                     # Weight pixels that are predicted farther away higher (ie: actual class 1, predicted class 4 is weighted higher than
                     # actual class 1, predicted class 2.
                     preds_class = np.argmax(preds.detach().cpu().numpy(), axis=1)
