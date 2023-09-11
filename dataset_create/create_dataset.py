@@ -209,6 +209,7 @@ api = get_api(
 
 print("Creating list of products to download")
 
+ids = set()
 with lock_trigger_list:
     for scene in scenes:
         products = get_products(
@@ -220,6 +221,7 @@ with lock_trigger_list:
         for _, product in products.iterrows():
             date = product["beginposition"].to_pydatetime()
             uuid = product["uuid"]
+            ids.add(uuid)
             trigger_list.append(
                 {
                     "date": date,
@@ -232,6 +234,7 @@ with lock_trigger_list:
                 }
             )
     print(f"Found {len(trigger_list)} total items.")
+print(len(ids))
 total_available = len(trigger_list)
 
 with lock_existing_prefixes:
