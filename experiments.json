@@ -549,7 +549,7 @@
         "name": "experiment54",
         "description": "New class designation",
         "batch_size": 256,
-        "class_designation": [1, 100, 200, 254],
+        "class_designation": [100, 200, 254],
         "class_weights": [],
         "weight_decay": 0.01,
         "randomize": true,
