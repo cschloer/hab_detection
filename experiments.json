@@ -555,6 +555,17 @@
         "randomize": true,
         "model_architecture": "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
         "learning_rate": 0.00001
+    },
+    "experiment55": {
+        "name": "experiment55",
+        "description": "Exact same as experiment44",
+        "batch_size": 128,
+        "class_designation": [100, 200, 254],
+        "class_weights": [],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
+        "learning_rate": 0.0001
     }
 }
 
