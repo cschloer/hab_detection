@@ -72,13 +72,14 @@ def get_useful_images():
                             print(
                                 f"Found {len(useful_images)} of {count} useful images..."
                             )
-                            #return useful_images
+                            # return useful_images
 
     return useful_images
 
-exit()
+
 
 useful_images = get_useful_images()
+exit()
 
 for useful_image in useful_images:
     occurances, label_path, feature_path = useful_image
