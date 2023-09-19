@@ -92,7 +92,7 @@ for useful_image in useful_images:
     if occurances > 1000:
         num_2 += 1
         num_copies = 100
-        if occurances > 10000:
+        if occurances > 5000:
             num_3 += 1
             num_copies = 1000
 
