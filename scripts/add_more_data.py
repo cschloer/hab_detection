@@ -90,6 +90,7 @@ for useful_image in useful_images:
         num_copies = 500
         if occurances > 3000:
             num_copies = 1000
+    num_copies = 1
 
     for rotation in range(4):
         for i in range(num_copies):
