@@ -566,6 +566,17 @@
         "randomize": true,
         "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
         "learning_rate": 0.0001
+    },
+    "experiment56": {
+        "name": "experiment56",
+        "description": "Same as experiment55, additional class balance",
+        "batch_size": 128,
+        "class_designation": [100, 200, 254],
+        "class_weights": [],
+        "weight_decay": 0.01,
+        "randomize": true,
+        "model_architecture": "deeplabv3-resnet18#no_replace_batchnorm",
+        "learning_rate": 0.0001
     }
 }
 
