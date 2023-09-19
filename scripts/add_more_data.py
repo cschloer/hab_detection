@@ -41,6 +41,7 @@ def load(file):
 
 useful_images = []
 
+count = 0
 for root, dirs, files in os.walk(data_path, topdown=False):
     for name in files:
         feature_path = os.path.join(root, name)
@@ -58,6 +59,7 @@ for root, dirs, files in os.walk(data_path, topdown=False):
 
                 label = load(label_path)
                 occurances = np.count_nonzero(label > 200)
+                count += 1
                 if occurances > 0:
                     useful_images.append(
                         (
@@ -67,4 +69,4 @@ for root, dirs, files in os.walk(data_path, topdown=False):
                         )
                     )
                     if len(useful_images) % 1000 == 0:
-                        print(f"Found {len(useful_images)} useful images...")
+                        print(f"Found {len(useful_images)} of {count} useful images...")
