@@ -60,7 +60,7 @@ def get_useful_images():
                     label = load(label_path)
                     occurances = np.count_nonzero(label > 220)
                     count += 1
-                    if occurances > 100:
+                    if occurances > 1000:
                         useful_images.append(
                             (
                                 occurances,
@@ -87,12 +87,12 @@ for useful_image in useful_images:
     label = load(label_path)
     feature = load(feature_path)
 
-    num_copies = 1
+    num_copies = 100
     num_1 += 1
-    if occurances > 1000:
+    if occurances > 2000:
         num_2 += 1
         num_copies = 100
-        if occurances > 5000:
+        if occurances > 3000:
             num_3 += 1
             num_copies = 1000
 
@@ -114,4 +114,4 @@ for useful_image in useful_images:
         )
         for i in range(num_copies):
             pass
-print(f"1: {num_1}, 1000: {num_2}. 10000: {num_3}")
+print(f"1000: {num_1}, 2000: {num_2}. 3000: {num_3}")
