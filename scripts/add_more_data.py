@@ -58,7 +58,7 @@ def get_useful_images():
                         continue
 
                     label = load(label_path)
-                    occurances = np.count_nonzero(label > 200)
+                    occurances = np.count_nonzero(label > 220)
                     count += 1
                     if occurances > 50:
                         useful_images.append(
@@ -72,10 +72,11 @@ def get_useful_images():
                             print(
                                 f"Found {len(useful_images)} of {count} useful images..."
                             )
-                            return useful_images
+                            #return useful_images
 
     return useful_images
 
+exit()
 
 useful_images = get_useful_images()
 
