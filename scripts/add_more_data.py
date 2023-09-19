@@ -68,7 +68,7 @@ def get_useful_images():
                                 feature_path,
                             )
                         )
-                        if len(useful_images) % 10000 == 0:
+                        if len(useful_images) % 1000 == 0:
                             print(
                                 f"Found {len(useful_images)} of {count} useful images..."
                             )
@@ -82,6 +82,6 @@ useful_images = get_useful_images()
 for useful_image in useful_images:
     occurances, label_path, feature_path = useful_image
     print(occurances)
-    new_path = f"{data_path}/synthetic/{label_path[len(data_path):-1 * len(os.path.basename(label_path))]}"
+    new_path = f"{data_path}/synthetic/{label_path[len(data_path) + 1:-1 * len(os.path.basename(label_path))]}"
     print(new_path, label_path)
     exit()
