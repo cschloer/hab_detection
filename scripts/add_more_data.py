@@ -39,34 +39,46 @@ def load(file):
         return np.ndarray(shape, dtype=descr, buffer=f.read(datasize))
 
 
-useful_images = []
-
-count = 0
-for root, dirs, files in os.walk(data_path, topdown=False):
-    for name in files:
-        feature_path = os.path.join(root, name)
-        if os.path.isfile(feature_path):
-            feature_filename = os.path.basename(feature_path)
-            dirname = os.path.dirname(feature_path)
-            label_filename = get_label_filename(feature_filename)
-            if label_filename:
-                label_path = f"{dirname}/{label_filename}"
-                if not os.path.isfile(label_path):
-                    print(
-                        f'Corresponding label file doesn\'t exist: "{label_filename}"'
-                    )
-                    continue
-
-                label = load(label_path)
-                occurances = np.count_nonzero(label > 200)
-                count += 1
-                if occurances > 50:
-                    useful_images.append(
-                        (
-                            occurances,
-                            label_path,
-                            feature_path,
+def get_useful_images():
+    useful_images = []
+    count = 0
+    for root, dirs, files in os.walk(data_path, topdown=False):
+        for name in files:
+            feature_path = os.path.join(root, name)
+            if os.path.isfile(feature_path):
+                feature_filename = os.path.basename(feature_path)
+                dirname = os.path.dirname(feature_path)
+                label_filename = get_label_filename(feature_filename)
+                if label_filename:
+                    label_path = f"{dirname}/{label_filename}"
+                    if not os.path.isfile(label_path):
+                        print(
+                            f'Corresponding label file doesn\'t exist: "{label_filename}"'
                         )
-                    )
-                    if len(useful_images) % 10000 == 0:
-                        print(f"Found {len(useful_images)} of {count} useful images...")
+                        continue
+
+                    label = load(label_path)
+                    occurances = np.count_nonzero(label > 200)
+                    count += 1
+                    if occurances > 50:
+                        useful_images.append(
+                            (
+                                occurances,
+                                label_path,
+                                feature_path,
+                            )
+                        )
+                        if len(useful_images) % 10000 == 0:
+                            print(
+                                f"Found {len(useful_images)} of {count} useful images..."
+                            )
+                            return useful_images
+
+    return useful_images
+
+
+useful_images = get_useful_images()
+
+for useful_image in useful_images:
+    occurances, label_path, feature_path = useful_image
+    print(occurances)
