@@ -39,6 +39,8 @@ def load(file):
         return np.ndarray(shape, dtype=descr, buffer=f.read(datasize))
 
 
+useful_images = []
+
 for root, dirs, files in os.walk(data_path, topdown=False):
     for name in files:
         feature_path = os.path.join(root, name)
@@ -56,8 +58,13 @@ for root, dirs, files in os.walk(data_path, topdown=False):
 
                 label = load(label_path)
                 occurances = np.count_nonzero(label > 200)
-                occurances2 = np.count_nonzero(label > 100)
-                print(label)
-                print(occurances)
-                print(occurances2)
-                exit()
+                if occurances > 0:
+                    useful_images.append(
+                        (
+                            occurances,
+                            label_path,
+                            feature_path,
+                        )
+                    )
+                    if len(useful_images) % 100 == 0:
+                        print(f"Found {len(useful_images)} useful images...")
