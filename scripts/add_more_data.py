@@ -72,7 +72,6 @@ def get_useful_images():
                             print(
                                 f"Found {len(useful_images)} of {count} useful images..."
                             )
-                            return useful_images
 
     return useful_images
 
