@@ -60,7 +60,7 @@ for root, dirs, files in os.walk(data_path, topdown=False):
                 label = load(label_path)
                 occurances = np.count_nonzero(label > 200)
                 count += 1
-                if occurances > 0:
+                if occurances > 50:
                     useful_images.append(
                         (
                             occurances,
