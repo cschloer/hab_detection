@@ -60,7 +60,7 @@ def get_useful_images():
                     label = load(label_path)
                     occurances = np.count_nonzero(label > 220)
                     count += 1
-                    if occurances > 50:
+                    if occurances > 100:
                         useful_images.append(
                             (
                                 occurances,
@@ -85,5 +85,18 @@ for useful_image in useful_images:
     new_path = f"{data_path}/synthetic/{label_path[len(data_path) + 1:-1 * len(os.path.basename(label_path))]}"
     print(new_path, label_path)
     label = load(label_path)
+    feature = load(feature_path)
     print(label.shape)
+    print(feature.shape)
+
+    num_copies = 1
+    if occurances > 1000:
+        num_copies = 100
+        if occurances > 10000:
+            print("GOT A 10,000")
+            num_copies = 1000
+
+    for rotation in range(4):
+        pass
+
     exit()
