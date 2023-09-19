@@ -78,9 +78,7 @@ def get_useful_images():
 
 useful_images = get_useful_images()
 
-num_1 = 0
-num_2 = 0
-num_3 = 0
+count = 0
 for useful_image in useful_images:
     occurances, label_path, feature_path = useful_image
     new_path = f"{data_path}/synthetic/{label_path[len(data_path) + 1:-1 * len(os.path.basename(label_path))]}"
@@ -88,15 +86,14 @@ for useful_image in useful_images:
     feature = load(feature_path)
 
     num_copies = 100
-    num_1 += 1
     if occurances > 2000:
-        num_2 += 1
-        num_copies = 100
+        num_copies = 500
         if occurances > 3000:
-            num_3 += 1
             num_copies = 1000
 
     for rotation in range(4):
+        for i in range(num_copies):
+            count += 1
         continue
         np.rot90(
             label,
@@ -112,6 +109,4 @@ for useful_image in useful_images:
                 2,
             ),
         )
-        for i in range(num_copies):
-            pass
-print(f"1000: {num_1}, 2000: {num_2}. 3000: {num_3}")
+print(f"Will save {count} new images")
