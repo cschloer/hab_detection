@@ -1,6 +1,7 @@
 # A script meant to find the patches with high HAB and duplicate them for better dataset distribution
 import os
 import re
+import numpy as np
 
 data_path = "/ssd/hab/data/dataset_train_structured"
 
@@ -32,7 +33,7 @@ def load(file):
             .replace(")", "")
             .split(",")
         )
-        datasize = numpy.lib.format.descr_to_dtype(descr).itemsize
+        datasize = np.lib.format.descr_to_dtype(descr).itemsize
         for dimension in shape:
             datasize *= dimension
         return np.ndarray(shape, dtype=descr, buffer=f.read(datasize))
