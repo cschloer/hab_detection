@@ -78,7 +78,6 @@ def get_useful_images():
 
 
 useful_images = get_useful_images()
-exit()
 
 for useful_image in useful_images:
     occurances, label_path, feature_path = useful_image
