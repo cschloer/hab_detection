@@ -72,10 +72,9 @@ def get_useful_images():
                             print(
                                 f"Found {len(useful_images)} of {count} useful images..."
                             )
-                            # return useful_images
+                            return useful_images
 
     return useful_images
-
 
 
 useful_images = get_useful_images()
@@ -86,4 +85,6 @@ for useful_image in useful_images:
     print(occurances)
     new_path = f"{data_path}/synthetic/{label_path[len(data_path) + 1:-1 * len(os.path.basename(label_path))]}"
     print(new_path, label_path)
+    label = load(label_path)
+    print(label.shape)
     exit()
