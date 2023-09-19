@@ -66,5 +66,5 @@ for root, dirs, files in os.walk(data_path, topdown=False):
                             feature_path,
                         )
                     )
-                    if len(useful_images) % 100 == 0:
+                    if len(useful_images) % 1000 == 0:
                         print(f"Found {len(useful_images)} useful images...")
