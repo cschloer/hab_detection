@@ -81,13 +81,9 @@ useful_images = get_useful_images()
 
 for useful_image in useful_images:
     occurances, label_path, feature_path = useful_image
-    print(occurances)
     new_path = f"{data_path}/synthetic/{label_path[len(data_path) + 1:-1 * len(os.path.basename(label_path))]}"
-    print(new_path, label_path)
     label = load(label_path)
     feature = load(feature_path)
-    print(label.shape)
-    print(feature.shape)
 
     num_copies = 1
     if occurances > 1000:
@@ -97,6 +93,20 @@ for useful_image in useful_images:
             num_copies = 1000
 
     for rotation in range(4):
-        pass
-
-    exit()
+        continue
+        np.rot90(
+            label,
+            axes=(
+                1,
+                2,
+            ),
+        )
+        np.rot90(
+            feature,
+            axes=(
+                1,
+                2,
+            ),
+        )
+        for i in range(num_copies):
+            pass
