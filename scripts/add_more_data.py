@@ -79,6 +79,9 @@ def get_useful_images():
 
 useful_images = get_useful_images()
 
+num_1 = 0
+num_2 = 0
+num_3 = 0
 for useful_image in useful_images:
     occurances, label_path, feature_path = useful_image
     new_path = f"{data_path}/synthetic/{label_path[len(data_path) + 1:-1 * len(os.path.basename(label_path))]}"
@@ -86,10 +89,12 @@ for useful_image in useful_images:
     feature = load(feature_path)
 
     num_copies = 1
+    num_1 += 1
     if occurances > 1000:
+        num_2 += 1
         num_copies = 100
         if occurances > 10000:
-            print("GOT A 10,000")
+            num_3 += 1
             num_copies = 1000
 
     for rotation in range(4):
@@ -110,3 +115,4 @@ for useful_image in useful_images:
         )
         for i in range(num_copies):
             pass
+print(f"1: {num_1}, 1000: {num_2}. 10000: {num_3}")
