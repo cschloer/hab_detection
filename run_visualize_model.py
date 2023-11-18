@@ -29,7 +29,7 @@ test_loader = DataLoader(
     drop_last=True,
 )
 batch = next(iter(test_loader))
-print(type(batch[0]))
+np.save("batch.npy", batch[0].numpy())
 exit()
 inputs = batch[0].to(device, dtype=torch.float, non_blocking=True)
 yhat = model(inputs)
