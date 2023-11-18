@@ -6,6 +6,8 @@ from torch.utils.data import DataLoader
 from torchviz import make_dot
 import numpy as np
 
+batch = torch.from_numpy(np.load("batch.npy"))
+
 class_designation = [100, 200, 254]
 model = load_model(
     "deeplabv3-resnet18#no_replace_batchnorm",
@@ -14,6 +16,14 @@ model = load_model(
     class_designation,
 )
 
+yhat = model(batch)
+
+make_dot(yhat, params=dict(list(model.named_parameters()))).render(
+    "torchviz", format="png"
+)
+
+"""
+# Code to grab a batch from the server, since torchviz needs an install (so we'll run it locally, but grab data from the server)
 test_dataset = get_image_dataset(
     STRUCTURED_FOLDER_PATH_TEST,
     class_designation,
@@ -31,10 +41,4 @@ test_loader = DataLoader(
 )
 batch = next(iter(test_loader))
 np.save("batch.npy", batch[0].numpy())
-exit()
-inputs = batch[0].to(device, dtype=torch.float, non_blocking=True)
-yhat = model(inputs)
-
-make_dot(yhat, params=dict(list(model.named_parameters()))).render(
-    "torchviz", format="png"
-)
+"""
