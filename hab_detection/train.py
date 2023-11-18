@@ -13,7 +13,7 @@ from .constants import (
     STRUCTURED_FOLDER_PATH_TRAIN,
     MODEL_SAVE_BASE_FOLDER,
 )
-from .helpers import log, set_config
+from .helpers import log, set_config, all_dist
 from .model import load_model, get_criterion, get_optimizer
 from .dataset import get_image_dataset, get_weighted_all_dist
 from .metrics import get_model_performance, get_metric_tracker
@@ -166,9 +166,18 @@ def train(
                     if isinstance(preds_dict, dict):
                         preds = preds_dict["out"]
                     raw_loss = criterion(preds, labels)  # Calculate cross entropy loss
+                    pixel_weights = np.where(
+                        raw_labels < 254,
+                        all_dist[raw_labels_flat],
+                        0,
+                    )
+
+                    # REMOVE weighted_all_dist because that wasn't used in experiment44
+                    """
                     pixel_weights = torch.from_numpy(weighted_all_dist[raw_labels]).to(
                         device
                     )
+                    """
                     # Weight pixels that are predicted farther away higher (ie: actual class 1, predicted class 4 is weighted higher than
                     # actual class 1, predicted class 2.
                     preds_class = np.argmax(preds.detach().cpu().numpy(), axis=1)

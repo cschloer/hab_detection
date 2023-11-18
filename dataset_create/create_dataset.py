@@ -269,33 +269,5 @@ thread_downloads1 = Thread(
 )
 thread_downloads1.start()
 
-"""
-thread_downloads2 = Thread(target=manage_downloads, args=(api, "2", lock_zip),)
-thread_downloads2.start()
-
-thread_downloads3 = Thread(target=manage_downloads, args=(api, "3", lock_zip),)
-thread_downloads3.start()
-"""
-"""
-uuid = "b4dbfcda-6a23-4af6-b3cd-cab5a618c781"
-date = datetime.datetime(2020, 12, 8, 16, 37, 1, 24000)
-id_ = "6_5_X0450_Y0300_S050"
-cyan_id = "6_5"
-window = [-90.0625607542466, 30.337830755522525, -89.91660792035341, 30.194472304251768]
-download_and_process(
-    api,
-    uuid,
-    id_,
-    id_ + "TEST",
-    window,
-    cyan_id,
-    date,
-    ZIP_FILE_TRAIN,
-    f"{SAVE_FOLDER}/images/scenes/{id_}",
-    "-- Download Thread: ",
-    lock_zip,
-)
-
-"""
 while True:
     time.sleep(100)
