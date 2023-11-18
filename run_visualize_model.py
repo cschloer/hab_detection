@@ -1,6 +1,7 @@
 from hab_detection.model import load_model
 from hab_detection.dataset import get_image_dataset
 from hab_detection.constants import STRUCTURED_FOLDER_PATH_TEST, device
+import torch
 from torch.utils.data import DataLoader
 
 class_designation = [100, 200, 254]
