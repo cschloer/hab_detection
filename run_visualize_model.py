@@ -27,6 +27,5 @@ test_loader = DataLoader(
     drop_last=True,
 )
 batch = next(iter(test_loader))
-print("BATCH", batch)
-yhat = model(batch)
+yhat = model(batch[0])
 print("YHAT", yhat)
