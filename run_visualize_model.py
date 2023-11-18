@@ -30,4 +30,7 @@ test_loader = DataLoader(
 batch = next(iter(test_loader))
 inputs = batch[0].to(device, dtype=torch.float, non_blocking=True)
 yhat = model(inputs)
-print("YHAT", yhat)
+
+make_dot(yhat, params=dict(list(model.named_parameters()))).render(
+    "torchviz", format="png"
+)
