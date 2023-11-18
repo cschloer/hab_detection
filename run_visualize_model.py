@@ -28,5 +28,5 @@ test_loader = DataLoader(
 )
 batch = next(iter(test_loader))
 print("BATCH", batch)
-yhat = model(batch.text)
+yhat = model(batch)
 print("YHAT", yhat)
