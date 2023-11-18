@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 class_designation = [100, 200, 254]
 model = load_model(
     "deeplabv3-resnet18#no_replace_batchnorm",
-    "/home/conrad/Dropbox/Masters/masters_thesis/models/experiment44/epoch_50.pt",
+    "/home/conrad/hab_detection/bundle/model.pt",
     None,
     class_designation,
 )
