@@ -1,6 +1,6 @@
 from hab_detection.model import load_model
 from hab_detection.dataset import get_image_dataset
-from hab_detection.constants import STRUCTURED_FOLDER_PATH_TEST
+from hab_detection.constants import STRUCTURED_FOLDER_PATH_TEST, device
 from torch.utils.data import DataLoader
 
 class_designation = [100, 200, 254]
@@ -27,5 +27,6 @@ test_loader = DataLoader(
     drop_last=True,
 )
 batch = next(iter(test_loader))
-yhat = model(batch[0])
+inputs = batch[0].to(device, dtype=torch.float, non_blocking=True)
+yhat = model(inputs)
 print("YHAT", yhat)
