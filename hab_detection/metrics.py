@@ -61,6 +61,30 @@ def get_metric_tracker(class_designation):
                         ignore_index=-1,
                         average="macro",
                     ).to(device),
+                    Accuracy(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                        average="none",
+                    ).to(device),
+                    Precision(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                        average="none",
+                    ).to(device),
+                    Recall(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                        average="none",
+                    ).to(device),
+                    Specificity(
+                        task="multiclass",
+                        num_classes=len(class_designation),
+                        ignore_index=-1,
+                        average="none",
+                    ).to(device),
                 ]
             )
         ).to(device)
