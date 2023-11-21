@@ -94,7 +94,7 @@ for model_arc in [
 ]:
     for learning_rate in [0.00001, 0.0001, 0.001]:
         for batch_size in [32, 64, 128]:
-            for weight_decay in [0.01]:
+            for weight_decay in [0.1, 0.01, 0.001]:
                 log(
                     f"Testing model {model_arc} with learning rate {learning_rate}, batch size {batch_size}, and weight decay {weight_decay}."
                 )

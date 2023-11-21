@@ -11,7 +11,7 @@ batch = torch.from_numpy(np.load("batch.npy"))
 class_designation = [100, 200, 254]
 model = load_model(
     "deeplabv3-resnet18#no_replace_batchnorm",
-    "/home/conrad/hab_detection/bundle/model.pt",
+    "/home/conrad/Dropbox/Masters/masters_thesis/hab_detection/bundle/model.pt",
     None,
     class_designation,
 )

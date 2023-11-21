@@ -733,6 +733,8 @@ def visualize(
         yticklabels=class_names,
     )
     ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
+    ax.set_xlabel("Predicted Value")
+    ax.set_ylabel("Actual Value")
 
     """
     cf_disp = ConfusionMatrixDisplay(cm)

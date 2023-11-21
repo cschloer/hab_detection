@@ -39,6 +39,7 @@ dataset = get_image_dataset(
     STRUCTURED_FOLDER_PATH_TRAIN if t == "train" else STRUCTURED_FOLDER_PATH_TEST,
     cd,
 )
+print(f"Dataset size: {len(dataset)}")
 
 loader = DataLoader(
     dataset,
