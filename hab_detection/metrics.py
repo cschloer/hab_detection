@@ -36,36 +36,12 @@ def get_metric_tracker(class_designation):
                         task="multiclass",
                         num_classes=len(class_designation),
                         ignore_index=-1,
-                        average="macro",
+                        average="none",
                     ).to(device),
                     ConfusionMatrix(
                         task="multiclass",
                         num_classes=len(class_designation),
                         ignore_index=-1,
-                    ).to(device),
-                    Precision(
-                        task="multiclass",
-                        num_classes=len(class_designation),
-                        ignore_index=-1,
-                        average="macro",
-                    ).to(device),
-                    Recall(
-                        task="multiclass",
-                        num_classes=len(class_designation),
-                        ignore_index=-1,
-                        average="macro",
-                    ).to(device),
-                    Specificity(
-                        task="multiclass",
-                        num_classes=len(class_designation),
-                        ignore_index=-1,
-                        average="macro",
-                    ).to(device),
-                    Accuracy(
-                        task="multiclass",
-                        num_classes=len(class_designation),
-                        ignore_index=-1,
-                        average="none",
                     ).to(device),
                     Precision(
                         task="multiclass",
