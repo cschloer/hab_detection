@@ -39,22 +39,11 @@ dataset = get_image_dataset(
     STRUCTURED_FOLDER_PATH_TRAIN if t == "train" else STRUCTURED_FOLDER_PATH_TEST,
     cd,
 )
-other_dataset = get_image_dataset(
-    STRUCTURED_FOLDER_PATH_TRAIN if t == "test" else STRUCTURED_FOLDER_PATH_TEST,
-    cd,
-)
 
-print(f"Dataset size: {len(dataset) + len(other_dataset)}")
+print(f"Dataset size: {len(dataset)}")
 
 loader = DataLoader(
     dataset,
-    batch_size=128,
-    shuffle=False,
-    num_workers=0,
-    drop_last=False,
-)
-other_loader = DataLoader(
-    other_dataset,
     batch_size=128,
     shuffle=False,
     num_workers=0,
@@ -85,40 +74,18 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
 
     labels_dist = labels_dist + labels_dist_temp
     all_dist = all_dist + all_dist_temp
-    if batch_idx % 100 == 0:
+    if batch_idx % 200 == 0:
         print(f"Batch {batch_idx} - premax {premax}, postmax {postmax}")
 
-premax = 0
-postmax = 0
-for batch_idx, (_, labels, _, raw_labels) in enumerate(other_loader):
-    mask = labels == -1
-
-    labels_dist_temp = np.bincount(
-        labels[~mask].flatten(),
-        minlength=num_classes,
-    )
-
-    # all_mask = np.logical_or(raw_labels == 254, raw_labels == 255)
-    premax = max(premax, torch.max(raw_labels))
-    postmax = max(postmax, torch.max(raw_labels[~mask]))
-    all_dist_temp = np.bincount(
-        raw_labels[~mask].flatten(),
-        minlength=254,
-    )
-
-    labels_dist = labels_dist + labels_dist_temp
-    all_dist = all_dist + all_dist_temp
-    if batch_idx % 100 == 0:
-        print(f"Other Batch {batch_idx} - premax {premax}, postmax {postmax}")
 
 print("Labels Distribution:")
 print(labels_dist)
 print("Weights:")
 print(1 / (labels_dist / np.max(labels_dist)))
 all_dist = np.where(all_dist == 0, 1, all_dist)
+exit()
 print("All Weights:")
 print(1 / (all_dist / np.max(all_dist)))
-exit()
 
 print("Calculating mean and std now.")
 
