@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from dist import dist
+from dist import train_dist as dist
 
 fig, ax = plt.subplots()
 color = ["green"] * 100 + ["orange"] * 100 + ["red"] * 54
@@ -17,6 +17,6 @@ ax.plot(range(200, 254), dist[200:254], color=high, label="200-253 HAB, high ris
 ax.set_yscale("log")
 ax.set_ylabel("Pixel Distribution in Dataset")
 ax.set_xlabel("HAB Value")
-ax.set_title("Pixel Distribution by HAB Level in Final Dataset")
+ax.set_title("Pixel Distribution by HAB Level in Train Dataset")
 ax.legend()
 plt.show()
