@@ -117,9 +117,9 @@ print(labels_dist)
 print("Weights:")
 print(1 / (labels_dist / np.max(labels_dist)))
 all_dist = np.where(all_dist == 0, 1, all_dist)
-exit()
 print("All Weights:")
 print(1 / (all_dist / np.max(all_dist)))
+exit()
 
 print("Calculating mean and std now.")
 
