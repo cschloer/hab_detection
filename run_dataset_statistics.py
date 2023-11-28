@@ -114,11 +114,13 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(other_loader):
 """
 
 
-print("Labels Distribution:")
+print("Labels Count:")
 print(labels_dist)
+print("Labels Dist:")
+print(labels_dist / np.max(labels_dist))
 print("Weights:")
 print(1 / (labels_dist / np.max(labels_dist)))
-print("All Pixels")
+print("All Pixels:")
 print(all_dist)
 all_dist = np.where(all_dist == 0, 1, all_dist)
 print("All Weights:")

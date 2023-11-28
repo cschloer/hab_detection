@@ -7,9 +7,11 @@ from dist import all_dist as dist, test_dist, train_dist
 subset = ""
 
 text = "Entire"
+total = 1855957425
 if subset == "train":
     text = "Train"
     dist = train_dist
+    total =
 if subset == "test":
     text = "Test"
     dist = test_dist
@@ -26,7 +28,7 @@ ax.plot(
 )
 ax.plot(range(200, 254), dist[200:254], color=high, label="200-253 HAB, high risk")
 ax.set_yscale("log")
-ax.set_ylabel("Distribution Ratio")
+ax.set_ylabel("Number of Occurances")
 ax.set_xlabel("HAB Value")
 ax.set_title(f"Pixel Distribution by HAB Level in the {text} Dataset")
 ax.set_ylim([0, 10e9])
