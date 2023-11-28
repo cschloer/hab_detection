@@ -1,36 +1,69 @@
 import numpy as np
 from matplotlib import pyplot as plt
+import seaborn as sns
 
-# from dist import train_dist as dist
-from dist import all_dist as dist, test_dist, train_dist
+# from pixel_count import train_pixel_count as pixel_count
+from dist import (
+    all_pixel_count,
+    test_pixel_count,
+    train_pixel_count,
+)
 
-subset = ""
+"""
+subset = "test"
 
 text = "Entire"
-total = 1855957425
 if subset == "train":
     text = "Train"
-    dist = train_dist
-    total =
+    pixel_count = train_pixel_count
 if subset == "test":
     text = "Test"
-    dist = test_dist
+    pixel_count = test_pixel_count
+"""
+
+data = {
+    "x": np.concatenate((range(254), range(254), range(254))),
+    "vals": np.concatenate(
+        (
+            all_pixel_count / np.sum(all_pixel_count),
+            train_pixel_count / np.sum(train_pixel_count),
+            test_pixel_count / np.sum(test_pixel_count),
+        )
+    ),
+    "subset": ["all"] * len(train_pixel_count)
+    + ["train"] * len(test_pixel_count)
+    + ["test"] * len(test_pixel_count),
+    "class": np.concatenate(
+        [
+            ["0-99 HAB, low risk"] * 100
+            + ["100 - 199 HAB, moderate risk"] * 100
+            + ["200-253 HAB, high risk"] * 54
+        ]
+        * 3
+    ),
+}
+print(len(data["x"]))
+print(len(data["vals"]))
+print(len(data["subset"]))
+print(len(data["class"]))
 
 fig, ax = plt.subplots()
 color = ["green"] * 100 + ["orange"] * 100 + ["red"] * 54
 low = np.array([149, 149, 149, 255]) / 255
 moderate = np.array([236, 173, 10, 255]) / 255
 high = np.array([169, 0, 0, 255]) / 255
-# moderate =
-ax.plot(range(100), dist[:100], color=low, label="0-99 HAB, low risk")
-ax.plot(
-    range(100, 200), dist[100:200], color=moderate, label="100-199 HAB, moderate risk"
+p = sns.lineplot(
+    data=data,
+    x="x",
+    y="vals",
+    hue="class",
+    style="subset",
+    ax=ax,
+    palette=[low, moderate, high],
 )
-ax.plot(range(200, 254), dist[200:254], color=high, label="200-253 HAB, high risk")
-ax.set_yscale("log")
-ax.set_ylabel("Number of Occurances")
+p.legend(loc="lower left")
+ax.set_ylabel("Fraction of Occurances")
 ax.set_xlabel("HAB Value")
-ax.set_title(f"Pixel Distribution by HAB Level in the {text} Dataset")
-ax.set_ylim([0, 10e9])
-ax.legend()
+ax.set_title(f"Pixel Count Fraction by HAB Level")
+ax.set_yscale("log")
 plt.show()
