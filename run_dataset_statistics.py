@@ -88,9 +88,9 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
     if batch_idx % 200 == 0:
         print(f"Batch {batch_idx} - premax {premax}, postmax {postmax}")
 
-"""
 premax = 0
 postmax = 0
+print(f"Dataset size for both: {len(dataset) + len(other_dataset)}")
 for batch_idx, (_, labels, _, raw_labels) in enumerate(other_loader):
     mask = labels == -1
 
@@ -111,7 +111,6 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(other_loader):
     all_dist = all_dist + all_dist_temp
     if batch_idx % 200 == 0:
         print(f"Batch {batch_idx} - premax {premax}, postmax {postmax}")
-"""
 
 
 print("Labels Count:")
