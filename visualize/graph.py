@@ -2,7 +2,17 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # from dist import train_dist as dist
-from dist import all_dist as dist
+from dist import all_dist as dist, test_dist, train_dist
+
+subset = ""
+
+text = "Entire"
+if subset == "train":
+    text = "Train"
+    dist = train_dist
+if subset == "test":
+    text = "Test"
+    dist = test_dist
 
 fig, ax = plt.subplots()
 color = ["green"] * 100 + ["orange"] * 100 + ["red"] * 54
@@ -16,8 +26,9 @@ ax.plot(
 )
 ax.plot(range(200, 254), dist[200:254], color=high, label="200-253 HAB, high risk")
 ax.set_yscale("log")
-ax.set_ylabel("Number of Occurances")
+ax.set_ylabel("Distribution Ratio")
 ax.set_xlabel("HAB Value")
-ax.set_title("Pixel Distribution by HAB Level in the Entire Dataset")
+ax.set_title(f"Pixel Distribution by HAB Level in the {text} Dataset")
+ax.set_ylim([0, 10e9])
 ax.legend()
 plt.show()
