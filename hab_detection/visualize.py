@@ -745,7 +745,7 @@ def visualize(
 
     if hist_2d is not None:
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
-        sums = hist_2d.astype("float").sum(axis=0) + 1
+        sums = hist_2d.astype("float").sum(axis=1) + 1
         # print("SUMS SHAPE", sums.shape)
         # print("SUMS", sums)
         rectangles = {}
