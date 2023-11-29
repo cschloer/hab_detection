@@ -380,7 +380,7 @@ def visualize_image(
     cyan_np,
     pred_np,
 ):
-    fig, axs = plt.subplots(2, 2, figsize=(28, 32))
+    fig, axs = plt.subplots(2, 2, figsize=(36, 32))
     height = sen2_np.shape[1]
     width = sen2_np.shape[2]
     ycrop = height % 8
