@@ -409,7 +409,7 @@ def visualize_image(
     classed_colormap = np.array(
         [
             [255, 250, 240, 255],
-            # [248, 209, 205, 255],
+            [248, 209, 205, 255],
             # [240, 168, 171, 255],
             [225, 85, 102, 255],
             [218, 44, 67, 255],
@@ -420,7 +420,7 @@ def visualize_image(
     cmap = matplotlib.colors.ListedColormap(
         [
             "#FFFAF0",
-            # "#F8D1CD",
+            "#F8D1CD",
             # "#F0A8AB",
             "#E15566",
             "#DA2C43",
@@ -673,7 +673,7 @@ def visualize(
     )
     # return
     log("Done visualizing full images.")
-    return
+    # return
 
     _, metrics, hist_2d = get_model_performance(
         model,
@@ -687,7 +687,7 @@ def visualize(
 
     """ Confusion Matrix """
     cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
-    cmn = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+    cmn = cm.astype("float") / cm.sum(axis=0)[:, np.newaxis]
     vmin = np.min(cmn)
     vmax = np.max(cmn)
     off_diag_mask = np.eye(*cmn.shape, dtype=bool)
