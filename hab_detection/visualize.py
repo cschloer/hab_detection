@@ -605,7 +605,6 @@ def visualize(
                 break
     """
 
-    """
     log("Visualizing full images.")
     visualize_full_image_multipatch(
         model,
@@ -672,7 +671,7 @@ def visualize(
     )
     # return
     log("Done visualizing full images.")
-    """
+    return
 
     _, metrics, hist_2d = get_model_performance(
         model,
