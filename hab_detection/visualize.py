@@ -379,7 +379,7 @@ def visualize_image(
     cyan_np,
     pred_np,
 ):
-    fig, axs = plt.subplots(2, 2, figsize=(20, 16))
+    fig, axs = plt.subplots(2, 2, figsize=(40, 32), layout="compressed")
     height = sen2_np.shape[1]
     width = sen2_np.shape[2]
     ycrop = height % 8
