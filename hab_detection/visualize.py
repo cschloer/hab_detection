@@ -485,7 +485,7 @@ def visualize(
     model_file,
     dataset_type="test",
 ):
-    matplotlib.rcParams.update({"font.size": 32})
+    matplotlib.rcParams.update({"font.size": 36})
     # Set the config to print to stdout
     set_config("test")
 
