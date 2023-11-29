@@ -35,6 +35,7 @@ from .model import load_model
 
 
 def save_plot(image_save_folder, filename):
+    plt.tight_layout()
     plt.savefig(f"{image_save_folder}/{filename}.png")
 
 
@@ -379,7 +380,7 @@ def visualize_image(
     cyan_np,
     pred_np,
 ):
-    fig, axs = plt.subplots(2, 2, figsize=(40, 32), layout="compressed")
+    fig, axs = plt.subplots(2, 2, figsize=(32, 32))
     height = sen2_np.shape[1]
     width = sen2_np.shape[2]
     ycrop = height % 8
@@ -484,6 +485,7 @@ def visualize(
     model_file,
     dataset_type="test",
 ):
+    matplotlib.rcParams.update({"font.size": 22})
     # Set the config to print to stdout
     set_config("test")
 
