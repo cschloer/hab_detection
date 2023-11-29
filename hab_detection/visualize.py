@@ -380,7 +380,7 @@ def visualize_image(
     cyan_np,
     pred_np,
 ):
-    fig, axs = plt.subplots(2, 2, figsize=(32, 32))
+    fig, axs = plt.subplots(2, 2, figsize=(28, 32))
     height = sen2_np.shape[1]
     width = sen2_np.shape[2]
     ycrop = height % 8
@@ -485,7 +485,7 @@ def visualize(
     model_file,
     dataset_type="test",
 ):
-    matplotlib.rcParams.update({"font.size": 22})
+    matplotlib.rcParams.update({"font.size": 32})
     # Set the config to print to stdout
     set_config("test")
 
