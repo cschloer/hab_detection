@@ -607,6 +607,7 @@ def visualize(
                 break
     """
 
+    """
     log("Visualizing full images.")
     visualize_full_image_multipatch(
         model,
@@ -674,12 +675,13 @@ def visualize(
     # return
     log("Done visualizing full images.")
     # return
+    """
 
     _, metrics, hist_2d = get_model_performance(
         model,
         loader,
         class_designation,
-        num_batches=-1,
+        num_batches=100,
         calculate_2d_hist=True,
         calculate_statistics=True,
     )
@@ -687,7 +689,9 @@ def visualize(
 
     """ Confusion Matrix """
     cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
+    print("CM", cm)
     cmn = cm.astype("float") / cm.sum(axis=0)[:, np.newaxis]
+    print("CMN", cmn)
     vmin = np.min(cmn)
     vmax = np.max(cmn)
     off_diag_mask = np.eye(*cmn.shape, dtype=bool)
@@ -742,6 +746,8 @@ def visualize(
     cf_disp.plot()
     """
     save_plot(image_save_folder, "confusion_matrix")
+    print("Done creating the confusion matrix")
+    return
 
     if hist_2d is not None:
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
