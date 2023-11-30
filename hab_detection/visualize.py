@@ -685,11 +685,13 @@ def visualize(
         calculate_2d_hist=True,
         calculate_statistics=True,
     )
-    log(f"\n{pprint.pformat(metrics)}")
+    # log(f"\n{pprint.pformat(metrics)}")
 
     """ Confusion Matrix """
     cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
     print("CM", cm)
+    print("SUM EDITED", cm.sum(axis=0))
+    print("SUM", cm.sum(axis=0)[:, np.newaxis])
     cmn = cm.astype("float") / cm.sum(axis=0)[:, np.newaxis]
     print("CMN", cmn)
     vmin = np.min(cmn)
