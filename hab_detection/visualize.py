@@ -694,7 +694,7 @@ def visualize(
     print("SUM 1", cm.sum(axis=1)[:, np.newaxis])
     print("SUM 2", cm.sum(axis=1)[np.newaxis, :])
     print("SUM 3", cm.sum(axis=1))
-    cmn = cm.astype("float") / cm.sum(axis=1)
+    cmn = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
     print("CMN", cmn)
     vmin = np.min(cmn)
     vmax = np.max(cmn)
