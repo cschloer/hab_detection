@@ -681,7 +681,7 @@ def visualize(
         model,
         loader,
         class_designation,
-        num_batches=100,
+        num_batches=-1,
         calculate_2d_hist=True,
         calculate_statistics=True,
     )
@@ -689,13 +689,7 @@ def visualize(
 
     """ Confusion Matrix """
     cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
-    print("CM", cm)
-    print("SUM EDITED", cm.sum(axis=1))
-    print("SUM 1", cm.sum(axis=1)[:, np.newaxis])
-    print("SUM 2", cm.sum(axis=1)[np.newaxis, :])
-    print("SUM 3", cm.sum(axis=1))
     cmn = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
-    print("CMN", cmn)
     vmin = np.min(cmn)
     vmax = np.max(cmn)
     off_diag_mask = np.eye(*cmn.shape, dtype=bool)
