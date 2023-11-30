@@ -690,9 +690,11 @@ def visualize(
     """ Confusion Matrix """
     cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
     print("CM", cm)
-    print("SUM EDITED", cm.sum(axis=0))
-    print("SUM", cm.sum(axis=0)[:, np.newaxis])
-    cmn = cm.astype("float") / cm.sum(axis=0)[:, np.newaxis]
+    print("SUM EDITED", cm.sum(axis=1))
+    print("SUM 1", cm.sum(axis=1)[:, np.newaxis])
+    print("SUM 2", cm.sum(axis=1)[np.newaxis, :])
+    print("SUM 3", cm.sum(axis=1))
+    cmn = cm.astype("float") / cm.sum(axis=1)
     print("CMN", cmn)
     vmin = np.min(cmn)
     vmax = np.max(cmn)
