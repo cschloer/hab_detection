@@ -22,7 +22,7 @@ SUBSET_SIZE = 50000
 
 with open("experiments.json", "r") as f:
     experiments = json.load(f)
-e = experiments["experiment34"]
+e = experiments["experiment44"]
 
 experiment_name = "kfold_test"
 model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
@@ -68,11 +68,10 @@ train_dataset = ImageData(
     features,
     labels,
     e["class_designation"],
-    randomize=True,
+    randomize=False,
     transform=True,
     in_memory=False,
     fold_list=fold_indices,
-    use_unzipped=True,
 )
 test_dataset = ImageData(
     features,
@@ -82,12 +81,11 @@ test_dataset = ImageData(
     transform=True,
     in_memory=False,
     fold_list=fold_indices,
-    use_unzipped=True,
 )
 
 
 for model_arc in [
-    # "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
+    "deeplabv3_mobilenet_v3_large#no_replace_batchnorm",
     # "lraspp_mobilenet_v3_large#no_replace_batchnorm",
     "deeplabv3-resnet18#no_replace_batchnorm",
     "deeplabv3-resnet50#no_replace_batchnorm",

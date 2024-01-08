@@ -202,6 +202,7 @@ def manage_downloads(api, name, lock_zip):
 with open(f"{SAVE_FOLDER}/data.json", "r") as f:
     scenes = json.load(f)
 
+print(f"Number of scenes: {len(scenes)}")
 api = get_api(
     os.environ.get("ESA_USER1").strip('"'),
     os.environ.get("ESA_PASSWORD1").strip('"'),
@@ -211,7 +212,8 @@ print("Creating list of products to download")
 
 ids = set()
 with lock_trigger_list:
-    for scene in scenes:
+    for i, scene in enumerate(scenes):
+        print(f"Scene {i + 1}")
         products = get_products(
             api,
             scene["window"],
@@ -234,8 +236,9 @@ with lock_trigger_list:
                 }
             )
     print(f"Found {len(trigger_list)} total items.")
-print(len(ids))
+print(f"IDs: {len(ids)}")
 total_available = len(trigger_list)
+exit()
 
 with lock_existing_prefixes:
     with zipfile.ZipFile(ZIP_FILE_TRAIN, mode="a", compression=zipfile.ZIP_STORED) as z:

@@ -172,7 +172,6 @@ def train(
                         0,
                     )
 
-                    # REMOVE weighted_all_dist because that wasn't used in experiment44
                     """
                     pixel_weights = torch.from_numpy(weighted_all_dist[raw_labels]).to(
                         device
