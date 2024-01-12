@@ -174,10 +174,10 @@ def train(
                     )
 
                     #
-                    """
                     pixel_weights = torch.from_numpy(weighted_all_dist[raw_labels]).to(
                         device
                     )
+                    """
                     # Weight pixels that are predicted farther away higher (ie: actual class 1, predicted class 4 is weighted higher than
                     # actual class 1, predicted class 2.
                     preds_class = np.argmax(preds.detach().cpu().numpy(), axis=1)
@@ -190,7 +190,9 @@ def train(
                         )
                     ).to(device, non_blocking=True)
 
-                    weighted_loss = raw_loss * pixel_weights * additional_class_weights
+                    weighted_loss = (
+                        raw_loss * additional_class_weights
+                    )  # * pixel_weights
 
                     loss = torch.mean(
                         torch.sum(weighted_loss.flatten(start_dim=1), axis=0)
