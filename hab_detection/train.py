@@ -12,8 +12,9 @@ from .constants import (
     STRUCTURED_FOLDER_PATH_TEST,
     STRUCTURED_FOLDER_PATH_TRAIN,
     MODEL_SAVE_BASE_FOLDER,
+    all_dist,
 )
-from .helpers import log, set_config, all_dist
+from .helpers import log, set_config
 from .model import load_model, get_criterion, get_optimizer
 from .dataset import get_image_dataset, get_weighted_all_dist
 from .metrics import get_model_performance, get_metric_tracker
@@ -141,7 +142,6 @@ def train(
         if track_statistics:
             train_tracker = get_metric_tracker(class_designation)
         for epoch in range(epoch_start, 1000):  # Training loop
-
             if log_progress:
                 log(f"Starting Epoch {epoch + 1}!")
             running_loss = 0
