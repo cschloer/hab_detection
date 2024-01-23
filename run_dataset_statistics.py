@@ -133,7 +133,7 @@ exit()
 print("Calculating mean and std now.")
 
 dataset = get_image_dataset(
-    ZIP_PATH_TRAIN if t == "train" else ZIP_PATH_TEST,
+    STRUCTURED_FOLDER_PATH_TRAIN if t == "test" else STRUCTURED_FOLDER_PATH_TEST,
     cd,
     transform=False,
 )
