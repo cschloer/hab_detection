@@ -154,12 +154,17 @@ psum_sq = np.zeros((12,))
 counter = 0
 count = 0
 for inputs, _, _, _ in loader:
+    if counter == 0:
+        print("shape", inputs.shape)
     psum += inputs.sum(axis=[0, 2, 3]).numpy()
     psum_sq += (inputs**2).sum(axis=[0, 2, 3]).numpy()
     counter += 1
     count += inputs.shape[0] * inputs.shape[2] * inputs.shape[3]
 
 # mean and STD
+print("psum", psum)
+print("psum_sq", psum_sq)
+print("count", count)
 mean = psum / count
 var = (psum_sq / count) - (mean**2)
 std = np.sqrt(var)
