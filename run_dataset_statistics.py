@@ -60,6 +60,7 @@ other_loader = DataLoader(
     num_workers=0,
     drop_last=False,
 )
+"""
 print("Dataset loaded. Calculating labels distribution.")
 
 num_classes = len(cd) if cd is not None else 254
@@ -128,6 +129,7 @@ print("All Weights:")
 print(1 / (all_dist / np.max(all_dist)))
 exit()
 
+"""
 print("Calculating mean and std now.")
 
 dataset = get_image_dataset(
@@ -151,16 +153,15 @@ psum_sq = np.zeros((12,))
 # loop through images
 counter = 0
 count = 0
-for (inputs, _, _, _) in loader:
-
+for inputs, _, _, _ in loader:
     psum += inputs.sum(axis=[0, 2, 3]).numpy()
-    psum_sq += (inputs ** 2).sum(axis=[0, 2, 3]).numpy()
+    psum_sq += (inputs**2).sum(axis=[0, 2, 3]).numpy()
     counter += 1
     count += inputs.shape[0] * inputs.shape[2] * inputs.shape[3]
 
 # mean and STD
 mean = psum / count
-var = (psum_sq / count) - (mean ** 2)
+var = (psum_sq / count) - (mean**2)
 std = np.sqrt(var)
 # output
 print("Data stats:")
