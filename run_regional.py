@@ -51,10 +51,11 @@ for i in range(len(features)):
 
 region_statistics = {}
 for region in results.keys():
-    print(k, len(results[k]["features"]))
     region_statistics[region] = {}
     features = results[region]
-    print(f"Running statistics for region {region}")
+    print(
+        f"Running statistics for region {region}, # of images {len(results[region]['features'])}"
+    )
     dataset = ImageData(
         results[region]["features"],
         results[region]["labels"],
