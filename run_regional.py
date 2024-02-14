@@ -1,4 +1,5 @@
 import sys
+import re
 import json
 from hab_detection.visualize import visualize
 from hab_detection.dataset import get_data
