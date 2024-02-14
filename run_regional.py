@@ -29,10 +29,20 @@ features, labels, _ = get_data(
     STRUCTURED_FOLDER_PATH_TEST,
 )
 print(features[0])
-"dataset_test_structured"
-match = re.findall(
-    ".*\/dataset_test_structured\/(\d_\d)\/.*",
-    features[0],
-    re.IGNORECASE,
-)
-print(match[0])
+results = {}
+for i in range(len(features)):
+    feature = features[i]
+    match = re.findall(
+        ".*\/dataset_test_structured\/(\d_\d)\/.*",
+        features[0],
+        re.IGNORECASE,
+    )
+    region = match[0]
+    if region not in results:
+        results{region} = { "features": [], "labels": [] }
+    results[region]["features"].append(feature)
+    results[region]["labels"].append(label)
+
+for k in results.keys():
+    print(k, len(results[k]["features"]))
+
