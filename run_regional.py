@@ -39,10 +39,9 @@ for i in range(len(features)):
     )
     region = match[0]
     if region not in results:
-        results{region} = { "features": [], "labels": [] }
+        results[region] = {"features": [], "labels": []}
     results[region]["features"].append(feature)
     results[region]["labels"].append(label)
 
 for k in results.keys():
     print(k, len(results[k]["features"]))
-
