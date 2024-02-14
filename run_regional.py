@@ -41,7 +41,7 @@ for i in range(len(features)):
     if region not in results:
         results[region] = {"features": [], "labels": []}
     results[region]["features"].append(feature)
-    results[region]["labels"].append(label)
+    results[region]["labels"].append(labels[i])
 
 for k in results.keys():
     print(k, len(results[k]["features"]))
