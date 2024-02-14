@@ -2,6 +2,7 @@ import sys
 import re
 import json
 from hab_detection.metrics import get_model_performance
+from hab_detection.model import load_model
 from hab_detection.visualize import visualize
 from hab_detection.dataset import get_data, ImageData
 from hab_detection.constants import (
