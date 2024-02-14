@@ -61,9 +61,9 @@ def get_data(data_path, use_zip=False):
                             for i in range(4):
                                 features.append(feature_path)
                                 labels.append(label_path)
-                        """
                         if len(labels) > 1000:
                             return features, labels, data_path if use_zip else None
+                        """
 
     else:
         zip = zipfile.ZipFile(data_path, mode="r")
