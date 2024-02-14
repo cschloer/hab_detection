@@ -34,7 +34,7 @@ for i in range(len(features)):
     feature = features[i]
     match = re.findall(
         ".*\/dataset_test_structured\/(\d_\d)\/.*",
-        features[0],
+        feature,
         re.IGNORECASE,
     )
     region = match[0]
