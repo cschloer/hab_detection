@@ -28,3 +28,10 @@ features, labels, _ = get_data(
     STRUCTURED_FOLDER_PATH_TEST,
 )
 print(features[0])
+"dataset_test_structured"
+match = re.findall(
+    ".*\/dataset_test_structured\/(\d_\d)\/.*",
+    features[0],
+    re.IGNORECASE,
+)
+print(match[0])
