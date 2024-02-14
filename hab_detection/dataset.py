@@ -56,10 +56,12 @@ def get_data(data_path, use_zip=False):
                         label = load(label_path)
                         occurances = np.count_nonzero(label > 220)
                         # Increase the occurance of labels > 220
+                        """
                         if occurances > 1000:
                             for i in range(4):
                                 features.append(feature_path)
                                 labels.append(label_path)
+                        """
 
     else:
         zip = zipfile.ZipFile(data_path, mode="r")
@@ -226,7 +228,6 @@ class ImageData(Dataset):
         return label
 
     def random_transform(self, image, label):
-
         # Random horizontal flipping
         if random.random() > 0.5:
             image = TF.hflip(image)
