@@ -757,7 +757,7 @@ def visualize(
         ranges = [
             (
                 (-20 if class_designation[0] == 1 else 0)
-                if (i == 0
+                if i == 0
                 else class_designation[i - 1],
                 class_designation[i],
             )
