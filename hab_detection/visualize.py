@@ -37,6 +37,7 @@ from .model import load_model
 def save_plot(image_save_folder, filename):
     plt.tight_layout()
     plt.savefig(f"{image_save_folder}/{filename}.png")
+    plt.savefig(f"{image_save_folder}/{filename}.svg", format="svg")
 
 
 def normalize_sen2(red, green, blue):
@@ -746,7 +747,6 @@ def visualize(
     """
     save_plot(image_save_folder, "confusion_matrix")
     print("Done creating the confusion matrix")
-    return
 
     if hist_2d is not None:
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
