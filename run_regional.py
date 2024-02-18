@@ -33,24 +33,40 @@ class_designation = e["class_designation"]
 model = load_model(e["model_architecture"], model_file, None, class_designation)
 
 features, labels, _ = get_data(
-    STRUCTURED_FOLDER_PATH_TRAIN,
-    # STRUCTURED_FOLDER_PATH_TEST,
+    # STRUCTURED_FOLDER_PATH_TRAIN,
+    STRUCTURED_FOLDER_PATH_TEST,
 )
 print(features[0])
 results = {}
+count = 0
 for i in range(len(features)):
+    count += 1
     feature = features[i]
     match = re.findall(
-        ".*\/dataset_train_structured\/(\d_\d)\/.*",
-        # ".*\/dataset_test_structured\/(\d_\d)\/.*",
+        # ".*\/dataset_train_structured\/(\d_\d)\/.*",
+        ".*\/dataset_test_structured\/(\d_\d)\/.*",
         feature,
         re.IGNORECASE,
     )
     region = match[0]
+
+    """ Testing without 8_3 """
+    if region == "8_3":
+        continue
+    if "all" not in results:
+        results["all"] = {"features": [], "labels": []}
+    results["all"]["features"].append(feature)
+    results["all"]["labels"].append(labels[i])
+    continue
+    """ Testing without 8_3 """
+
     if region not in results:
         results[region] = {"features": [], "labels": []}
     results[region]["features"].append(feature)
     results[region]["labels"].append(labels[i])
+print(
+    f"Used {len(results['all']['features'])} samples of {count} total possible samples ({count / len(results['all']['featuers'])})"
+)
 
 region_statistics = {}
 for region in results.keys():
