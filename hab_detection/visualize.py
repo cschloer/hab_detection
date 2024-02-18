@@ -559,6 +559,7 @@ def visualize(
         )
     else:
         raise Exception(f"Unknown dataset type {dataset_type}")
+    print("DATASET SIZE", len(dataset))
     loader = DataLoader(
         dataset,
         batch_size=128,
