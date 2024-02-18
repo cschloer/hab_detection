@@ -782,8 +782,8 @@ def visualize(
             print(sums.shape)
             print("_____")
 
-            # normalized = hist_2d[i] / sums
-            normalized = hist_2d / sums
+            normalized = hist_2d[i] / sums[i]
+            #normalized = hist_2d / sums
             axs.plot(
                 range(1 if class_designation[0] == 1 else 0, 254),
                 normalized[1 if class_designation[0] == 1 else 0 :],
