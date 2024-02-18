@@ -65,7 +65,7 @@ for i in range(len(features)):
     results[region]["features"].append(feature)
     results[region]["labels"].append(labels[i])
 print(
-    f"Used {len(results['all']['features'])} samples of {count} total possible samples ({count / len(results['all']['featuers'])})"
+    f"Used {len(results['all']['features'])} samples of {count} total possible samples ({count / len(results['all']['features'])})"
 )
 
 region_statistics = {}
