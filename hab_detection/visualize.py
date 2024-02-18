@@ -750,14 +750,14 @@ def visualize(
 
     if hist_2d is not None:
         fig, axs = plt.subplots(1, 1, figsize=(12, 8))
-        sums = hist_2d.astype("float").sum(axis=1) + 1
+        sums = hist_2d.astype("float").sum(axis=0) + 1
         # print("SUMS SHAPE", sums.shape)
         # print("SUMS", sums)
         rectangles = {}
         ranges = [
             (
                 (-20 if class_designation[0] == 1 else 0)
-                if i == 0
+                if (i == 0
                 else class_designation[i - 1],
                 class_designation[i],
             )
@@ -782,8 +782,8 @@ def visualize(
             print(sums.shape)
             print("_____")
 
-            normalized = hist_2d[i] / sums[i]
-            #normalized = hist_2d / sums
+            normalized = hist_2d[i] / sums
+            # normalized = hist_2d / sums
             axs.plot(
                 range(1 if class_designation[0] == 1 else 0, 254),
                 normalized[1 if class_designation[0] == 1 else 0 :],
