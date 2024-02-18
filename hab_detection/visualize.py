@@ -777,6 +777,10 @@ def visualize(
                 0.05,
                 color=color,
             )
+            print("_____")
+            print(hist_2d.shape)
+            print(sums.shape)
+            print("_____")
 
             normalized = hist_2d[i] / sums
             axs.plot(
