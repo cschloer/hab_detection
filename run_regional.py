@@ -33,8 +33,8 @@ class_designation = e["class_designation"]
 model = load_model(e["model_architecture"], model_file, None, class_designation)
 
 features, labels, _ = get_data(
-    # STRUCTURED_FOLDER_PATH_TRAIN,
-    STRUCTURED_FOLDER_PATH_TEST,
+    STRUCTURED_FOLDER_PATH_TRAIN,
+    # STRUCTURED_FOLDER_PATH_TEST,
 )
 print(features[0])
 results = {}
@@ -43,8 +43,8 @@ for i in range(len(features)):
     count += 1
     feature = features[i]
     match = re.findall(
-        # ".*\/dataset_train_structured\/(\d_\d)\/.*",
-        ".*\/dataset_test_structured\/(\d_\d)\/.*",
+        ".*\/dataset_train_structured\/(\d_\d)\/.*",
+        # ".*\/dataset_test_structured\/(\d_\d)\/.*",
         feature,
         re.IGNORECASE,
     )
@@ -65,7 +65,7 @@ for i in range(len(features)):
     results[region]["features"].append(feature)
     results[region]["labels"].append(labels[i])
 print(
-    f"Used {len(results['all']['features'])} samples of {count} total possible samples ({count / len(results['all']['features'])})"
+    f"Used {len(results['all']['features'])} samples of {count} total possible samples ({len(results['all']['features'])/ count})"
 )
 
 region_statistics = {}
