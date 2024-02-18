@@ -782,7 +782,8 @@ def visualize(
             print(sums.shape)
             print("_____")
 
-            normalized = hist_2d[i] / sums
+            # normalized = hist_2d[i] / sums
+            normalized = hist_2d / sums
             axs.plot(
                 range(1 if class_designation[0] == 1 else 0, 254),
                 normalized[1 if class_designation[0] == 1 else 0 :],
@@ -792,7 +793,7 @@ def visualize(
                 linewidth=2.0,
             )
             # Plot thicker line inside of range where it is correct
-            if i != 0:
+            if i != -1:
                 axs.plot(
                     range(floor, min(ceil + 1, len(normalized))),
                     normalized[floor : min(ceil + 1, len(normalized))],
