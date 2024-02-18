@@ -51,8 +51,8 @@ for i in range(len(features)):
     region = match[0]
 
     """ Testing without 8_3 """
-    if region == "8_3":
-        continue
+    # if region == "8_3":
+    #    continue
     if "all" not in results:
         results["all"] = {"features": [], "labels": []}
     results["all"]["features"].append(feature)
