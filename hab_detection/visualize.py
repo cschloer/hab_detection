@@ -837,8 +837,8 @@ def visualize(
             plt.xticks([0, 50, 100, 150, 200, 253], [0, 50, 100, 150, 200, 253])
         plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.2, 0.4, 0.6, 0.8, 1.0])
 
-        axs.set_title("Classification of Pixels vs Actual HAB Index")
-        plt.xlabel("Actual HAB Index")
-        plt.ylabel("Fraction Classified")
+        axs.set_title("Classification of Pixels vs Actual HAB Index", fontsize=20)
+        plt.xlabel("Actual HAB Index", fontsize=18)
+        plt.ylabel("Fraction Classified", fontsize=18)
 
         save_plot(image_save_folder, "class_preds")
