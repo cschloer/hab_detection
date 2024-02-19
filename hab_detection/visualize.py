@@ -790,6 +790,9 @@ def visualize(
             )
             # Plot thicker line inside of range where it is correct
             if i != 0:
+                print(
+                    f" i: {i}, floor: {floor}, ceil: {ceil}, len normalized: {len(normalized)}"
+                )
                 axs.plot(
                     range(floor, min(ceil + 1, len(normalized))),
                     normalized[floor : min(ceil + 1, len(normalized))],
