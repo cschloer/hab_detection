@@ -40,10 +40,12 @@ dataset = get_image_dataset(
     cd,
 )
 
+"""
 other_dataset = get_image_dataset(
     STRUCTURED_FOLDER_PATH_TRAIN if t == "test" else STRUCTURED_FOLDER_PATH_TEST,
     cd,
 )
+"""
 print(f"Dataset size: {len(dataset)}")
 
 loader = DataLoader(
@@ -54,6 +56,7 @@ loader = DataLoader(
     num_workers=0,
     drop_last=False,
 )
+"""
 other_loader = DataLoader(
     other_dataset,
     # batch_size=128,
@@ -62,6 +65,7 @@ other_loader = DataLoader(
     num_workers=0,
     drop_last=False,
 )
+"""
 print("Dataset loaded. Calculating labels distribution.")
 
 num_classes = len(cd) if cd is not None else 254
@@ -69,6 +73,7 @@ labels_dist = np.zeros(num_classes)
 all_dist = np.zeros(254)
 premax = 0
 postmax = 0
+num_samples_used = 0
 for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
     mask = labels == -1
 
@@ -88,10 +93,12 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
     if labels_dist_temp[2] > 0:
         labels_dist = labels_dist + labels_dist_temp
         all_dist = all_dist + all_dist_temp
+        num_samples_used += 1
     # if batch_idx % 200 == 0:
     if batch_idx % (200 * 128) == 0:
         print(f"Batch {batch_idx} - premax {premax}, postmax {postmax}")
 
+"""
 premax = 0
 postmax = 0
 print(f"Dataset size for both: {len(dataset) + len(other_dataset)}")
@@ -115,6 +122,9 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(other_loader):
     all_dist = all_dist + all_dist_temp
     if batch_idx % 200 == 0:
         print(f"Batch {batch_idx} - premax {premax}, postmax {postmax}")
+"""
+
+print(f"Num samples used: {num_samples_used}")
 
 
 print("Labels Count:")
