@@ -90,7 +90,7 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
         minlength=254,
     )
 
-    if labels_dist_temp[2] > 409:
+    if labels_dist_temp[2] >= 2048:
         labels_dist = labels_dist + labels_dist_temp
         all_dist = all_dist + all_dist_temp
         num_samples_used += 1
