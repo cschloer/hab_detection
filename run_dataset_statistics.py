@@ -60,7 +60,6 @@ other_loader = DataLoader(
     num_workers=0,
     drop_last=False,
 )
-"""
 print("Dataset loaded. Calculating labels distribution.")
 
 num_classes = len(cd) if cd is not None else 254
@@ -84,10 +83,14 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
         minlength=254,
     )
 
-    labels_dist = labels_dist + labels_dist_temp
-    all_dist = all_dist + all_dist_temp
+    print(labels_dist_temp.shape)
+    print(labels_dist_temp[2])
+    if labels_dist_temp[2] > 0:
+        labels_dist = labels_dist + labels_dist_temp
+        all_dist = all_dist + all_dist_temp
     if batch_idx % 200 == 0:
         print(f"Batch {batch_idx} - premax {premax}, postmax {postmax}")
+    exit()
 
 premax = 0
 postmax = 0
@@ -129,7 +132,6 @@ print("All Weights:")
 print(1 / (all_dist / np.max(all_dist)))
 exit()
 
-"""
 print("Calculating mean and std now.")
 
 dataset = get_image_dataset(
