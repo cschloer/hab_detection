@@ -90,7 +90,7 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
         minlength=254,
     )
 
-    if labels_dist_temp[2] > 0:
+    if labels_dist_temp[2] > 409:
         labels_dist = labels_dist + labels_dist_temp
         all_dist = all_dist + all_dist_temp
         num_samples_used += 1
@@ -135,11 +135,13 @@ print("Labels Fraction:")
 print(labels_dist / np.sum(labels_dist))
 print("Weights:")
 print(1 / (labels_dist / np.max(labels_dist)))
+"""
 print("All Pixels:")
 print(all_dist)
 all_dist = np.where(all_dist == 0, 1, all_dist)
 print("All Weights:")
 print(1 / (all_dist / np.max(all_dist)))
+"""
 exit()
 
 print("Calculating mean and std now.")
