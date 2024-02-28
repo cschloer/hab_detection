@@ -48,14 +48,16 @@ print(f"Dataset size: {len(dataset)}")
 
 loader = DataLoader(
     dataset,
-    batch_size=128,
+    # batch_size=128,
+    batch_size=1,
     shuffle=False,
     num_workers=0,
     drop_last=False,
 )
 other_loader = DataLoader(
     other_dataset,
-    batch_size=128,
+    # batch_size=128,
+    batch_size=1,
     shuffle=False,
     num_workers=0,
     drop_last=False,
@@ -88,9 +90,9 @@ for batch_idx, (_, labels, _, raw_labels) in enumerate(loader):
     if labels_dist_temp[2] > 0:
         labels_dist = labels_dist + labels_dist_temp
         all_dist = all_dist + all_dist_temp
-    if batch_idx % 200 == 0:
+    # if batch_idx % 200 == 0:
+    if batch_idx % (200 * 128) == 0:
         print(f"Batch {batch_idx} - premax {premax}, postmax {postmax}")
-    exit()
 
 premax = 0
 postmax = 0
