@@ -682,11 +682,11 @@ def visualize(
     # return
     """
 
-    metrics_pickle_filename = f"{image_save_folder}/metrics.pickle"
+    cm_pickle_filename = f"{image_save_folder}/metrics.pickle"
     hist_2d_pickle_filename = f"{image_save_folder}/hist_2d.pickle"
     try:
-        with open(metrics_pickle_filename, "rb") as f:
-            metrics = pickle.load(f)
+        with open(cm_pickle_filename, "rb") as f:
+            cm = pickle.load(f)
         with open(hist_2d_pickle_filename, "rb") as f:
             hist_2d = pickle.load(f)
     except (FileNotFoundError, EOFError) as e:
@@ -698,21 +698,16 @@ def visualize(
             calculate_2d_hist=True,
             calculate_statistics=True,
         )
-        dump_metrics = {}
-        for k in metrics.keys():
-            dump_metrics = metrics[k].to(torch.device("cpu"))
-        with open(metrics_pickle_filename, "wb") as f:
-            pickle.dump(dump_metrics, f)
+        cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
+        with open(cm_pickle_filename, "wb") as f:
+            pickle.dump(cm, f)
         with open(hist_2d_pickle_filename, "wb") as f:
             pickle.dump(hist_2d, f)
-        print(
-            f"Dumped pickles to {metrics_pickle_filename} and {hist_2d_pickle_filename}"
-        )
+        print(f"Dumped pickles to {cm_pickle_filename} and {hist_2d_pickle_filename}")
 
     # log(f"\n{pprint.pformat(metrics)}")
 
     """ Confusion Matrix """
-    cm = np.squeeze(metrics["MulticlassConfusionMatrix"].cpu().numpy())
     cmn = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
     vmin = np.min(cmn)
     vmax = np.max(cmn)
