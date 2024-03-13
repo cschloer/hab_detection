@@ -518,6 +518,7 @@ def visualize(
                         train_loss.append(float(loss))
                     else:
                         raise Exception(f"Found unknown type {t} in log")
+
         """
         W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
         plt.rcParams.update(
