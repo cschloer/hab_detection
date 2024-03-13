@@ -689,7 +689,7 @@ def visualize(
             metrics = pickle.load(f)
         with open(hist_2d_pickle_filename, "rb") as f:
             hist_2d = pickle.load(f)
-    except FileNotFoundError:
+    except (FileNotFoundError, EOFError) as e:
         _, metrics, hist_2d = get_model_performance(
             model,
             loader,
