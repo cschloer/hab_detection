@@ -698,16 +698,13 @@ def visualize(
             calculate_2d_hist=True,
             calculate_statistics=True,
         )
-        print("METRICS", metrics)
         dump_metrics = {}
         for k in metrics.keys():
             dump_metrics = metrics[k].to(torch.device("cpu"))
-        print("DUMP METRICS", metrics)
         with open(metrics_pickle_filename, "wb") as f:
             pickle.dump(dump_metrics, f)
-        print("HIST @D", hist_2d)
         with open(hist_2d_pickle_filename, "wb") as f:
-            pickle.dump(hist_2d.to(torch.device("cpu")), f)
+            pickle.dump(hist_2d), f)
         print(
             f"Dumped pickles to {metrics_pickle_filename} and {hist_2d_pickle_filename}"
         )
