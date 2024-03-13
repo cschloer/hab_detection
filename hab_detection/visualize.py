@@ -698,9 +698,9 @@ def visualize(
             calculate_2d_hist=True,
             calculate_statistics=True,
         )
-        with open(metrics_pickle_filename, "w") as f:
+        with open(metrics_pickle_filename, "wb") as f:
             pickle.dump(metrics, f)
-        with open(hist_2d_pickle_filename, "w") as f:
+        with open(hist_2d_pickle_filename, "wb") as f:
             pickle.dump(hist_2d, f)
         print(
             f"Dumped pickles to {metrics_pickle_filename} and {hist_2d_pickle_filename}"
