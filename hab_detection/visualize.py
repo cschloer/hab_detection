@@ -518,6 +518,7 @@ def visualize(
                         train_loss.append(float(loss))
                     else:
                         raise Exception(f"Found unknown type {t} in log")
+        """
         W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
         plt.rcParams.update(
             {
@@ -525,11 +526,17 @@ def visualize(
                 "font.size": 12,  # Set font size to 12pt
                 "axes.labelsize": 12,  # -> axis labels
                 "legend.fontsize": 12,  # -> legends
+                "text.usetex": True,
                 "font.family": "serif",
                 "font.serif": "Palatino",
                 "font.weight": "bold",
+                "text.latex.preamble": (  # LaTeX preamble
+                    r"\usepackage{lmodern}"
+                    # ... more packages if needed
+                ),
             }
         )
+        """
 
         fig = plt.figure()
         ax = fig.add_subplot()
@@ -693,14 +700,30 @@ def visualize(
     # return
     """
 
-    _, metrics, hist_2d = get_model_performance(
-        model,
-        loader,
-        class_designation,
-        num_batches=-1,
-        calculate_2d_hist=True,
-        calculate_statistics=True,
-    )
+    metrics_pickle_filename = f"{image_save_folder}/metrics.pickle"
+    hist_2d_pickle_filename = f"{image_save_folder}/metrics.pickle"
+    try:
+        with open(metrics_pickle_filename, "r") as f:
+            metrics = pickle.load(f)
+        with open(hist_2d_pickle_filename, "r") as f:
+            hist_2d = pickle.load(f)
+    except FileNotFoundError:
+        _, metrics, hist_2d = get_model_performance(
+            model,
+            loader,
+            class_designation,
+            num_batches=-1,
+            calculate_2d_hist=True,
+            calculate_statistics=True,
+        )
+        with open(metrics_pickle_filename, "w") as f:
+            pickle.dump(metrics, f)
+        with open(hist_2d_pickle_filename, "w") as f:
+            pickle.dump(hist_2d, f)
+        print(
+            f"Dumped pickles to {metrics_pickle_filename} and {hist_2d_pickle_filename}"
+        )
+
     # log(f"\n{pprint.pformat(metrics)}")
 
     """ Confusion Matrix """
@@ -760,6 +783,7 @@ def visualize(
     cf_disp.plot()
     """
 
+    """
     W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
     plt.rcParams.update(
         {
@@ -767,11 +791,17 @@ def visualize(
             "font.size": 12,  # Set font size to 12pt
             "axes.labelsize": 12,  # -> axis labels
             "legend.fontsize": 12,  # -> legends
+            "text.usetex": True,
             "font.family": "serif",
             "font.serif": "Palatino",
             "font.weight": "bold",
+            "text.latex.preamble": (  # LaTeX preamble
+                r"\usepackage{lmodern}"
+                # ... more packages if needed
+            ),
         }
     )
+    """
     save_plot(image_save_folder, "confusion_matrix")
     print("Done creating the confusion matrix")
 
@@ -861,6 +891,7 @@ def visualize(
             plt.xticks([0, 50, 100, 150, 200, 253], [0, 50, 100, 150, 200, 253])
         plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.2, 0.4, 0.6, 0.8, 1.0])
 
+        """
         W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
         plt.rcParams.update(
             {
@@ -868,11 +899,17 @@ def visualize(
                 "font.size": 12,  # Set font size to 12pt
                 "axes.labelsize": 12,  # -> axis labels
                 "legend.fontsize": 12,  # -> legends
+                "text.usetex": True,
                 "font.family": "serif",
                 "font.serif": "Palatino",
                 "font.weight": "bold",
+                "text.latex.preamble": (  # LaTeX preamble
+                    r"\usepackage{lmodern}"
+                    # ... more packages if needed
+                ),
             }
         )
+        """
 
         axs.set_title("Classification of Pixels vs Actual HAB Index")
         plt.xlabel("Actual HAB Index")
