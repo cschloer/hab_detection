@@ -764,25 +764,6 @@ def visualize(
     cf_disp.plot()
     """
 
-    """
-    W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
-    plt.rcParams.update(
-        {
-            "figure.figsize": (W, W / (4 / 3)),  # 4:3 aspect ratio
-            "font.size": 12,  # Set font size to 12pt
-            "axes.labelsize": 12,  # -> axis labels
-            "legend.fontsize": 12,  # -> legends
-            "text.usetex": True,
-            "font.family": "serif",
-            "font.serif": "Palatino",
-            "font.weight": "bold",
-            "text.latex.preamble": (  # LaTeX preamble
-                r"\usepackage{lmodern}"
-                # ... more packages if needed
-            ),
-        }
-    )
-    """
     save_plot(image_save_folder, "confusion_matrix")
     print("Done creating the confusion matrix")
 
@@ -871,26 +852,6 @@ def visualize(
         else:
             plt.xticks([0, 50, 100, 150, 200, 253], [0, 50, 100, 150, 200, 253])
         plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.2, 0.4, 0.6, 0.8, 1.0])
-
-        """
-        W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
-        plt.rcParams.update(
-            {
-                "figure.figsize": (W, W / (4 / 3)),  # 4:3 aspect ratio
-                "font.size": 12,  # Set font size to 12pt
-                "axes.labelsize": 12,  # -> axis labels
-                "legend.fontsize": 12,  # -> legends
-                "text.usetex": True,
-                "font.family": "serif",
-                "font.serif": "Palatino",
-                "font.weight": "bold",
-                "text.latex.preamble": (  # LaTeX preamble
-                    r"\usepackage{lmodern}"
-                    # ... more packages if needed
-                ),
-            }
-        )
-        """
 
         axs.set_title("Classification of Pixels vs Actual HAB Index")
         plt.xlabel("Actual HAB Index")
