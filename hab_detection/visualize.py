@@ -698,8 +698,10 @@ def visualize(
             calculate_2d_hist=True,
             calculate_statistics=True,
         )
+        print("METRICS", metrics)
         with open(metrics_pickle_filename, "wb") as f:
             pickle.dump(metrics.to(torch.device("cpu")), f)
+        print("HIST @D", hist_2d)
         with open(hist_2d_pickle_filename, "wb") as f:
             pickle.dump(hist_2d.to(torch.device("cpu")), f)
         print(
