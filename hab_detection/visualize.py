@@ -529,10 +529,6 @@ def visualize(
                 "font.family": "serif",
                 "font.serif": "Palatino",
                 "font.weight": "bold",
-                "text.latex.preamble": (  # LaTeX preamble
-                    r"\usepackage{lmodern}"
-                    # ... more packages if needed
-                ),
             }
         )
 
@@ -776,10 +772,6 @@ def visualize(
             "font.family": "serif",
             "font.serif": "Palatino",
             "font.weight": "bold",
-            "text.latex.preamble": (  # LaTeX preamble
-                r"\usepackage{lmodern}"
-                # ... more packages if needed
-            ),
         }
     )
     save_plot(image_save_folder, "confusion_matrix")
@@ -882,10 +874,6 @@ def visualize(
                 "font.family": "serif",
                 "font.serif": "Palatino",
                 "font.weight": "bold",
-                "text.latex.preamble": (  # LaTeX preamble
-                    r"\usepackage{lmodern}"
-                    # ... more packages if needed
-                ),
             }
         )
 
