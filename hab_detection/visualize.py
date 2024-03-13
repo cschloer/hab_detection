@@ -685,9 +685,9 @@ def visualize(
     metrics_pickle_filename = f"{image_save_folder}/metrics.pickle"
     hist_2d_pickle_filename = f"{image_save_folder}/metrics.pickle"
     try:
-        with open(metrics_pickle_filename, "r") as f:
+        with open(metrics_pickle_filename, "rb") as f:
             metrics = pickle.load(f)
-        with open(hist_2d_pickle_filename, "r") as f:
+        with open(hist_2d_pickle_filename, "rb") as f:
             hist_2d = pickle.load(f)
     except FileNotFoundError:
         _, metrics, hist_2d = get_model_performance(
