@@ -525,7 +525,6 @@ def visualize(
                 "font.size": 12,  # Set font size to 12pt
                 "axes.labelsize": 12,  # -> axis labels
                 "legend.fontsize": 12,  # -> legends
-                "text.usetex": True,
                 "font.family": "serif",
                 "font.serif": "Palatino",
                 "font.weight": "bold",
@@ -768,7 +767,6 @@ def visualize(
             "font.size": 12,  # Set font size to 12pt
             "axes.labelsize": 12,  # -> axis labels
             "legend.fontsize": 12,  # -> legends
-            "text.usetex": True,
             "font.family": "serif",
             "font.serif": "Palatino",
             "font.weight": "bold",
@@ -870,7 +868,6 @@ def visualize(
                 "font.size": 12,  # Set font size to 12pt
                 "axes.labelsize": 12,  # -> axis labels
                 "legend.fontsize": 12,  # -> legends
-                "text.usetex": True,
                 "font.family": "serif",
                 "font.serif": "Palatino",
                 "font.weight": "bold",
