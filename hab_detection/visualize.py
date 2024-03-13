@@ -683,7 +683,7 @@ def visualize(
     """
 
     metrics_pickle_filename = f"{image_save_folder}/metrics.pickle"
-    hist_2d_pickle_filename = f"{image_save_folder}/metrics.pickle"
+    hist_2d_pickle_filename = f"{image_save_folder}/hist_2d.pickle"
     try:
         with open(metrics_pickle_filename, "rb") as f:
             metrics = pickle.load(f)
