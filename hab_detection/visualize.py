@@ -699,9 +699,9 @@ def visualize(
             calculate_statistics=True,
         )
         with open(metrics_pickle_filename, "wb") as f:
-            pickle.dump(metrics, f)
+            pickle.dump(metrics.to(torch.device("cpu")), f)
         with open(hist_2d_pickle_filename, "wb") as f:
-            pickle.dump(hist_2d, f)
+            pickle.dump(hist_2d.to(torch.device("cpu")), f)
         print(
             f"Dumped pickles to {metrics_pickle_filename} and {hist_2d_pickle_filename}"
         )
