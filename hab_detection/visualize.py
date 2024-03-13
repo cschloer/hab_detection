@@ -518,6 +518,23 @@ def visualize(
                         train_loss.append(float(loss))
                     else:
                         raise Exception(f"Found unknown type {t} in log")
+        W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
+        plt.rcParams.update(
+            {
+                "figure.figsize": (W, W / (4 / 3)),  # 4:3 aspect ratio
+                "font.size": 12,  # Set font size to 12pt
+                "axes.labelsize": 12,  # -> axis labels
+                "legend.fontsize": 12,  # -> legends
+                "text.usetex": True,
+                "font.family": "serif",
+                "font.serif": "Palatino",
+                "font.weight": "bold",
+                "text.latex.preamble": (  # LaTeX preamble
+                    r"\usepackage{lmodern}"
+                    # ... more packages if needed
+                ),
+            }
+        )
 
         fig = plt.figure()
         ax = fig.add_subplot()
@@ -540,24 +557,6 @@ def visualize(
         plt.title("Loss across training epochs")
 
         # plt.show()
-
-        W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
-        plt.rcParams.update(
-            {
-                "figure.figsize": (W, W / (4 / 3)),  # 4:3 aspect ratio
-                "font.size": 12,  # Set font size to 12pt
-                "axes.labelsize": 12,  # -> axis labels
-                "legend.fontsize": 12,  # -> legends
-                "text.usetex": True,
-                "font.family": "serif",
-                "font.serif": "Palatino",
-                "font.weight": "bold",
-                "text.latex.preamble": (  # LaTeX preamble
-                    r"\usepackage{lmodern}"
-                    # ... more packages if needed
-                ),
-            }
-        )
 
         save_plot(image_save_folder, "loss")
     except FileNotFoundError as e:
