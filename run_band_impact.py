@@ -79,7 +79,7 @@ for band in range(12):
     print("----------------")
 
 for band in results.keys():
-    avg_acc = np.mean(results[band]["MulticlassAccuracy"].numpy())
+    avg_acc = np.mean(results[band]["MulticlassAccuracy"].cpu().numpy())
     print(f"Band {band} average accuracy: {avg_acc}")
     for k in results[band].keys():
         results[band][k] = results[band][k].cpu().numpy().tolist()
