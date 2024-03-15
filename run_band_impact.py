@@ -81,9 +81,11 @@ for band in range(12):
 for band in results.keys():
     avg_acc = np.mean(results[band]["MulticlassAccuracy"].numpy())
     print(f"Band {band} average accuracy: {avg_acc}")
+    for k in results[band].keys():
+        results[band][k] = results[band][k].cpu().numpy().tolist()
 
 model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
 image_save_folder = f"{model_save_folder}/visualize/test"
-all_zero_pickle_filename = f"{image_save_folder}/band_zero_results.pickle"
-with open(all_zero_pickle_filename, "wb") as f:
-    pickle.dump(results, f)
+all_zero_pickle_filename = f"{image_save_folder}/band_zero_results.json"
+with open(all_zero_pickle_filename, "w") as f:
+    json.dump(results, f)
