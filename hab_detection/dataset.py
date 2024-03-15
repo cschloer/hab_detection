@@ -96,6 +96,7 @@ class ImageData(Dataset):
         fold_list=None,
         zip_path=None,
         in_memory_prefill=True,
+        transform_image_func=None,
     ):
         super().__init__()
         assert len(features) == len(labels)
@@ -108,6 +109,7 @@ class ImageData(Dataset):
         self.zip = None
         self.in_memory = in_memory
         self.cache = None
+        self.transform_image_func = transform_image_func
         if in_memory:
             self.cache = [None] * len(self.features)
             if in_memory_prefill:
@@ -182,6 +184,7 @@ class ImageData(Dataset):
             raise FileNotFoundError(filename)
         if label is None:
             raise FileNotFoundError(label_filename)
+
         if self.in_memory:
             self.cache[idx] = (
                 image,
@@ -275,6 +278,9 @@ class ImageData(Dataset):
             label = self.transform_label(label)
         else:
             label = raw_label
+
+        if self.transform_image_func is not None:
+            image = self.transform_image_func(image)
 
         return (
             image,

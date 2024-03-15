@@ -37,7 +37,7 @@ from .model import load_model
 
 def save_plot(image_save_folder, filename):
     plt.savefig(f"{image_save_folder}/{filename}.pdf", dpi=1000, bbox_inches="tight")
-    plt.tight_layout()
+    # plt.tight_layout()
     plt.savefig(f"{image_save_folder}/{filename}.png")
     plt.savefig(f"{image_save_folder}/{filename}.svg", format="svg")
 
@@ -383,7 +383,7 @@ def visualize_image(
     cyan_np,
     pred_np,
 ):
-    fig, axs = plt.subplots(2, 2, figsize=(36, 32))
+    fig, axs = plt.subplots(2, 2)
     height = sen2_np.shape[1]
     width = sen2_np.shape[2]
     ycrop = height % 8
@@ -391,7 +391,7 @@ def visualize_image(
     sen2_np = sen2_np[:, 0 : height - ycrop, 0 : width - xcrop]
     pred_np = np.squeeze(pred_np[:, 0 : height - ycrop, 0 : width - xcrop])
     sen2_img = normalize_sen2(sen2_np[1, :, :], sen2_np[2, :, :], sen2_np[3, :, :])
-    ax = axs[1, 0]
+
     """
     ax.set_title("Actual image")
     ax.imshow(sen2_img)
@@ -401,7 +401,13 @@ def visualize_image(
         0 : height - ycrop, 0 : width - xcrop
     ]
 
-    ax.set_title("Difference Between Prediction and Actual")
+    ax = axs[0, 0]
+    ax.set_title("Actual HAB Index")
+    ax.imshow(cyan_colormap[cyan_reshaped])
+    ax.axis("off")
+
+    ax = axs[1, 0]
+    ax.set_title("Difference")
     cyan_classed = np.copy(cyan_reshaped)
     pred_classed = np.copy(pred_np)
     for i in range(len(class_designation)):
@@ -431,6 +437,7 @@ def visualize_image(
     )
     norm = matplotlib.colors.Normalize(vmin=0, vmax=len(class_designation))
 
+    print(classed_colormap[cyan_classed])
     im = ax.imshow(classed_colormap[cyan_classed], cmap=cmap, norm=norm)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
@@ -446,12 +453,6 @@ def visualize_image(
     ax.axis("off")
 
     # ---------------------------
-
-    ax = axs[0, 0]
-    ax.set_title("Actual HAB Index")
-    ax.imshow(cyan_colormap[cyan_reshaped])
-    ax.axis("off")
-
     custom_colormap = np.copy(cyan_colormap)
     prev_val = 0
     used = list(range(len(cyan_colormap)))
@@ -498,6 +499,24 @@ def visualize(
     os.makedirs(image_save_folder, exist_ok=True)
 
     log("Generating loss plot.")
+    W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
+    plt.rcParams.update(
+        {
+            "figure.figsize": (W, W / (4 / 3)),  # 4:3 aspect ratio
+            "font.size": 12,  # Set font size to 11pt
+            "axes.labelsize": 12,  # -> axis labels
+            "legend.fontsize": 12,  # -> legends
+            "text.usetex": True,
+            "font.family": "serif",
+            "font.family": "Palatino",
+            "font.weight": "bold",
+            "text.latex.preamble": (  # LaTeX preamble
+                r"\usepackage{lmodern}"
+                # ... more packages if needed
+            ),
+        }
+    )
+
     try:
         test_loss = []
         train_loss = []
@@ -612,8 +631,25 @@ def visualize(
                 break
     """
 
-    """
     log("Visualizing full images.")
+    W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
+    plt.rcParams.update(
+        {
+            "figure.figsize": (W, W / (4 / 3)),  # 4:3 aspect ratio
+            "font.size": 12,  # Set font size to 11pt
+            "axes.labelsize": 12,  # -> axis labels
+            "legend.fontsize": 12,  # -> legends
+            "text.usetex": True,
+            "font.family": "serif",
+            "font.family": "Palatino",
+            "font.weight": "bold",
+            "text.latex.preamble": (  # LaTeX preamble
+                r"\usepackage{lmodern}"
+                # ... more packages if needed
+            ),
+        }
+    )
+    """
     visualize_full_image_multipatch(
         model,
         dataset,
@@ -656,6 +692,7 @@ def visualize(
         image_save_folder,
         "greenbay",
     )
+    """
     visualize_full_image_multipatch(
         model,
         dataset,
@@ -680,7 +717,6 @@ def visualize(
     # return
     log("Done visualizing full images.")
     # return
-    """
 
     cm_pickle_filename = f"{image_save_folder}/cm.pickle"
     hist_2d_pickle_filename = f"{image_save_folder}/hist_2d.pickle"
@@ -712,6 +748,24 @@ def visualize(
     vmin = np.min(cmn)
     vmax = np.max(cmn)
     off_diag_mask = np.eye(*cmn.shape, dtype=bool)
+
+    W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
+    plt.rcParams.update(
+        {
+            "figure.figsize": (W, W / (4 / 3)),  # 4:3 aspect ratio
+            "font.size": 12,  # Set font size to 11pt
+            "axes.labelsize": 12,  # -> axis labels
+            "legend.fontsize": 12,  # -> legends
+            "text.usetex": True,
+            "font.family": "serif",
+            "font.family": "Palatino",
+            "font.weight": "bold",
+            "text.latex.preamble": (  # LaTeX preamble
+                r"\usepackage{lmodern}"
+                # ... more packages if needed
+            ),
+        }
+    )
 
     fig = plt.figure()
     gs0 = matplotlib.gridspec.GridSpec(1, 2, width_ratios=[20, 2], hspace=0.05)
@@ -766,8 +820,26 @@ def visualize(
     save_plot(image_save_folder, "confusion_matrix")
     print("Done creating the confusion matrix")
 
+    W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
+    plt.rcParams.update(
+        {
+            "figure.figsize": (W, W),  # 4:3 aspect ratio
+            "font.size": 12,  # Set font size to 11pt
+            "axes.labelsize": 12,  # -> axis labels
+            "legend.fontsize": 12,  # -> legends
+            "text.usetex": True,
+            "font.family": "serif",
+            "font.family": "Palatino",
+            "font.weight": "bold",
+            "text.latex.preamble": (  # LaTeX preamble
+                r"\usepackage{lmodern}"
+                # ... more packages if needed
+            ),
+        }
+    )
+
     if hist_2d is not None:
-        fig, axs = plt.subplots(1, 1, figsize=(12, 8))
+        fig, axs = plt.subplots(1, 1)
         sums = hist_2d.astype("float").sum(axis=0) + 1
         # print("SUMS SHAPE", sums.shape)
         # print("SUMS", sums)
@@ -843,7 +915,7 @@ def visualize(
                 va="center",
             )
 
-        plt.autoscale(enable=True, axis="x", tight=True)
+        # plt.autoscale(enable=True, axis="x", tight=True)
         axs.set_ylim(0.0, 1.07)
         axs.set_xlim(-20 if class_designation[0] == 1 else 0, 253)
         if class_designation[0] == 1:

@@ -206,7 +206,7 @@ def load_model(
     model = model.to(device)
     if model_file is not None:
         # An entire path was passed in
-        if model_file.startswith("/"):
+        if model_file.startswith("/") or model_file.startswith("./"):
             model.load_state_dict(torch.load(model_file, map_location=device))
         else:
             model_file_path = f"{model_folder}/{model_file}"
