@@ -1,4 +1,5 @@
 import sys
+import torch
 import numpy as np
 import pickle
 import re
@@ -44,8 +45,21 @@ results = {}
 count = 0
 for band in range(12):
 
-    def transform_image_func(image):
+    def set_zero(image):
         image[band, :, :] = 0
+        return image
+
+    def set_random(image):
+        image[band, :, :] = torch.from_numpy(
+            np.random.normal(
+                0,
+                1,
+                (
+                    64,
+                    64,
+                ),
+            )
+        )
         return image
 
     dataset = ImageData(
@@ -56,7 +70,7 @@ for band in range(12):
         randomize=False,
         transform=True,
         in_memory=False,
-        transform_image_func=transform_image_func,
+        transform_image_func=set_random,
     )
     loader = DataLoader(
         dataset,
@@ -86,6 +100,7 @@ for band in results.keys():
 
 model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
 image_save_folder = f"{model_save_folder}/visualize/test"
-all_zero_pickle_filename = f"{image_save_folder}/band_zero_results.json"
-with open(all_zero_pickle_filename, "w") as f:
+# filename = f"{image_save_folder}/band_zero_results.json"
+filename = f"{image_save_folder}/band_random_results.json"
+with open(filename, "w") as f:
     json.dump(results, f)
