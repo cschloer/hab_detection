@@ -73,7 +73,7 @@ for i in range(4096):
         return image
 
     def set_random(image):
-        pixel = np.copy(image[:, x, y])
+        pixel = torch.from_numpy(np.copy(image[:, x, y].cpu().numpy()))
         image[:, :, :] = torch.from_numpy(
             np.random.normal(
                 0,
