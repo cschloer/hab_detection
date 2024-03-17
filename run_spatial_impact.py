@@ -1,5 +1,6 @@
 import sys
 import torch
+import time
 import numpy as np
 import random
 import pickle
@@ -46,7 +47,7 @@ results = {}
 count = 0
 used_pixels = {}
 random.seed(42)
-for i in range(1):
+for i in range(4):
     x = None
     y = None
     while f"{x}-{y}" in used_pixels:
@@ -83,11 +84,12 @@ for i in range(1):
     )
     loader = DataLoader(
         dataset,
-        batch_size=128,
+        batch_size=64 * 2**i,
         shuffle=False,
         num_workers=0,
         drop_last=False,
     )
+    start = time.time()
     _, metrics, _ = get_model_performance(
         model,
         loader,
@@ -100,7 +102,7 @@ for i in range(1):
             y,
         ),
     )
-    print(f"Running statistics for round {i}")
+    print(f"Running statistics for round {i} took {time.time() - start}")
     print(metrics)
     results[i] = metrics
     print("----------------")
