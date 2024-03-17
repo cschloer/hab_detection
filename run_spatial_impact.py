@@ -49,7 +49,7 @@ count = 0
 used_pixels = {}
 random.seed(42)
 tracker = get_metric_tracker(class_designation)
-for i in range(4):
+for i in range(75):
     x = None
     y = None
     while f"{x}-{y}" in used_pixels or x is None:
