@@ -54,24 +54,17 @@ for i in range(4):
     while f"{x}-{y}" in used_pixels or x is None:
         x = math.floor(random.random() * 64)
         y = math.floor(random.random() * 64)
-    print("X and Y out", x, y)
     used_pixels[f"{x}-{y}"] = True
 
     def set_random(image):
         pixel = image[:, x, y]
 
         image[:, :, :] = torch.from_numpy(
-            np.random.normal(
-                0,
-                1,
-                (
-                    12,
-                    64,
-                    64,
-                ),
-            )
+            np.full(
+                (64, 64, 12),
+                pixel,
+            ).reshape((12, 64, 64))
         )
-        image[:, x, y] = pixel
         return image
 
     dataset = ImageData(
@@ -86,7 +79,7 @@ for i in range(4):
     )
     loader = DataLoader(
         dataset,
-        batch_size=64 * 2**i,
+        batch_size=128,
         shuffle=False,
         num_workers=0,
         drop_last=False,
