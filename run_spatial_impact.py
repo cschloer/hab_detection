@@ -2,6 +2,7 @@ import sys
 import torch
 import time
 import numpy as np
+import math
 import random
 import pickle
 import re
@@ -50,9 +51,10 @@ random.seed(42)
 for i in range(4):
     x = None
     y = None
-    while f"{x}-{y}" in used_pixels:
+    while f"{x}-{y}" in used_pixels or x is None:
         x = math.floor(random.random() * 64)
         y = math.floor(random.random() * 64)
+    print("X and Y out", x, y)
     used_pixels[f"{x}-{y}"] = True
 
     def set_random(image):
