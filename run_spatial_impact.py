@@ -57,7 +57,7 @@ for i in range(4096):
         y = math.floor(random.random() * 64)
     used_pixels[f"{x}-{y}"] = True
 
-    def set_random(image):
+    def set_same(image):
         pixel = image[:, x, y]
 
         image[:, :, :] = torch.from_numpy(
@@ -70,6 +70,21 @@ for i in range(4096):
                 0,
             )
         )
+        return image
+    def set_random(image):
+        pixel = np.copy(image[:, x, y])
+        image[:, :, :] = torch.from_numpy(
+            np.random.normal(
+                0,
+                1,
+                (
+                    12
+                    64,
+                    64,
+                ),
+            )
+        )
+        image[:,x,y] = pixel
         return image
 
     dataset = ImageData(
@@ -116,6 +131,6 @@ for k in results.keys():
 model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
 image_save_folder = f"{model_save_folder}/visualize/test"
 # filename = f"{image_save_folder}/band_zero_results.json"
-filename = f"{image_save_folder}/spatial_random_results.json"
+filename = f"{image_save_folder}/spatial_random_all_results.json"
 with open(filename, "w") as f:
     json.dump(results, f)
