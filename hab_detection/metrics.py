@@ -77,6 +77,8 @@ def get_model_performance(
     calculate_2d_hist=False,
     # If we only want the loss
     calculate_statistics=True,
+    # If we only evaluate a single pixel (when checking geospatial influence)
+    pixel_mode=None,
 ):
     # model_cpu = model.cpu()
     if calculate_statistics:
@@ -184,6 +186,10 @@ def get_model_performance(
                         labels[~(labels == -1)],
                     )
                 else:
+                    if pixel_mode is not None:
+                        x, y = pixel_mode
+                        preds = preds[:, :, x, y]
+                        labels = labels[:, x, y]
                     tracker.update(preds, labels)
 
                 if class_designation is not None and calculate_2d_hist:
