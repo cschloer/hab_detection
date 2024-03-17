@@ -49,7 +49,7 @@ count = 0
 used_pixels = {}
 random.seed(42)
 tracker = get_metric_tracker(class_designation)
-for i in range(75):
+for i in range(4096):
     x = None
     y = None
     while f"{x}-{y}" in used_pixels or x is None:
@@ -61,10 +61,14 @@ for i in range(75):
         pixel = image[:, x, y]
 
         image[:, :, :] = torch.from_numpy(
-            np.full(
-                (64, 64, 12),
-                pixel,
-            ).reshape((12, 64, 64))
+            np.moveaxis(
+                np.full(
+                    (64, 64, 12),
+                    pixel,
+                ),
+                2,
+                0,
+            )
         )
         return image
 
