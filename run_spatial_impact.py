@@ -71,6 +71,7 @@ for i in range(4096):
             )
         )
         return image
+
     def set_random(image):
         pixel = np.copy(image[:, x, y])
         image[:, :, :] = torch.from_numpy(
@@ -78,13 +79,13 @@ for i in range(4096):
                 0,
                 1,
                 (
-                    12
+                    12,
                     64,
                     64,
                 ),
             )
         )
-        image[:,x,y] = pixel
+        image[:, x, y] = pixel
         return image
 
     dataset = ImageData(
