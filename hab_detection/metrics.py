@@ -79,10 +79,12 @@ def get_model_performance(
     calculate_statistics=True,
     # If we only evaluate a single pixel (when checking geospatial influence)
     pixel_mode=None,
+    tracker=None,
 ):
     # model_cpu = model.cpu()
     if calculate_statistics:
-        tracker = get_metric_tracker(class_designation)
+        if tracker is None:
+            tracker = get_metric_tracker(class_designation)
         tracker2 = get_metric_tracker(class_designation)
     if calculate_2d_hist:
         hist_2d = (

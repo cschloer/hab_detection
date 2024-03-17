@@ -7,7 +7,7 @@ import random
 import pickle
 import re
 import json
-from hab_detection.metrics import get_model_performance
+from hab_detection.metrics import get_model_performance, get_metric_tracker
 from hab_detection.model import load_model
 from hab_detection.visualize import visualize
 from hab_detection.dataset import get_data, ImageData
@@ -48,6 +48,7 @@ results = {}
 count = 0
 used_pixels = {}
 random.seed(42)
+tracker = get_metric_tracker(class_designation)
 for i in range(4):
     x = None
     y = None
@@ -85,7 +86,7 @@ for i in range(4):
         drop_last=False,
     )
     start = time.time()
-    _, metrics, _ = get_model_performance(
+    get_model_performance(
         model,
         loader,
         class_designation,
@@ -96,17 +97,17 @@ for i in range(4):
             x,
             y,
         ),
+        tracker=tracker,
     )
     print(f"Running statistics for round {i} took {time.time() - start}")
-    print(metrics)
-    results[i] = metrics
+    print(tracker.compute_all())
     print("----------------")
 
-for i in results.keys():
-    avg_acc = np.mean(results[i]["MulticlassAccuracy"].cpu().numpy())
-    print(f"Round {i} average accuracy: {avg_acc}")
-    for k in results[i].keys():
-        results[i][k] = results[i][k].cpu().numpy().tolist()
+results = tracker.compute_all()
+avg_acc = np.mean(results["MulticlassAccuracy"].cpu().numpy())
+print(f"Average accuracy: {avg_acc}")
+for k in results.keys():
+    results[k] = results[k].cpu().numpy().tolist()
 
 model_save_folder = f"{MODEL_SAVE_BASE_FOLDER}/{experiment_name}"
 image_save_folder = f"{model_save_folder}/visualize/test"
