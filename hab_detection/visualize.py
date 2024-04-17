@@ -879,13 +879,12 @@ def visualize(
                 linewidth=2.0,
             )
             # Plot thicker line inside of range where it is correct
-            if i != 0:
-                axs.plot(
-                    range(floor, min(ceil + 1, len(normalized))),
-                    normalized[floor : min(ceil + 1, len(normalized))],
-                    color=color,
-                    linewidth=2.0,
-                )
+            axs.plot(
+                range(floor, min(ceil + 1, len(normalized))),
+                normalized[floor : min(ceil + 1, len(normalized))],
+                color=color,
+                linewidth=2.0,
+            )
             if class_designation[0] == 1:
                 plt.plot(
                     [-20, 0.5],

@@ -89,13 +89,14 @@ def generate_figure(
         """
 
     if linecolor is None:
-        ax.plot([-1, 12], [acc, acc], label=f"No Bands Removed", linewidth=3.0)
+        ax.plot([-1, 12], [acc, acc], "--", label=f"No Bands Removed", linewidth=2.0)
     else:
         ax.plot(
             [-1, 12],
             [acc, acc],
+            "--",
             label=f"No Bands Removed",
-            linewidth=1.0,
+            linewidth=2.0,
             color=linecolor,
         )
 
@@ -124,10 +125,9 @@ generate_figure(
     lambda results, band: np.mean(results[band]["MulticlassAccuracy"]),
     0.8627,
     True,
-    show=True,
-    save=False,
+    show=False,
+    save=True,
 )
-"""
 
 generate_figure(
     "Accuracy After Bands Randomized for Low Risk HAB",
@@ -161,4 +161,3 @@ generate_figure(
     show=False,
     save=True,
 )
-"""
