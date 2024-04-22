@@ -35,7 +35,7 @@ def eight_neighbor_average_convolve2d(x):
     return neighbor_sum / num_neighbor
 
 
-TEMP_FOLDER = "/home/conrad/Dropbox/Masters/masters_thesis/hab_detection/scripts/temp"
+TEMP_FOLDER = "/home/conrad/Dropbox/Masters/masters_thesis/hab_detection/scripts/tmp"
 region_ids = ["8_3", "6_2", "7_2", "7_5", "6_5"]
 start_year = 2019
 start_month = 6

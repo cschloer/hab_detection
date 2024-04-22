@@ -1,31 +1,16 @@
+import rasterio
 import os
-
-# from sentinelsat import SentinelAPI
+import requests
 import numpy as np
-
-CYAN_APP_KEY = os.environ.get("CYAN_APP_KEY").strip('"')
-TEMP_FOLDER = "/tmp/hab"
-SAVE_FOLDER = os.environ.get("SAVE_FOLDER").strip('"')
-ZIP_FILE_TRAIN = f"{SAVE_FOLDER}/dataset_train.zip"
-ZIP_FILE_TEST = f"{SAVE_FOLDER}/dataset_test.zip"
-os.makedirs(TEMP_FOLDER, exist_ok=True)
-
-
-def get_api(user, password):
-    return SentinelAPI(
-        user,
-        password,
-        "https://apihub.copernicus.eu/apihub",
-        show_progressbars=False,
-    )
-
-
-def get_cyan_url(date, region_id):
-    day_of_year = date.strftime("%j")
-    year = date.strftime("%Y")
-    return f"https://oceandata.sci.gsfc.nasa.gov/ob/getfile/L{year}{day_of_year}.L3m_DAY_CYAN_CI_cyano_CYAN_CONUS_300m_{region_id}.tif"
-    return f"https://oceandata.sci.gsfc.nasa.gov/ob/getfile/L{year}{day_of_year}.L3m_DAY_CYAN_CI_cyano_CYAN_CONUS_300m_{region_id}.tif?appkey={CYAN_APP_KEY}"
-
+from rasterio import plot
+import contextlib
+from rasterio.plot import show
+from skimage import exposure
+import subprocess
+from pathlib import Path
+from osgeo import ogr, osr, gdal
+from PIL import Image
+import matplotlib.pyplot as plt
 
 cyan_colormap = np.array(
     [
@@ -287,3 +272,189 @@ cyan_colormap = np.array(
         [0, 0, 0, 255],
     ]
 )
+
+
+def download_cyan():
+    CYAN_AUTH_TOKEN = os.environ.get("CYAN_AUTH_TOKEN").strip('"')
+
+    year = 2019
+    day_of_year = 240
+    region_id = "6_2"
+
+    cyan_download_url = f"https://oceandata.sci.gsfc.nasa.gov/ob/getfile/L{year}{day_of_year}.L3m_DAY_CYAN_CI_cyano_CYAN_CONUS_300m_{region_id}.tif"
+    headers = {"Authorization": f"Bearer {CYAN_AUTH_TOKEN}"}
+    response = requests.get(cyan_download_url, headers=headers)
+    with open("./tmp/cyan.tif", "wb") as f:
+        f.write(response.content)
+
+
+def warp_and_crop(
+    base="./tmp",
+    cyan_image_path="./tmp/cyan.tif",
+):
+    temp_cyan = base + "/temp_cyan.tif"
+    temp2_cyan = base + "/temp2_cyan.tif"
+    temp3_cyan = base + "/cyan_nn.tif"
+
+    temp_cyan2 = base + "/temp_cyan2.tif"
+    temp2_cyan2 = base + "/temp2_cyan2.tif"
+    temp3_cyan2 = base + "/cyan_bl.tif"
+
+    with contextlib.suppress(FileNotFoundError):
+        os.remove(temp_cyan)
+        os.remove(temp2_cyan)
+        os.remove(temp3_cyan)
+        os.remove(temp_cyan2)
+        os.remove(temp2_cyan2)
+        os.remove(temp3_cyan2)
+
+    # Taken from sen2 results (see cloud_filter_demo.py for example)
+    xres = 0.00021409749853504087
+    yres = -0.00021409749853504087
+
+    window = (
+        -83.96382396474051,
+        43.79469572771599,
+        -83.62462108388114,
+        43.57522248304422,
+    )
+
+    """ NEAREST NEIGHBOR INTERPOLATION """
+    # Convert projection system of cyan image
+    cmd = [
+        "gdalwarp",
+        "-t_srs",
+        "EPSG:4326",
+        "-srcnodata",
+        '"254"',
+        "-dstnodata",
+        '"255"',
+        cyan_image_path,
+        temp_cyan,
+    ]
+    subprocess.check_call(cmd)
+
+    # Change x and y resolution of cyan image
+    cmd = [
+        "gdalwarp",
+        "-s_srs",
+        "EPSG:4326",
+        "-tr",
+        str(abs(xres)),
+        str(abs(yres)),
+        "-r",
+        "near",
+        "-tap",
+        "-srcnodata",
+        "255",
+        temp_cyan,
+        temp2_cyan,
+    ]
+    subprocess.check_call(cmd)
+
+    # Translate the cyan image
+    cmd = [
+        "gdal_translate",
+        "-f",
+        "GTiff",
+        "-projwin",
+        str(window[0]),
+        str(window[1]),
+        str(window[2]),
+        str(window[3]),
+        "-projwin_srs",
+        "EPSG:4326",
+        temp2_cyan,
+        temp3_cyan,
+    ]
+    subprocess.check_call(cmd)
+
+    """ BILINEAR INTERPOLATION """
+    # Convert projection system of cyan image
+    cmd = [
+        "gdalwarp",
+        "-t_srs",
+        "EPSG:4326",
+        "-srcnodata",
+        '"254"',
+        "-dstnodata",
+        '"255"',
+        cyan_image_path,
+        temp_cyan2,
+    ]
+    subprocess.check_call(cmd)
+
+    # Change x and y resolution of cyan image
+    cmd = [
+        "gdalwarp",
+        "-s_srs",
+        "EPSG:4326",
+        "-tr",
+        str(abs(xres)),
+        str(abs(yres)),
+        "-r",
+        "bilinear",
+        "-tap",
+        "-srcnodata",
+        "255",
+        temp_cyan2,
+        temp2_cyan2,
+    ]
+    subprocess.check_call(cmd)
+
+    # Translate the cyan image
+    cmd = [
+        "gdal_translate",
+        "-f",
+        "GTiff",
+        "-projwin",
+        str(window[0]),
+        str(window[1]),
+        str(window[2]),
+        str(window[3]),
+        "-projwin_srs",
+        "EPSG:4326",
+        temp2_cyan2,
+        temp3_cyan2,
+    ]
+    subprocess.check_call(cmd)
+
+
+def visualize(nn_cyan="./tmp/cyan_nn.tif", bl_cyan="./tmp/cyan_bl.tif"):
+    W = 5.8  # Figure width in inches, approximately A4-width - 2*1.25in margin
+    plt.rcParams.update(
+        {
+            "figure.figsize": (W, W / (4 / 3)),  # 4:3 aspect ratio
+            "font.size": 12,  # Set font size to 11pt
+            "axes.labelsize": 12,  # -> axis labels
+            "legend.fontsize": 12,  # -> legends
+            "text.usetex": True,
+            "font.family": "serif",
+            "font.family": "Palatino",
+            "font.weight": "bold",
+            "text.latex.preamble": (  # LaTeX preamble
+                r"\usepackage{lmodern}"
+                # ... more packages if needed
+            ),
+        }
+    )
+    fig, axs = plt.subplots(2, 1, figsize=(7, 6))
+    ax1 = axs[0]
+    img1 = Image.open(nn_cyan)
+    ax1.set_title("Nearest Neighbor Interpolation")
+    ax1.imshow(img1)
+    ax1.axis("off")
+
+    ax2 = axs[1]
+    img2 = Image.open(bl_cyan)
+    ax2.set_title("Bilinear Interpolation")
+    ax2.imshow(img2)
+    ax2.axis("off")
+
+    # plt.show()
+    plt.savefig(f"./interpolation_demo.pdf", dpi=1000, bbox_inches="tight")
+
+
+download_cyan()
+warp_and_crop()
+visualize()
