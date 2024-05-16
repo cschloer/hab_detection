@@ -81,7 +81,7 @@ p = sns.lineplot(
     palette=[low, moderate, high],
 )
 p.legend(loc="lower left")
-ax.set_ylabel("Fraction of Occurances")
+ax.set_ylabel("Fraction of Occurrences")
 ax.set_xlabel("HAB Value")
 ax.set_title(f"Pixel Count Fraction by HAB Level")
 ax.set_yscale("log")

@@ -406,6 +406,19 @@ def visualize_image(
     ax.imshow(cyan_colormap[cyan_reshaped])
     ax.axis("off")
 
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cmap = matplotlib.colors.ListedColormap(cyan_colormap[:-2] / 255)
+    mappable = cm.ScalarMappable(cmap=cmap)
+    mappable.set_array([])
+    mappable.set_clim(0, 1)
+    colorbar = fig.colorbar(
+        mappable, cax=cax, orientation="vertical"
+    )  # , ticks=[0, 1, 2, 3, 4])
+    colorbar.set_ticks([0, 1])
+    colorbar.set_ticklabels(["0", "253"])
+    colorbar.ax.tick_params(axis="both", which="both", length=0)
+
     ax = axs[1, 0]
     ax.set_title("Difference")
     cyan_classed = np.copy(cyan_reshaped)
@@ -468,6 +481,24 @@ def visualize_image(
     ax.imshow(cyan_image)
     ax.axis("off")
 
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cmap = matplotlib.colors.ListedColormap(
+        [
+            "#959595",
+            "#ecad0a",
+            "#a90000",
+        ]
+    )
+    mappable = cm.ScalarMappable(cmap=cmap)
+    mappable.set_array([])
+    mappable.set_clim(-0.5, len(class_designation) + 0.5)
+    colorbar = fig.colorbar(
+        mappable, cax=cax, orientation="vertical"
+    )  # , ticks=[0, 1, 2, 3, 4])
+    colorbar.set_ticks(np.linspace(0, len(class_designation), len(class_designation)))
+    colorbar.set_ticklabels(["0-99", "100-199", "200-253"])
+
     pred_masked = np.where(
         cyan_reshaped > 253, 255, np.array(class_designation)[pred_np] - 1
     )
@@ -475,6 +506,24 @@ def visualize_image(
     ax.set_title("Prediction HAB Class")
     ax.imshow(custom_colormap[pred_masked])
     ax.axis("off")
+
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cmap = matplotlib.colors.ListedColormap(
+        [
+            "#959595",
+            "#ecad0a",
+            "#a90000",
+        ]
+    )
+    mappable = cm.ScalarMappable(cmap=cmap)
+    mappable.set_array([])
+    mappable.set_clim(-0.5, len(class_designation) + 0.5)
+    colorbar = fig.colorbar(
+        mappable, cax=cax, orientation="vertical"
+    )  # , ticks=[0, 1, 2, 3, 4])
+    colorbar.set_ticks(np.linspace(0, len(class_designation), len(class_designation)))
+    colorbar.set_ticklabels(["0-99", "100-199", "200-253"])
 
     save_plot(image_save_folder, image_name)
     # log(
@@ -649,7 +698,6 @@ def visualize(
             ),
         }
     )
-    """
     visualize_full_image_multipatch(
         model,
         dataset,
@@ -692,7 +740,6 @@ def visualize(
         image_save_folder,
         "greenbay",
     )
-    """
     visualize_full_image_multipatch(
         model,
         dataset,
@@ -716,7 +763,7 @@ def visualize(
     )
     # return
     log("Done visualizing full images.")
-    # return
+    return
 
     cm_pickle_filename = f"{image_save_folder}/cm.pickle"
     hist_2d_pickle_filename = f"{image_save_folder}/hist_2d.pickle"
