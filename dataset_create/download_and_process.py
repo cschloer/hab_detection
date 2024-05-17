@@ -10,7 +10,8 @@ import shutil
 from osgeo import ogr, osr, gdal
 import zipfile
 from matplotlib import pyplot as plt
-from sentinelsat import LTATriggered
+
+# from sentinelsat import LTATriggered
 from tempfile import TemporaryFile
 from urllib.request import urlretrieve
 import gdal_merge
@@ -37,7 +38,6 @@ def download_and_process(
     subset_resolution=64,
     subset_stride=64,
 ):
-
     if sen2_uuid == "b767a097-089c-4572-bbf3-8606107015a5":
         log("Skipping weird image from lakemichigan1 2020/11/6")
         return
@@ -50,7 +50,6 @@ def download_and_process(
     day = date.day
 
     try:
-
         # download sen2 file
         log(f"Downloading SEN2 files to {temp_folder}...")
         exists, sen2_zip_filename = download_sen2(
@@ -128,7 +127,7 @@ def download_and_process(
 
                             skip = (
                                 np.count_nonzero(cyan_subset_filtered == 255)
-                                / subset_resolution ** 2
+                                / subset_resolution**2
                                 >= 0.95
                             )
                             if skip and not (
@@ -252,7 +251,6 @@ def get_immediate_subdirectories(a_dir):
 
 
 def generate_all_bands(unprocessedBandPath, granule, outputPathSubdirectory):
-
     granuleBandTemplate = granule[:-6]
     granpart_1 = unprocessedBandPath.split(".SAFE")[0][-22:-16]
     granule_2 = unprocessedBandPath.split(".SAFE")[0][-49:-34]
@@ -503,11 +501,19 @@ def visualize_overlap(cyan, sen2, region_key, year, month, day, image_download_p
     black = np.concatenate(
         (
             np.full(
-                (3, cyan_filtered_reshaped.shape[0], cyan_filtered_reshaped.shape[1],),
+                (
+                    3,
+                    cyan_filtered_reshaped.shape[0],
+                    cyan_filtered_reshaped.shape[1],
+                ),
                 0,
             ),
             np.full(
-                (1, cyan_filtered_reshaped.shape[0], cyan_filtered_reshaped.shape[1],),
+                (
+                    1,
+                    cyan_filtered_reshaped.shape[0],
+                    cyan_filtered_reshaped.shape[1],
+                ),
                 255,
             ),
         ),
@@ -516,15 +522,26 @@ def visualize_overlap(cyan, sen2, region_key, year, month, day, image_download_p
 
     # Creating an overlay that has pixel value [0,0,0,0], which makes it entirely opaque
     opaque = np.full(
-        (4, cyan_filtered_reshaped.shape[0], cyan_filtered_reshaped.shape[1],), 0,
+        (
+            4,
+            cyan_filtered_reshaped.shape[0],
+            cyan_filtered_reshaped.shape[1],
+        ),
+        0,
     )
 
-    black_white_filter = np.where(cyan_filtered_reshaped == 255, black, opaque,)
+    black_white_filter = np.where(
+        cyan_filtered_reshaped == 255,
+        black,
+        opaque,
+    )
     black_white_filter_reshaped = np.moveaxis(black_white_filter, 0, -1)
     ax3 = axs[1][0]
     ax3.set_title("Sentinel 2 with filter")
     ax3.imshow(img)
-    ax3.imshow(black_white_filter_reshaped,)
+    ax3.imshow(
+        black_white_filter_reshaped,
+    )
     ax3.axis("off")
 
     ax4 = axs[1][1]
@@ -594,7 +611,6 @@ def save_data(
     tile_size,
     id_,
 ):
-
     filename_base = f"{region_key}_{str(year).zfill(4)}_{str(month).zfill(2)}_{str(day).zfill(2)}_x{tile_start_x}_y{tile_start_y}_{tile_size}x{tile_size}_{id_}"
     cyan_filename = filename_base + "_cyan.npy"
     sen2_filename = filename_base + "_sen2.npy"
@@ -648,9 +664,15 @@ def get_land_filter(img):
 
 def apply_cloud_and_land_filter(cyan_np, cloud_filter, land_filter):
     # The cyan image after applying the sen2 cloud filter to it
-    cyan_np_land_filtered = np.where((cyan_np != 255) & (land_filter), 255, cyan_np,)
+    cyan_np_land_filtered = np.where(
+        (cyan_np != 255) & (land_filter),
+        255,
+        cyan_np,
+    )
     cyan_np_cloud_land_filtered = np.where(
-        (cyan_np_land_filtered != 254) & (cloud_filter), 255, cyan_np_land_filtered,
+        (cyan_np_land_filtered != 254) & (cloud_filter),
+        255,
+        cyan_np_land_filtered,
     )
 
     return cyan_np_cloud_land_filtered
